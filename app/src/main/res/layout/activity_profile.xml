@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="56dp"
+            android:background="#00ff000"
+            android:src="@drawable/BacktoLogin">
+        </ImageButton>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="83dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#f69b94"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#f8c8c4"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#fcdcce"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#96b0e5"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#92b9e2"></ImageButton>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="83dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#ebc0c7"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#7bb6c8"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#aad3d7"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#f5f1f0"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#d5e3e6"></ImageButton>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="83dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#f2a4b1"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#7175a5"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#a1b3d7"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#bd83cf"></ImageButton>
+
+            <ImageButton
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#e5afe9"></ImageButton>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/joinName"
+                android:layout_width="313dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="14dp"
+                android:text="   이름을 설정하세요"
+                android:textColor="#363639"
+                android:textSize="13sp"
+                android:fontFamily="@font/ko_pub_world_dotum_medium"
+                android:background="@drawable/gray_edittext"></EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/joinCheckButton"
+                android:layout_width="313dp"
+                android:layout_height="48dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="16dp"
+                android:text="프로필 변경 완료"
+                android:textColor="#ffffff"
+                android:fontFamily="@font/KoPubWorldDotumBold"
+                android:background="@drawable/button_round"></ImageButton>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="145dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical"
+    android:elevation="2dp"
+    android:background="@drawable/goal_list">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="하루에 물 1L 마시기"
+        android:textColor="#363639"
+        android:textSize="15sp"
+        android:fontFamily="@font/KoPubWorldDotumBold">
+    </TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="2022.01.27 ~ 2022.02.27"
+        android:textColor="#3f3f3f"
+        android:textSize="12sp"
+        android:fontFamily="@font/ko_pub_world_dotum_medium">
+    </TextView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <!-- 상태 바 -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="277dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:progress="20"
+            android:progressTint="#36375a"
+            android:scaleY="3"
+            android:max="100"></ProgressBar>
+
+        <!-- 진행 일수 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="9dp"
+            android:layout_gravity="center_vertical"
+            android:text="5일/30일"
+            android:textColor="#3f3f3f"
+            android:textSize="10sp"
+            android:fontFamily="@font/ko_pub_world_dotum_medium"></TextView>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/first_profile">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#f69b94"></ImageView>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8sp"
+                    android:textColor="#ffffff"
+                    android:text="민"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="-8dp"
+            android:layout_toRightOf="@id/first_profile">
+
+            <ImageView
+                android:id="@+id/second_profile"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="#f8c8c4"></ImageView>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="8sp"
+                    android:textColor="#ffffff"
+                    android:text="유"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33334f"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:src="@mipmap/ic_launcher"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <EditText
+            android:id="@+id/loginEmail"
+            android:layout_width="313dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:text="   이메일 입력"
+            android:textColor="#7e7e7e"
+            android:textSize="13sp"
+            android:fontFamily="@font/ko_pub_world_dotum_medium"
+            android:background="@drawable/white_edittext"></EditText>
+
+        <EditText
+            android:id="@+id/loginPW"
+            android:layout_width="313dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginRight="40dp"
+            android:text="   비밀번호 입력"
+            android:textColor="#7e7e7e"
+            android:textSize="13sp"
+            android:fontFamily="@font/ko_pub_world_dotum_medium"
+            android:background="@drawable/white_edittext"></EditText>
+
+        <ImageButton
+            android:id="@+id/loginButton"
+            android:layout_width="313dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/LoginButton"></ImageButton>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/joinButton"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginLeft="101dp"
+                android:layout_marginTop="23dp"
+                android:text="회원가입"
+                android:textColor="#ffffff"
+                android:fontFamily="@font/KoPubWorldDotumBold"
+                android:background=""
+                android:textSize="13sp"></Button>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="19.5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="23dp"
+                android:text="|"
+                android:textColor="#ffffff"></TextView>
+
+            <Button
+                android:id="@+id/PWButton"
+                android:layout_width="91dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="23dp"
+                android:layout_marginRight="102dp"
+                android:text="PW 찾기"
+                android:fontFamily="@font/KoPubWorldDotumBold"
+                android:textColor="#ffffff"
+                android:background=""
+                android:textSize="13sp"></Button>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="23.5dp"
+            android:text="소셜 로그인"
+            android:layout_gravity="center"
+            android:fontFamily="@font/KoPubWorldDotumBold"
+            android:textColor="#ffffff"></TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/facebookLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="130dp"
+                android:layout_marginRight="35dp"
+                android:background="#00ff0000"
+                android:src="@drawable/FacebookLogin"></ImageButton>
+
+            <ImageButton
+                android:id="@+id/googleLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="127dp"
+                android:background="#00ff0000"
+                android:src="@drawable/GoogleLogin"></ImageButton>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+

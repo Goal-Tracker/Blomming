@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/announce_header.xml" value="0.351" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/announce_list.xml" value="0.351" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/button_profile.xml" value="0.356" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/button_profile_click.xml" value="0.356" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/button_round.xml" value="0.356" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/goal_add_button.xml" value="0.351" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/goal_list.xml" value="0.351" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/main_border.xml" value="0.356" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/red_edittext.xml" value="0.356" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/string.xml" value="0.356" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/white_edittext.xml" value="0.356" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/font/fontstyle.xml" value="0.33918918918918917" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_join.xml" value="0.3130630630630631" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_login.xml" value="0.3130630630630631" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_menu.xml" value="0.3022522522522523" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/activity_profile.xml" value="0.3130630630630631" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/announce_layer.xml" value="0.67" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/announce_message.xml" value="0.3022522522522523" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/drawer_main.xml" value="0.3022522522522523" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/fontstyle.xml" value="0.3130630630630631" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/goals_layer.xml" value="0.67" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/login.xml" value="0.33" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/layout/main_toolbar.xml" value="0.3022522522522523" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/menu/drawer_menu.xml" value="0.3022522522522523" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
