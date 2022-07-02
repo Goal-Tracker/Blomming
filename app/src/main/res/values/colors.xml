@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="main_text">#585858</color>
+    <color name="stamp_board">#f9f9f9</color>
+    <color name="stamp_item">#eeeeee</color>
+    <color name="profile_color_coral">#f69b94</color>
+    <color name="profile_color_blue">#96b0e5</color>
+    <color name="profile_color_babyPink">#f8c8c4</color>
+    <color name="profile_color_lightOrange">#fcdcce</color>
+    <color name="profile_color_lightBlue">#92b9e2</color>
+    <color name="profile_color_mint">#aad3d7</color>
+    <color name="stamp_comment">#363639</color>
+    <color name="greyish_brown">#585858</color>
+    <color name="dialog_button">#36375a</color>
+    <color name="inputBox_inner">#f9f9f9</color>
+    <color name="inputBox_outline">#e8e8e8</color>
 </resources>
