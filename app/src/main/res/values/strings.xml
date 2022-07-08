@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">My Application</string>
+    <!--페이스북 App Key-->
+    <string name="facebook_app_id">341480501260552</string>
 </resources>

@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_goalAchieve"
-            android:title="GOAL 기록" />
+    <item
+        android:id="@+id/nav_goalAchieve"
+        android:title="GOAL 기록" />
 
-        <item
-            android:id="@+id/nav_friendList"
-            android:title="친구목록"/>
+    <item
+        android:id="@+id/nav_friendList"
+        android:title="친구목록"/>
 
-        <item
-            android:id="@+id/nav_settings"
-            android:title="설정"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:title="설정"/>
 
-        <item
-            android:id="@+id/nav_announce"
-            android:title="공지사항"/>
+    <item
+        android:id="@+id/nav_notice"
+        android:title="공지사항"/>
 
-        <item
-            android:id="@+id/nav_logOut"
-            android:title="로그아웃"/>
-    </group>
+    <item
+        android:id="@+id/nav_logOut"
+        android:title="로그아웃"/>
 </menu>

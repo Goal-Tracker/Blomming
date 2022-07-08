@@ -14,7 +14,7 @@
         android:text="하루에 물 1L 마시기"
         android:textColor="#363639"
         android:textSize="15sp"
-        android:fontFamily="@font/KoPubWorldDotumBold">
+        android:fontFamily="@font/ko_pub_world_dotum_bold">
     </TextView>
 
     <TextView

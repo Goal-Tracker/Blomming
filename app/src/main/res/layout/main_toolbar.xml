@@ -13,15 +13,15 @@
         android:layout_marginLeft="310dp"
         android:layout_marginTop="50dp"
         android:background="#00ff0000"
-        android:src="@drawable/alarmButton"></ImageButton>
+        android:src="@drawable/alarmbtn"></ImageButton>
 
     <ImageButton
-        android:id="@+id/menu"
+        android:id="@+id/menubtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="54dp"
         android:background="#00ff0000"
-        android:src="@drawable/menuButton"></ImageButton>
+        android:src="@drawable/menubtn"></ImageButton>
 
 </androidx.appcompat.widget.Toolbar>

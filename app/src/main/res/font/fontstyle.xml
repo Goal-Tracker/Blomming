@@ -8,5 +8,5 @@
     <font
         android:fontStyle="normal"
         android:fontWeight="400"
-        android:font="@font/KoPubWorldDotumBold"/>
+        android:font="@font/ko_pub_world_dotum_bold"/>
 </font-family>
