@@ -237,7 +237,12 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
 
         today_stamp_button.setOnClickListener {
-            val dlg = StampUploadDialog(requireContext(),this)
+            val dlg = StampUploadDialog(requireContext(), this)
+            dlg.start()
+        }
+
+        today_stamp_noneStamp_button.setOnClickListener {
+            val dlg = StampUploadDialog(requireContext(), this)
             dlg.start()
         }
 
@@ -247,21 +252,29 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
     override fun onUploadImageClicked() {
         Toast.makeText(requireContext(), "이미지 선택하기", Toast.LENGTH_SHORT).show()
 
-        val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
+        val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, GALLERY)
+
+
+
+//        val intent = Intent(Intent.ACTION_PICK)
+//        intent.type = "image/*"
+//        intent.action = Intent.ACTION_GET_CONTENT
+//        val chooserIntent = Intent.createChooser(intent, "선택해주세요")
+//        startActivityForResult(chooserIntent, 0)
     }
 
     override fun onUploadButtonClicked() {
         Toast.makeText(requireContext(), "코멘트 업로드하기", Toast.LENGTH_SHORT).show()
     }
 
-    @Override override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    @Override override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
 
         if( resultCode == Activity.RESULT_OK){
             if( requestCode == GALLERY) {
-                var ImnageData: Uri? = data?.data
+                var ImnageData: Uri? = intent?.data
                 Toast.makeText(requireContext(), ImnageData.toString(), Toast.LENGTH_SHORT).show()
 
                 try {

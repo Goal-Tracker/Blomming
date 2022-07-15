@@ -14,6 +14,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import java.security.AccessController.getContext
 
 class StampUploadDialog(context: Context, Interface: StampUploadDialogInterface) : Dialog(context), TodayStampUploadInterface {
+//class StampUploadDialog(context: Context) : Dialog(context), TodayStampUploadInterface {
 
     // 액티비티에서 인터페이스를 받아옴
     private var StampUploadDialogInterface: StampUploadDialogInterface = Interface

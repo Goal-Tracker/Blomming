@@ -31,6 +31,10 @@
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/today_stamp_item.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/user_profile_item.xml" value="1.1" />
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.33063063063063064" />
+        <entry key="app/src/main/res/layout/fragment_stamp_bottom_sheet.xml" value="0.3182291666666667" />
+        <entry key="app/src/main/res/layout/poke_dialog.xml" value="0.3182291666666667" />
+        <entry key="app/src/main/res/layout/stamp_upload_dialog.xml" value="0.3182291666666667" />
+        <entry key="app/src/main/res/layout/today_stamp_item.xml" value="0.23324275362318841" />
       </map>
     </option>
   </component>
