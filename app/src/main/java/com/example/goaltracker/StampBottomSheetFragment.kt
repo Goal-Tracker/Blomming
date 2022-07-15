@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragment(), StampUploadDialogInterface {
+class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragment() {
 
     private val GALLERY = 1
 
@@ -238,53 +238,13 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         today_stamp_button.setOnClickListener {
             Toast.makeText(requireContext(), "today stamp button click", Toast.LENGTH_SHORT).show()
             startActivity(Intent(context, StampUploadDialogActivity::class.java))
-
-//            val dlg = StampUploadDialog(requireContext(),this)
-//            dlg.start()
         }
 
         today_stamp_noneStamp_button.setOnClickListener {
             Toast.makeText(requireContext(), "today stamp button click", Toast.LENGTH_SHORT).show()
             startActivity(Intent(context, StampUploadDialogActivity::class.java))
-
-//            val dlg = StampUploadDialog(requireContext(),this)
-//            dlg.start()
         }
 
         return view
-    }
-
-    override fun onUploadImageClicked() {
-        Toast.makeText(requireContext(), "이미지 선택하기", Toast.LENGTH_SHORT).show()
-
-        val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        startActivityForResult(intent, GALLERY)
-    }
-
-    override fun onUploadButtonClicked() {
-        Toast.makeText(requireContext(), "코멘트 업로드하기", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if( resultCode == Activity.RESULT_OK){
-            if( requestCode == GALLERY) {
-                var ImnageData: Uri? = data?.data
-                Toast.makeText(requireContext(), ImnageData.toString(), Toast.LENGTH_SHORT).show()
-
-                try {
-                    val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, ImnageData)
-                    Toast.makeText(requireContext(), bitmap.toString(), Toast.LENGTH_SHORT).show()
-
-//                    certImage_imageView.setImageResource(R.drawable.cert1)
-//                    certImage_imageView.setImageBitmap(bitmap)
-
-                } catch (e:Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
     }
 }

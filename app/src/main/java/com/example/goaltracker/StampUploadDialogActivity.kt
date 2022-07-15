@@ -49,17 +49,12 @@ class StampUploadDialogActivity : AppCompatActivity() {
             Toast.makeText(it.context, "You Click Certification Image Button", Toast.LENGTH_SHORT).show()
 
             if(checkPersmission()){
+                Toast.makeText(it.context, "checkPersmission()", Toast.LENGTH_SHORT).show()
                 dispatchTakePictureIntent()
             } else{
+                Toast.makeText(it.context, "requestPermission()", Toast.LENGTH_SHORT).show()
                 requestPermission()
             }
-
-
-//            val intent: Intent = Intent(Intent.ACTION_GET_CONTENT)
-//            intent.type = "image/*"
-//            startActivityForResult(intent, GALLERY)
-
-//            StampUploadDialogInterface.onUploadImageClicked()
         }
 
         commentUpload_button.setOnClickListener {
@@ -70,19 +65,12 @@ class StampUploadDialogActivity : AppCompatActivity() {
 
                 finish()
             }
-
-
-//            StampUploadDialogInterface.onUploadButtonClicked()
-
-//            dlg.dismiss()
         }
 
         close_dialog_button.setOnClickListener {
             Toast.makeText(it.context, "You Click Close Button", Toast.LENGTH_SHORT).show()
 
             finish()
-
-//            dlg.dismiss()
         }
     }
 
@@ -217,6 +205,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
     private fun launchImageCrop(uri: Uri?){
         CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON)
             .setCropShape(CropImageView.CropShape.RECTANGLE)
+            .setAspectRatio(1,1)
             .start(this)
     }
 }
