@@ -71,4 +71,6 @@ class StampUploadDialog(context: Context, Interface: StampUploadDialogInterface)
     override fun onUploadImage(bitmap: Bitmap) {
         certImage_imageView.setImageBitmap(bitmap)
     }
+
+
 }
