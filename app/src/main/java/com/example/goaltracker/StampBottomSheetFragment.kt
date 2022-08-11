@@ -2,7 +2,9 @@ package com.example.goaltracker
 
 import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -24,9 +26,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragment() {
-
-    private val GALLERY = 1
-
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
     private lateinit var certification_default_layout: ConstraintLayout
@@ -108,8 +107,9 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             stamp_db.addSnapshotListener { stamp_snapshot, e ->
                 try {
                     val day_record = stamp_snapshot?.get("Day_record") as HashMap<String, List<HashMap<String, String>>>
-
                     val commentArray = day_record["Day$stamp_num"] as List<HashMap<String, String>>
+
+                    Log.d("StampBottomSheetFragment", "commentArray length : ${commentArray.size}")
 
                     Log.d("User Comment day", "User Comment date : " + commentArray.toString())
 
@@ -131,6 +131,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                                     "profile_color_blue" -> theme_color = R.color.profile_color_blue
                                     "profile_color_babyPink" -> theme_color = R.color.profile_color_babyPink
                                     "profile_color_lightOrange" -> theme_color = R.color.profile_color_lightOrange
+                                    "profile_color_mint" -> theme_color = R.color.profile_color_mint
                                     else -> theme_color = R.color.profile_color_lightBlue
                                 }
 
@@ -163,14 +164,14 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
 
             if (notYet == 0){ // 이미 기간이 지난 경우
-                Log.d("stamp status", "stampInfo.stamp: ${stampInfo.stamp}, notYet: $notYet")
+                Log.d("stamp status", "notYet: $notYet")
 
                 if (stampInfo.stampNum == 0){   // 스탬프가 없는 경우
                     noneStamp_textView.visibility = View.VISIBLE
                     today_stamp_noneStamp_button.visibility = View.VISIBLE
                     stamp_recyclerView.visibility = View.GONE
                     today_stamp_button.visibility = View.GONE
-                    today_stamp_noneStamp_button.isEnabled = true
+                    today_stamp_noneStamp_button.isEnabled = false
                     today_stamp_button.isEnabled = false
                     today_stamp_noneStamp_button.text = "기간이 지났습니다"
                     bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
@@ -181,26 +182,26 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                     stamp_recyclerView.visibility = View.VISIBLE
                     today_stamp_button.visibility = View.VISIBLE
                     today_stamp_noneStamp_button.isEnabled = false
-                    today_stamp_button.isEnabled = true
+                    today_stamp_button.isEnabled = false
                     today_stamp_button.text = "기간이 지났습니다"
                     bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
                 }
 
 
             } else if(notYet == 2) {  // 아직 기간이 아닌 경우
-                Log.d("stamp status", "stampInfo.stamp: ${stampInfo.stamp}, notYet: $notYet")
+                Log.d("stamp status", "notYet: $notYet")
 
                 noneStamp_textView.visibility = View.VISIBLE
                 today_stamp_noneStamp_button.visibility = View.VISIBLE
                 stamp_recyclerView.visibility = View.GONE
                 today_stamp_button.visibility = View.GONE
-                today_stamp_noneStamp_button.isEnabled = true
+                today_stamp_noneStamp_button.isEnabled = false
                 today_stamp_button.isEnabled = false
 
                 today_stamp_noneStamp_button.text = "아직 기간이 아닙니다"
                 bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
             } else {
-                Log.d("stamp status", "stampInfo.stamp: ${stampInfo.stamp}, notYet: $notYet")
+                Log.d("stamp status", "notYet: $notYet")
 
                 if (stampInfo.stampNum == 0){
                     noneStamp_textView.visibility = View.VISIBLE
@@ -237,12 +238,18 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
         today_stamp_button.setOnClickListener {
             Toast.makeText(requireContext(), "today stamp button click", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(context, StampUploadDialogActivity::class.java))
+            val intent = Intent(context, StampUploadDialogActivity::class.java)
+            intent.putExtra("stampInfo", stampInfo)
+            intent.putExtra("stampNum", stamp_num)
+            startActivity(intent)
         }
 
         today_stamp_noneStamp_button.setOnClickListener {
             Toast.makeText(requireContext(), "today stamp button click", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(context, StampUploadDialogActivity::class.java))
+            val intent = Intent(context, StampUploadDialogActivity::class.java)
+            intent.putExtra("stampInfo", stampInfo)
+            intent.putExtra("stampNum", stamp_num)
+            startActivity(intent)
         }
 
         return view

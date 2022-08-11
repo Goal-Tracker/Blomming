@@ -240,8 +240,6 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
 
             } else {
                 //0 명 골 인증
-                Log.d(TAG, "none stampNum : ${Data.stamp}")
-
                 none_stamp_layout.visibility = VISIBLE
                 one_stamp_layout.visibility = GONE
                 two_stamp_layout.visibility = GONE

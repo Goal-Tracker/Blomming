@@ -10,6 +10,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 class PokeDialog(context: Context) : Dialog(context) {
 
@@ -20,6 +23,8 @@ class PokeDialog(context: Context) : Dialog(context) {
     private lateinit var tv_profileName: TextView
     private lateinit var commentUpload_button:Button
 
+    private val userID = MySharedPreferences.getUserId(context)
+    val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
     fun start(profile: GoalTeamData) {
         setContentView(R.layout.poke_dialog)
@@ -52,6 +57,17 @@ class PokeDialog(context: Context) : Dialog(context) {
 
         commentUpload_button.setOnClickListener {
             Toast.makeText(it.context, profile.name + "을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
+
+            // 잘 안 됨
+            val notifyData = hashMapOf(
+                "message" to "[콕 찌르기]" + MySharedPreferences.getUserNickname(context) + " 님이 콕 찔렀습니다.",
+                "userColor" to MySharedPreferences.getUserColor(context),
+                "type" to 2,
+                "uid" to MySharedPreferences.getUserId(context)
+            )
+
+            db.collection("notification").document(MySharedPreferences.getUserId(context))
+                .update("notified", FieldValue.arrayUnion(notifyData))
 
             commentUpload_button.text = "콕 찔렀습니다"
             commentUpload_button.isEnabled = false

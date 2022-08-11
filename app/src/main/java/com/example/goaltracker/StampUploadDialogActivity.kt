@@ -3,6 +3,7 @@ package com.example.goaltracker
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.ImageDecoder
@@ -11,13 +12,19 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View.inflate
 import android.view.Window
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import java.io.File
@@ -25,6 +32,7 @@ import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.zip.Inflater
 
 class StampUploadDialogActivity : AppCompatActivity() {
     private lateinit var close_dialog_button : ImageButton
@@ -34,11 +42,22 @@ class StampUploadDialogActivity : AppCompatActivity() {
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var currentPhotoPath : String
+    private lateinit var imageResultURL : Uri
+
+    var fbStorage = FirebaseStorage.getInstance()
+    val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
+
+    private lateinit var stampInfo : StampBoardData
+    private var stampNum : Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_stamp_upload_dialog)
+
+        val intent: Intent = getIntent()
+        stampInfo = intent.getParcelableExtra("stampInfo")!!
+        stampNum = intent.getIntExtra("stampNum", -1)
 
         close_dialog_button = findViewById(com.example.goaltracker.R.id.close_dialog_button)
         certImage_imageView = findViewById(com.example.goaltracker.R.id.certImage_imageView)
@@ -62,6 +81,40 @@ class StampUploadDialogActivity : AppCompatActivity() {
                 Toast.makeText(it.context, "comment is empty", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(it.context, "You Click Comment Upload Button", Toast.LENGTH_SHORT).show()
+
+                val goal_db = db.collection("Goal").document(stampInfo.goal_id)
+
+                goal_db.addSnapshotListener { goal_snapshot, e ->
+                    try {
+                        val stamp_id = goal_snapshot?.get("Stamp_id") as String
+
+                        if (stampNum != -1){
+                            var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                            var imgFileName =  timeStamp + ".png"
+                            var storageRef = fbStorage?.reference?.child("stamp/stamp_id")?.child(imgFileName)
+
+                            storageRef?.putFile(imageResultURL!!)?.addOnSuccessListener {
+                                Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                            }
+
+                            val stampData = hashMapOf(
+                                "Comment" to comment_editText.text.toString(),
+                                "Image" to imgFileName,
+                                "Uid" to MySharedPreferences.getUserId(this)
+                            )
+
+                            db.collection("Stamp").document(stamp_id)
+                                .update(
+                                    mapOf("Day_record.Day${stampNum}" to FieldValue.arrayUnion(stampData))
+                                )
+                        } else {
+                            Log.d("TAG", "Stamp num receive fail")
+                        }
+
+                    } catch (e: Exception){
+                        Log.d(ContentValues.TAG, "[Error] $e")
+                    }
+                }
 
                 finish()
             }
@@ -162,6 +215,8 @@ class StampUploadDialogActivity : AppCompatActivity() {
                 val result = CropImage.getActivityResult(data)
                 if(resultCode == Activity.RESULT_OK){
                     result.uri?.let {
+
+                        imageResultURL = result.uri
 
                         certImage_imageView.setImageBitmap(result.bitmap)
                         certImage_imageView.setImageURI(result.uri)

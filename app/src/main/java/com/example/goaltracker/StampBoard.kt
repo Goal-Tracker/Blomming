@@ -1,5 +1,6 @@
 package com.example.goaltracker
 
+import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +10,14 @@ import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.MetadataChanges
+import com.squareup.okhttp.Dispatcher
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,15 +25,12 @@ import kotlin.collections.ArrayList
 
 class StampBoard : AppCompatActivity() {
 
-    private val GALLERY = 1
-
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
     lateinit var goalTeamAdapter: GoalTeamAdapter
-    val teamDatas = ArrayList<GoalTeamData>()
 
     lateinit var stampBoardAdapter: StampBoardAdapter
-    val stampDatas = ArrayList<StampBoardData>()
+    val teamDatas = ArrayList<GoalTeamData>()
 
     lateinit var goalTitle_textView : TextView
     lateinit var first_day_textView : TextView
@@ -43,6 +46,11 @@ class StampBoard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stamp_board)
+
+        // uid 저장
+        MySharedPreferences.setUserId(this, "QL5QEcUUl5QKxKWOKQ2J")
+        MySharedPreferences.setUserNickname(this, "임정수")
+        MySharedPreferences.setUserColor(this, "profile_color_lightOrange")
 
         goalTitle_textView = findViewById(R.id.goalTitle_textView)
         first_day_textView = findViewById(R.id.first_day_textView)
@@ -93,88 +101,162 @@ class StampBoard : AppCompatActivity() {
             Log.d("goal_db", "teamList : $teamList")
             Log.d("goal_db", "stamp_id : $stamp_id")
 
+            var start_date = start_day + " 00:00:00"
+            var sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
+            var date = sf.parse(start_date)
+            var today = Calendar.getInstance()
+
+            var calcDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
+
+            val pastDate = (calcDate+1).toInt()
 
             // 판에 스탬프 개수 초기화
-            stampDatas.apply {
-                var themeArray = arrayOf(R.color.profile_color_lightBlue)
-                add(StampBoardData(goal_id = goal_id, num = 1, stamp = false, participateNum = 5, stampNum = 1, stampThemeList = themeArray))
+            val stamp_db = db.collection("Stamp").document(stamp_id)
+            stamp_db.addSnapshotListener { stamp_snapshot, e ->
+                try {
+                    val stampDatas = ArrayList<StampBoardData>()
 
-                themeArray = arrayOf(R.color.profile_color_lightBlue, R.color.profile_color_lightOrange)
-                add(StampBoardData(goal_id = goal_id, num = 2, stamp = false, participateNum = 5, stampNum = 2, stampThemeList = themeArray))
+                    for (i in 1..goal_day) {
+                        val notYet: Boolean = pastDate <= i
 
-                themeArray = arrayOf(R.color.profile_color_lightBlue, R.color.profile_color_lightOrange, R.color.profile_color_coral)
-                add(StampBoardData(goal_id = goal_id, num = 3, stamp = false, participateNum = 5, stampNum = 3, stampThemeList = themeArray))
+                        val day_record = stamp_snapshot?.get("Day_record") as HashMap<String, List<HashMap<String, String>>>
+                        Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] ${day_record["Day$i"]}")
+                        if (day_record["Day$i"] != null){
+                            Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] inner ${day_record["Day$i"]}")
+                            var commentArray = day_record["Day$i"] as List<HashMap<String, String>>
+                            var themeArray = ArrayList<Int>()
+                            var commentNum = commentArray.size
 
-                for (i in 4..goal_day){
-                    Log.d("stampDatas add log : ", i.toString())
-                    add(StampBoardData(goal_id = goal_id, num = i, stamp = true, participateNum = 5, stampNum = 0, stampThemeList = emptyArray()))
-                }
+                            Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] not null :  ${commentArray}")
 
-                stampBoardAdapter.stampDatas = stampDatas
-                stampBoardAdapter.notifyDataSetChanged()
-            }
+                            if (commentNum > 0) {
+                                Log.d(
+                                    ContentValues.TAG,
+                                    "[day_record[\"Day$i\"]] commentNum > 0 :  ${commentArray}"
+                                )
 
-            Log.d("stampData result : ", stampDatas.toString())
+                                for (commentInfo in commentArray) {
+                                    Log.d(
+                                        ContentValues.TAG,
+                                        "[day_record[\"Day$i\"]] commentInfo :  ${commentInfo}"
+                                    )
 
-            teamDatas.clear()
-            // 팀원
-            teamDatas.apply {
-                for (member in teamList){
-                    Log.d("Add stamp member : ", member.toString())
+                                    var theme_color: Int
+                                    theme_color = when (commentInfo["UserColor"] as String) {
+                                        "profile_color_lightBlue" -> R.color.profile_color_lightBlue
+                                        "profile_color_coral" -> R.color.profile_color_coral
+                                        "profile_color_blue" -> R.color.profile_color_blue
+                                        "profile_color_babyPink" -> R.color.profile_color_babyPink
+                                        "profile_color_lightOrange" -> R.color.profile_color_lightOrange
+                                        "profile_color_mint" -> R.color.profile_color_mint
+                                        else -> R.color.profile_color_lightBlue
+                                    }
 
-                    val member_db = db.collection("Account").document(member)
-
-                    member_db.get()
-                        .addOnSuccessListener { document ->
-                            if (document != null) {
-                                Log.d(TAG, "member_dbSnapshot data: ${document.data}")
-
-                                val nickname: String = document.get("UserName").toString()
-                                val theme: String = document.get("UserColor").toString()
-                                var theme_color: Int
-
-                                when (theme) {
-                                    "profile_color_lightBlue" -> theme_color = R.color.profile_color_lightBlue
-                                    "profile_color_coral" -> theme_color = R.color.profile_color_coral
-                                    "profile_color_blue" -> theme_color = R.color.profile_color_blue
-                                    "profile_color_babyPink" -> theme_color = R.color.profile_color_babyPink
-                                    "profile_color_lightOrange" -> theme_color = R.color.profile_color_lightOrange
-                                    else -> theme_color = R.color.profile_color_lightBlue
+                                    themeArray.add(theme_color)
+                                    Log.d(ContentValues.TAG, "$i : [when (theme)] $theme_color")
+                                    Log.d(ContentValues.TAG, "$i : [themeArray] $themeArray")
                                 }
 
-                                Log.d(TAG, "nickname : ${nickname}")
-                                Log.d(TAG, "theme : ${theme}")
-                                Log.d(TAG, "theme_color : ${theme_color}")
+                                Log.d(ContentValues.TAG, "$i : [inner themeArray] $themeArray")
 
-                                add(GoalTeamData(name = nickname, profileColor = theme_color))
-
-                                Log.d("teamDatas result : ", teamDatas.toString())
-
-                                goalTeamAdapter.teamDatas = teamDatas
-                                goalTeamAdapter.notifyDataSetChanged()
-
-                            } else {
-                                Log.d(TAG, "No such document")
+                                Log.d(ContentValues.TAG, "comment not null num : $i")
+                                stampDatas.add(
+                                    StampBoardData(
+                                        goal_id = goal_id,
+                                        num = i,
+                                        stamp = notYet,
+                                        participateNum = teamList.size,
+                                        stampNum = commentNum,
+                                        stampThemeList = themeArray
+                                    )
+                                )
                             }
+
+//                            } else {
+//                                stampDatas.add(
+//                                    StampBoardData(
+//                                        goal_id = goal_id,
+//                                        num = i,
+//                                        stamp = notYet,
+//                                        participateNum = teamList.size,
+//                                        stampNum = commentNum,
+//                                        stampThemeList = themeArray
+//                                    )
+//                                )
+//
+//                                Log.d("stampData result inner : ", stampDatas.toString())
+//                            }
+                        } else {
+                            Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] is empty")
+                            Log.d(ContentValues.TAG, "comment null num : $i")
+
+                            stampDatas.add(
+                                StampBoardData(
+                                    goal_id = goal_id,
+                                    num = i,
+                                    stamp = notYet,
+                                    participateNum = teamList.size,
+                                    stampNum = 0,
+                                    stampThemeList = ArrayList<Int>()
+                                )
+                            )
                         }
-                        .addOnFailureListener { exception ->
-                            Log.d(TAG, "get failed with ", exception)
-                        }
+                    }
+
+                    Log.d("stampData result inner : ", stampDatas.toString())
+
+                    stampDatas.sortBy { it.num }
+                    stampBoardAdapter.stampDatas = stampDatas
+                    stampBoardAdapter.notifyDataSetChanged()
+                } catch (e: Exception) {
+                    Log.d(ContentValues.TAG, "[Error] $e")
                 }
             }
-            Log.d("teamDatas result : ", teamDatas.toString())
-        })
 
-//        teamDatas.apply {
-//            add(GoalTeamData(name = "변다소리", profileColor = R.color.profile_color_lightBlue))
-//            add(GoalTeamData(name = "민지", profileColor = R.color.profile_color_coral))
-//            add(GoalTeamData(name = "효선", profileColor = R.color.profile_color_blue))
-//            add(GoalTeamData(name = "유진", profileColor = R.color.profile_color_babyPink))
-//            add(GoalTeamData(name = "정수", profileColor = R.color.profile_color_lightOrange))
-//
-//            goalTeamAdapter.teamDatas = teamDatas
-//            goalTeamAdapter.notifyDataSetChanged()
-//        }
+
+            // 팀원
+            Log.d("teamList : ", teamList.toString())
+            for (member in teamList){
+                Log.d("Add stamp member : ", member.toString())
+
+                val member_db = db.collection("Account").document(member)
+
+                member_db.get().addOnSuccessListener { document ->
+                    if (document != null) {
+                        Log.d(TAG, "member_dbSnapshot data: ${document.data}")
+
+                        val nickname: String = document.get("UserName").toString()
+                        val theme: String = document.get("UserColor").toString()
+                        var theme_color: Int
+
+                        when (theme) {
+                            "profile_color_lightBlue" -> theme_color = R.color.profile_color_lightBlue
+                            "profile_color_coral" -> theme_color = R.color.profile_color_coral
+                            "profile_color_blue" -> theme_color = R.color.profile_color_blue
+                            "profile_color_babyPink" -> theme_color = R.color.profile_color_babyPink
+                            "profile_color_lightOrange" -> theme_color = R.color.profile_color_lightOrange
+                            "profile_color_mint" -> theme_color = R.color.profile_color_mint
+                            else -> theme_color = R.color.profile_color_lightBlue
+                        }
+
+                        Log.d(TAG, "nickname : ${nickname}")
+                        Log.d(TAG, "theme : ${theme}")
+                        Log.d(TAG, "theme_color : ${theme_color}")
+
+                        teamDatas.add(GoalTeamData(name = nickname, profileColor = theme_color))
+
+                        Log.d("teamDatas result : ", teamDatas.toString())
+
+                        teamDatas.distinct()
+                        goalTeamAdapter.teamDatas = teamDatas
+                        goalTeamAdapter.notifyDataSetChanged()
+
+                    } else {
+                        Log.d(TAG, "No such document")
+                    }
+                }
+            }
+        })
 
     }
 
