@@ -16,7 +16,7 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/backtologin2"
+                android:id="@+id/backToJoin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -44,7 +44,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="83dp"
-                    android:background="@drawable/profile1"></ImageButton>
+                    android:background="@drawable/b_f69b94"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_f8c8c4"
@@ -52,8 +52,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#f8c8c4"></ImageButton>
+                    android:background="@drawable/b_f8c8c4"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_fcdcce"
@@ -61,8 +60,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#fcdcce"></ImageButton>
+                    android:background="@drawable/b_fcdcce"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_96b0e5"
@@ -70,8 +68,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#96b0e5"></ImageButton>
+                    android:background="@drawable/b_96b0e5"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_92b9e2"
@@ -79,8 +76,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#92b9e2"></ImageButton>
+                    android:background="@drawable/b_92b9e2"></ImageButton>
 
             </LinearLayout>
 
@@ -96,8 +92,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="83dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#ebc0c7"></ImageButton>
+                    android:background="@drawable/b_ebc0c7"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_7bb6c8"
@@ -105,8 +100,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#7bb6c8"></ImageButton>
+                    android:background="@drawable/b_7bb6c8"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_aad3d7"
@@ -114,8 +108,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#aad3d7"></ImageButton>
+                    android:background="@drawable/b_aad3d7"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_f5f1f0"
@@ -123,8 +116,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#f5f1f0"></ImageButton>
+                    android:background="@drawable/b_f5f1f0"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_d5e3e6"
@@ -132,8 +124,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#d5e3e6"></ImageButton>
+                    android:background="@drawable/b_d5e3e6"></ImageButton>
 
             </LinearLayout>
 
@@ -149,8 +140,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="83dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#f2a4b1"></ImageButton>
+                    android:background="@drawable/b_f2a4b1"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_7175a5"
@@ -158,8 +148,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#7175a5"></ImageButton>
+                    android:background="@drawable/b_7175a5"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_a1b3d7"
@@ -167,8 +156,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#a1b3d7"></ImageButton>
+                    android:background="@drawable/b_a1b3d7"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_bd83cf"
@@ -176,8 +164,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#bd83cf"></ImageButton>
+                    android:background="@drawable/b_bd83cf"></ImageButton>
 
                 <ImageButton
                     android:id="@+id/c_e5afe9"
@@ -185,8 +172,7 @@
                     android:layout_height="31dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="18dp"
-                    android:background="@drawable/button_round"
-                    android:backgroundTint="#e5afe9"></ImageButton>
+                    android:background="@drawable/b_e5afe9"></ImageButton>
 
             </LinearLayout>
 

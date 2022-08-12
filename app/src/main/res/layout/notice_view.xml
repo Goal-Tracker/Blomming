@@ -52,19 +52,12 @@
                 android:layout_height="match_parent"
                 android:fillViewport="true">
 
-                <LinearLayout
+                <!-- 알림 공지 -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/notice_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- 알림 공지 -->
-                    <ListView
-                        android:id="@+id/notice_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    </ListView>
-
-                </LinearLayout>
+                    android:layout_height="match_parent">
+                </androidx.recyclerview.widget.RecyclerView>
 
             </ScrollView>
 

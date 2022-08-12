@@ -15,7 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_join.*
 
-
 class JoinActivity : AppCompatActivity() {
 
     lateinit var signupID : EditText
@@ -38,6 +37,7 @@ class JoinActivity : AppCompatActivity() {
         fireStore= FirebaseFirestore.getInstance()
 
         backtologin.setOnClickListener {
+            
             finish()
         }
 
@@ -95,7 +95,7 @@ class JoinActivity : AppCompatActivity() {
                             var accountName : String
 
                             accountName=firebaseAuth?.currentUser?.uid.toString()
-                            userAccount.userId=firebaseAuth?.currentUser?.email
+                            userAccount.userId= firebaseAuth?.currentUser?.email.toString()
                             userAccount.password=password
 
                             fireStore?.collection("account")?.document(accountName)?.set(userAccount)

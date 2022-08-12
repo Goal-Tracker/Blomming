@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainLayout">
 
     <LinearLayout
@@ -97,23 +98,19 @@
                 android:layout_weight="1">
 
                 <ScrollView
-                    android:id="@+id/goal_scroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/goal_recycler_view"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <!-- goal -->
-                        <include layout="@layout/goals_layer"/>
-                        <include layout="@layout/goals_layer"/>
-                        <include layout="@layout/goals_layer"/>
-                        <include layout="@layout/goals_layer"/>
-
-
-                    </LinearLayout>
+                    </androidx.recyclerview.widget.RecyclerView>
 
                 </ScrollView>
 

@@ -65,6 +65,7 @@ class LoginActivity : AppCompatActivity() {
             firebaseAuth?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
+
                         Toast.makeText(
                             baseContext, "로그인에 성공 하였습니다.",
                             Toast.LENGTH_SHORT
