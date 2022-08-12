@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddGoal">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:id="@+id/scrollView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:ignore="MissingConstraints">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="107dp"
+                        android:background="@drawable/ic_title_bar"
+                        tools:ignore="MissingConstraints" />
+
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="56dp"
+                        android:text="GOAL 추가"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageButton
+                        android:id="@+id/close_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="56dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/ic_baseline_close_24"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="43dp"
+                        android:textColor="#363639"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="목표 이름" />
+
+                    <EditText
+                        android:id="@+id/goalName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="목표 이름을 입력해 주세요."
+                        android:textSize="12sp"
+                        android:textStyle="normal"/>
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:textColor="#363639"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="목표 기간" />
+
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="10dp"
+                        android:fillViewport="true"
+                        android:scrollbars="none">
+
+                        <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+                            android:id="@+id/DayButtonGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            app:alignItems="center">
+
+                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                                android:id="@+id/btn_7"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                app:toggle_selectedBackgroundColor="@color/main_color"
+                                app:toggle_text="07일"
+                                app:toggle_btnCornerRadius="200dp"
+                                app:toggle_textColor="@color/white" />
+
+                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                                android:id="@+id/btn_30"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                app:toggle_selectedBackgroundColor="@color/main_color"
+                                app:toggle_text="30일"
+                                app:toggle_btnCornerRadius="200dp"
+                                app:toggle_textColor="@color/white" />
+
+                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                                android:id="@+id/btn_50"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="13dp"
+                                app:toggle_selectedBackgroundColor="@color/main_color"
+                                app:toggle_text="50일"
+                                app:toggle_btnCornerRadius="200dp"
+                                app:toggle_textColor="@color/white" />
+
+                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                                android:id="@+id/btn_100"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="13dp"
+                                app:toggle_selectedBackgroundColor="@color/main_color"
+                                app:toggle_text="100일"
+                                app:toggle_textSize="12dp"
+                                app:toggle_btnCornerRadius="200dp"
+                                app:toggle_textColor="@color/white" />
+
+                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                                android:id="@+id/btn_etc"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="13dp"
+                                app:toggle_selectedBackgroundColor="@color/main_color"
+                                app:toggle_text="기타"
+                                app:toggle_btnCornerRadius="200dp"
+                                app:toggle_textColor="@color/white" />
+
+                        </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+
+
+                    </HorizontalScrollView>
+
+
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="41dp"
+                        android:textColor="#363639"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="시작일" />
+
+                    <EditText
+                        android:id="@+id/first_day"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="2022-02-03"
+                        android:focusable="false"
+                        android:textColor="#585858"
+                        android:textSize="12sp"
+                        android:textStyle="normal"/>
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#363639"
+                        android:layout_marginTop="40dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="종료일"/>
+
+                    <EditText
+                        android:id="@+id/last_day"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="2022-02-09"
+                        android:focusable="false"
+                        android:textColor="#585858"
+                        android:textSize="12sp"
+                        android:textStyle="normal"/>
+
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#363639"
+                        android:layout_marginTop="40dp"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:text="메모" />
+
+                    <EditText
+                        android:id="@+id/Memo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="한줄 메모를 입력해 보세요."
+                        android:textColor="#585858"
+                        android:textSize="12sp"
+                        android:textStyle="normal"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="40dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#363639"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:text="친구 초대" />
+
+                        <TextView
+                            android:id="@+id/memberNum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="11dp"
+                            android:textStyle="normal"
+                            android:textSize="13sp"
+                            android:textColor="#7e7e7e"
+                            android:lineSpacingExtra="27sp"
+                            android:text="0명 / 최대 5명"/>
+                    </LinearLayout>
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+
+                        <EditText
+                            android:id="@+id/searchWord"
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:background="@drawable/search_bar"
+                            android:hint="친구를 검색해 보세요"
+                            android:iconifiedByDefault="false"
+                            android:paddingLeft="18dp"
+                            android:textColor="#676767"
+                            android:textSize="11sp" />
+
+                        <ImageButton
+                            android:id="@+id/searchBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/searchWord"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="18dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/ic_baseline_search_24" />
+                    </RelativeLayout>
+
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/white_background">
+
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:ignore="MissingClass">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/list_background"
+                                android:orientation="vertical"
+                                android:paddingTop="25dp"
+                                android:paddingBottom="18dp"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:listitem="@layout/item_member" />
+                        </androidx.core.widget.NestedScrollView>
+
+                    </RelativeLayout>
+
+                    <Button
+                        android:id="@+id/save_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginBottom="90dp"
+                        android:text="GOAL 추가하기"
+                        android:textColor="@color/white"
+                        android:background="@drawable/add_button"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
