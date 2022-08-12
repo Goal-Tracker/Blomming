@@ -101,19 +101,19 @@ class StampUploadDialogActivity : AppCompatActivity() {
                             }
 
                             val stampData = hashMapOf(
-                                "timestamp" to FieldValue.serverTimestamp(),
+//                                "timestamp" to FieldValue.serverTimestamp(),
                                 "Comment" to comment_editText.text.toString(),
                                 "Image" to imgFileName,
                                 "Uid" to MySharedPreferences.getUserId(this),
                                 "UserColor" to MySharedPreferences.getUserColor(this)
                             )
 
-                            db.collection("Goal")
+//                            db.collection("Goal")
 
-//                            db.collection("Stamp").document(stamp_id)
-//                                .update(
-//                                    mapOf("Day_record.Day${stampNum}" to FieldValue.arrayUnion(stampData))
-//                                )
+                            db.collection("Stamp").document(stamp_id)
+                                .update(
+                                    mapOf("Day_record.Day${stampNum}" to FieldValue.arrayUnion(stampData))
+                                )
                         } else {
                             Log.d("TAG", "Stamp num receive fail")
                         }
