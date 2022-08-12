@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<TodayStampAdapter.ViewHolder>() {
 
@@ -44,14 +46,31 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
         private val certification_default_textView: TextView = itemView.findViewById(R.id.certification_default_textView)
         var bgCertDefault : GradientDrawable = certification_default_view.background as GradientDrawable
 
-        private val certificatoin_imageView: ImageView = itemView.findViewById(R.id.certificatoin_imageView)
+        private val certification_imageView: ImageView = itemView.findViewById(R.id.certification_imageView)
         private val nickname_textView: TextView = itemView.findViewById(R.id.nickname_textView)
         private val comment_textView: TextView = itemView.findViewById(R.id.comment_textView)
 
         fun bind(listener: View.OnClickListener, Data: TodayStampData) {
-//            certificatoin_imageView.setImageResource(Data.image)
-            bgCertDefault.setColor(ContextCompat.getColor(context, Data.theme))
-            certification_default_textView.text = Data.nickname
+            // 이미지 로드
+            if (Data.image != null) {
+                Glide.with(context)
+                    .load(Data.image)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .centerCrop()
+                    .into(certification_imageView)
+                certification_imageView.visibility = View.VISIBLE
+                certification_imageView.clipToOutline = true
+
+                certification_default_view.visibility = View.GONE
+                certification_default_textView.visibility = View.GONE
+            } else {
+                bgCertDefault.setColor(ContextCompat.getColor(context, Data.theme))
+                certification_default_textView.text = Data.nickname
+                certification_imageView.visibility = View.GONE
+                certification_default_view.visibility = View.VISIBLE
+                certification_default_textView.visibility = View.VISIBLE
+            }
+
             nickname_textView.text = Data.nickname
             comment_textView.text = Data.comment
 

@@ -1,8 +1,11 @@
 package com.example.goaltracker
 
 import android.app.Dialog
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
@@ -23,7 +26,6 @@ class PokeDialog(context: Context) : Dialog(context) {
     private lateinit var tv_profileName: TextView
     private lateinit var commentUpload_button:Button
 
-    private val userID = MySharedPreferences.getUserId(context)
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
     fun start(profile: GoalTeamData) {
@@ -42,10 +44,6 @@ class PokeDialog(context: Context) : Dialog(context) {
         var bgProfile : GradientDrawable = view_profile.background as GradientDrawable
         var bgButton: GradientDrawable = commentUpload_button.background as GradientDrawable
 
-        commentUpload_button.text = "콕 찌르기"
-        commentUpload_button.isEnabled = true
-        bgButton.setColor(ContextCompat.getColor(context, R.color.dialog_button))
-
         tv_profileName.text = profile.name[0].toString()
         bgProfile.setColor(ContextCompat.getColor(context, profile.profileColor))
 
@@ -55,23 +53,51 @@ class PokeDialog(context: Context) : Dialog(context) {
             dlg.dismiss()
         }
 
-        commentUpload_button.setOnClickListener {
-            Toast.makeText(it.context, profile.name + "을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
-
-            // 잘 안 됨
-            val notifyData = hashMapOf(
-                "message" to "[콕 찌르기]" + MySharedPreferences.getUserNickname(context) + " 님이 콕 찔렀습니다.",
-                "userColor" to MySharedPreferences.getUserColor(context),
-                "type" to 2,
-                "uid" to MySharedPreferences.getUserId(context)
-            )
-
-            db.collection("notification").document(MySharedPreferences.getUserId(context))
-                .update("notified", FieldValue.arrayUnion(notifyData))
-
-            commentUpload_button.text = "콕 찔렀습니다"
+        if (profile.uid == MySharedPreferences.getUserId(context)) {
+            commentUpload_button.text = "자신 입니다"
             commentUpload_button.isEnabled = false
             bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
+        } else {
+            commentUpload_button.text = "콕 찌르기"
+            commentUpload_button.isEnabled = true
+            bgButton.setColor(ContextCompat.getColor(context, R.color.dialog_button))
+
+            commentUpload_button.setOnClickListener {
+                Toast.makeText(it.context, profile.name + "을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
+
+//            val notifyData = hashMapOf(
+//                "message" to "[콕 찌르기] " + MySharedPreferences.getUserNickname(context) + " 님이 콕 찔렀습니다.",
+//                "userColor" to MySharedPreferences.getUserColor(context),
+//                "type" to 2,
+//                "uid" to MySharedPreferences.getUserId(context)
+//            )
+//
+//            Log.d(ContentValues.TAG, "poke message : $notifyData")
+//            Log.d(ContentValues.TAG, "poke message to : ${profile.uid}")
+//
+//            db.collection("notification").document(profile.uid)
+//                .update("notified", FieldValue.arrayUnion(notifyData))
+
+
+                val notifyData = hashMapOf(
+                    "timestamp" to FieldValue.serverTimestamp(),
+                    "message" to "[콕 찌르기] " + MySharedPreferences.getUserNickname(context) + " 님이 콕 찔렀습니다.",
+                    "userColor" to MySharedPreferences.getUserColor(context),
+                    "type" to 2,
+                    "uid" to MySharedPreferences.getUserId(context)
+                )
+
+                Log.d(TAG, "poke message : $notifyData")
+                Log.d(TAG, "poke message to : ${profile.uid}")
+
+                db.collection("Account/${profile.uid}/notification").add(notifyData)
+                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
+                commentUpload_button.text = "콕 찔렀습니다"
+                commentUpload_button.isEnabled = false
+                bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
+            }
         }
 
         dlg.show()

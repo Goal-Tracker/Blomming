@@ -75,7 +75,7 @@ class StampBoard : AppCompatActivity() {
         // 읽고 스탬프 추가 (테스트용)
         val goal_db = db.collection("Goal").document(goal_id)
 
-        goal_db.addSnapshotListener(EventListener<DocumentSnapshot> { snapshot, e ->
+        goal_db.addSnapshotListener { snapshot, e ->
             val goal_day = snapshot?.get("Day").toString().toInt()
             val start_day = snapshot?.get("Start_day").toString()
             val start_day_str = start_day.replace("-", ".")
@@ -93,7 +93,11 @@ class StampBoard : AppCompatActivity() {
             last_day_textView.text = end_day_str
             subtitle_textView.text = subtitle
             goalDate_textView.text = goal_day.toString() + "일"
-            goalToadyDate_textView.text = past_date.toString() + "일"
+            if (past_date > goal_day) {
+                goalToadyDate_textView.text = "종료"
+            } else {
+                goalToadyDate_textView.text = past_date.toString() + "일"
+            }
             goal_progressBar.max = goal_day
             goal_progressBar.progress = past_date
 
@@ -171,21 +175,6 @@ class StampBoard : AppCompatActivity() {
                                     )
                                 )
                             }
-
-//                            } else {
-//                                stampDatas.add(
-//                                    StampBoardData(
-//                                        goal_id = goal_id,
-//                                        num = i,
-//                                        stamp = notYet,
-//                                        participateNum = teamList.size,
-//                                        stampNum = commentNum,
-//                                        stampThemeList = themeArray
-//                                    )
-//                                )
-//
-//                                Log.d("stampData result inner : ", stampDatas.toString())
-//                            }
                         } else {
                             Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] is empty")
                             Log.d(ContentValues.TAG, "comment null num : $i")
@@ -243,7 +232,7 @@ class StampBoard : AppCompatActivity() {
                         Log.d(TAG, "theme : ${theme}")
                         Log.d(TAG, "theme_color : ${theme_color}")
 
-                        teamDatas.add(GoalTeamData(name = nickname, profileColor = theme_color))
+                        teamDatas.add(GoalTeamData(uid = member, name = nickname, profileColor = theme_color))
 
                         Log.d("teamDatas result : ", teamDatas.toString())
 
@@ -256,7 +245,7 @@ class StampBoard : AppCompatActivity() {
                     }
                 }
             }
-        })
+        }
 
     }
 

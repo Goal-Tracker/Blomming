@@ -89,24 +89,31 @@ class StampUploadDialogActivity : AppCompatActivity() {
                         val stamp_id = goal_snapshot?.get("Stamp_id") as String
 
                         if (stampNum != -1){
-                            var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-                            var imgFileName =  timeStamp + ".png"
-                            var storageRef = fbStorage?.reference?.child("stamp/stamp_id")?.child(imgFileName)
+                            var imgFileName = ""
+                            if (imageResultURL != null) {
+                                var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                                imgFileName = stamp_id + "_" + timeStamp + ".png"
+                                var storageRef = fbStorage?.reference?.child("stamp")?.child(imgFileName)
 
-                            storageRef?.putFile(imageResultURL!!)?.addOnSuccessListener {
-                                Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                                storageRef?.putFile(imageResultURL!!)?.addOnSuccessListener {
+                                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                                }
                             }
 
                             val stampData = hashMapOf(
+                                "timestamp" to FieldValue.serverTimestamp(),
                                 "Comment" to comment_editText.text.toString(),
                                 "Image" to imgFileName,
-                                "Uid" to MySharedPreferences.getUserId(this)
+                                "Uid" to MySharedPreferences.getUserId(this),
+                                "UserColor" to MySharedPreferences.getUserColor(this)
                             )
 
-                            db.collection("Stamp").document(stamp_id)
-                                .update(
-                                    mapOf("Day_record.Day${stampNum}" to FieldValue.arrayUnion(stampData))
-                                )
+                            db.collection("Goal")
+
+//                            db.collection("Stamp").document(stamp_id)
+//                                .update(
+//                                    mapOf("Day_record.Day${stampNum}" to FieldValue.arrayUnion(stampData))
+//                                )
                         } else {
                             Log.d("TAG", "Stamp num receive fail")
                         }
