@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.goaltracker
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.goaltracker
 
 import android.app.Notification
 import android.content.Intent

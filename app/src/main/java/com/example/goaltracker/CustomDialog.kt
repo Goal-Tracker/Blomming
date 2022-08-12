@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.goaltracker
 
 import android.app.Dialog
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.goaltracker
 
 import android.content.Intent
 import android.content.pm.PackageInfo
