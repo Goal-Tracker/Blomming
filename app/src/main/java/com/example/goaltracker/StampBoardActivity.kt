@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class StampBoard : AppCompatActivity() {
+class StampBoardActivity : AppCompatActivity() {
 
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
