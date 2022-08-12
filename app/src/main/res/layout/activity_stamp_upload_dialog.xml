@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_baseline_close_24"
+        android:src="@drawable/ic_baseline_close_poke_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -7,6 +7,7 @@
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/comment_input_borderline.xml" value="0.15925925925925927" />
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/default_image.xml" value="0.33063063063063064" />
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.20585585585585586" />
+        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/ic_baseline_close_poke_24.xml" value="0.1335" />
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.33063063063063064" />
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamp_board_rectangle.xml" value="0.33063063063063064" />
         <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamp_board_top_rectangle.xml" value="0.38229166666666664" />
@@ -36,40 +37,6 @@
         <entry key="app/src/main/res/layout/poke_dialog.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/stamp_upload_dialog.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/today_stamp_item.xml" value="0.23324275362318841" />
-      </map>
-    </option>
-  </component>
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/add_button.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/check_active.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/check_inactive.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/circle_gray.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/circle_navy.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/custom_checkbox.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.2035" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/ic_s.xml" value="0.2035" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/ic_title_bar.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/login_border.xml" value="0.2035" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/navi_menu.xml" value="0.13" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/round.xml" value="0.164" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/drawable/white_background.xml" value="0.1575" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/activity_add_goal.xml" value="0.2128205128205128" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/activity_friend.xml" value="0.264" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/activity_goal_list.xml" value="0.1618705035971223" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/activity_main.xml" value="0.2" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/activity_search_friend.xml" value="0.17894736842105263" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/activity_test.xml" value="0.24427083333333333" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/fragment_friend.xml" value="0.25885416666666666" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/item_friend.xml" value="0.25885416666666666" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/item_member.xml" value="0.2" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/item_search_friend.xml" value="0.264" />
-        <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/test.xml" value="0.2" />
       </map>
     </option>
   </component>
