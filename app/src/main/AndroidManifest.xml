@@ -11,6 +11,12 @@
         android:theme="@style/Theme.GoalTracker">
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GoalList"
+            android:exported="false" />
+        <activity
+            android:name=".AddGoal"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

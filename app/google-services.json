@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "470402455172",
+    "project_id": "goal-tracker-40b70",
+    "storage_bucket": "goal-tracker-40b70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470402455172:android:834c19c75279637da314d1",
+        "android_client_info": {
+          "package_name": "com.example.goaltracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470402455172-95mck8j3vbkgbsh3bnbeade6pfhg4j7o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.goaltracker",
+            "certificate_hash": "9449d0a68b5b00f851c8f8257766d8ff858c57cc"
+          }
+        },
+        {
+          "client_id": "470402455172-qtfn7a7up7efsa1dn84ttbnu53nrp951.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnGCp8U1tblYOTosAEZ9kS3RBOw0FWllo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470402455172-qtfn7a7up7efsa1dn84ttbnu53nrp951.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
