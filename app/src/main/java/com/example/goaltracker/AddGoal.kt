@@ -1,67 +1,60 @@
 package com.example.goaltracker
 
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.util.Size
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
-import kotlinx.android.synthetic.main.item_member.*
 import kotlinx.android.synthetic.main.item_member.view.*
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-import java.lang.reflect.Array
-import java.nio.file.Files.size
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 class AddGoal : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
-    private val uid = Firebase.auth.currentUser?.uid // 현재
+    val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
+    private val user = Firebase.auth.currentUser?.uid // 현재
 
-    lateinit var searchBtn: ImageButton    // 검색
+    lateinit var goalName: EditText         // 이름
+    lateinit var first_day: EditText        // 시작일
+    lateinit var last_day: EditText         // 종료일
+    lateinit var Memo: EditText             // 메모
+    lateinit var save_btn: Button           // 저장
+    lateinit var close_btn: ImageButton     // 메인 화면으로
+    lateinit var searchBtn: ImageButton     // 검색
 
-    lateinit var goalName: EditText  // 이름
-    lateinit var first_day: EditText // 시작일
-    lateinit var last_day: EditText  // 종료일
-    lateinit var Memo: EditText      // 메모
-    lateinit var save_btn: Button    // 저장
-
-    lateinit var close_btn: ImageButton    // 메인 화면으로
-
-
+    // 달력
     var first_calendar = Calendar.getInstance()
     var last_calendar = Calendar.getInstance()
 
-    // Person 클래스 ArrayList 생성성
+    var number = 0
+    lateinit var document : String
+
+    // ArrayList 생성
     var FriendsList : ArrayList<Friends> = arrayListOf()
+    val teamList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_goal)
+
 
         searchWord.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -101,9 +94,8 @@ class AddGoal : AppCompatActivity() {
             this.startActivity(intent)
         }
 
+        // 날짜 버튼
         showDatePicker()
-
-        // 날짜 버튼 선택
         val themedButtonGroup = findViewById<ThemedToggleButtonGroup>(R.id.DayButtonGroup)
 
         // 시작일 : 현재 날짜
@@ -111,26 +103,30 @@ class AddGoal : AppCompatActivity() {
         val sdf = SimpleDateFormat(myFormat, Locale.US)
         first_day.setText(sdf.format(first_calendar.time))
 
-
         // 종료일
-        themedButtonGroup.setOnSelectListener { btn_7 : ThemedButton ->
-
+        themedButtonGroup.setOnSelectListener { button : ThemedButton ->
             if (btn_7.isSelected){
                 // 종료일 : 7일 뒤
                 last_calendar.add(Calendar.DATE, +7)
-                last_day.setText(sdf.format(last_calendar.time))
-
-                val allButtons = themedButtonGroup.buttons
-                allButtons.filter { !it.isSelected }
             }
-
-            else
-                last_day.setText(sdf.format(last_calendar.time))
+            if (btn_30.isSelected){
+                // 종료일 : 30일 뒤
+                last_calendar.add(Calendar.DATE, +30)
+            }
+            if (btn_50.isSelected){
+                // 종료일 : 50일 뒤
+                last_calendar.add(Calendar.DATE, +50)
+            }
+            if (btn_100.isSelected){
+                // 종료일 : 100일 뒤
+                last_calendar.add(Calendar.DATE, +100)
+            }
+            last_day.setText(sdf.format(last_calendar.time))
         }
 
-
-        // 데이터 추가
+        // 데이터 저장
         save_btn.setOnClickListener {
+
             val goal = hashMapOf(
                 "Title" to goalName.text.toString(),
                 "Start_day" to first_day.text.toString(),
@@ -139,13 +135,15 @@ class AddGoal : AppCompatActivity() {
                 "Action" to true,
                 "Day" to fewDay(),  //날짜 차이 계산
                 "Stamp_id" to UUID.randomUUID().toString(), // 인스턴스 ID
-                "Team" to FriendsList[0].UserName.toString() // 팀원 (배열)
+                "Team" to teamList // 팀원 uid (배열)
             )
 
-            firestore!!.collection("Goal")  
+            firestore!!.collection("Goal")
                 .add(goal)
-                .addOnSuccessListener { documentReference -> Log.d("DatabaseTest", documentReference.id) }
+                .addOnSuccessListener { documentReference -> Log.d("DatabaseTest", documentReference.id)
+                    document =  documentReference.id}
                 .addOnFailureListener { exception -> Log.d("DatabaseTest", exception.message!!) }
+
 
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -221,7 +219,6 @@ class AddGoal : AppCompatActivity() {
 
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
         init {  // 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
 
             firestore?.collection("Account")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -253,44 +250,21 @@ class AddGoal : AppCompatActivity() {
             }
 
             fun addFriendsBtnOnclick(item: Friends){
+                val user = Firebase.auth.currentUser?.uid
+
                 binding.checkBox.setOnClickListener {
-
-                    if(item.uid != uid){
-                        val friendRef = firestore?.collection("Account")?.document(item.uid.toString())
-                        val myRef = firestore?.collection("Account")?.document("$uid")
-                        friendRef!!.get()
-
-                            .addOnSuccessListener { friendDocument ->
-                                myRef!!.get()
-                                    .addOnSuccessListener { myDocument->
-                                        val friend: MutableMap<String, Any> = HashMap()
-                                        val mine: MutableMap<String, Any> = HashMap()
-
-                                        if( myDocument.get("FriendsList") != null){
-                                        }
-
-                                        // 친구 리스트가 없는 경우
-                                        else {
-                                            mine[item.uid.toString()] = "request"
-                                            myRef.update("FriendsList", FieldValue.arrayUnion(mine))
-
-                                            friend[uid.toString()] = "requested"
-                                            friendRef.update("FriendsList", FieldValue.arrayUnion(friend))
-
-                                            Toast.makeText(this@AddGoal,friendDocument.get("UserName").toString()+"에게 친구요청을 보냈습니다", Toast.LENGTH_LONG).show()
-                                            Log.d(friendDocument.get("UserName").toString(),"에게 친구요청 성공")
-                                        }
-                                    }
-                                    .addOnFailureListener {
-                                        Toast.makeText(this@AddGoal,friendDocument.get("UserName").toString()+"에게 친구요청 보내기를 실패하였습니다", Toast.LENGTH_LONG).show()
-                                        Log.d(friendDocument.get("UserName").toString(),"에게 친구요청 실패")
-                                    }
-                            }
-
+                    // 체크한 친구만 Goal에 추가
+                    when ((it as CheckBox).isChecked) {
+                        true -> teamList.add(item.Uid.toString())
+                        false -> teamList.remove(item.Uid.toString()) // 리스트에서 제거
                     }
                 }
             }
+
         }
+
+
+
 
         // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -315,7 +289,7 @@ class AddGoal : AppCompatActivity() {
                 FriendsList.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                        if (snapshot.getString("UserName")!!.contains(searchWord) || snapshot.getString("Email")!!.contains(searchWord)) {
+                    if (snapshot.getString("UserName")!!.contains(searchWord) || snapshot.getString("Email")!!.contains(searchWord)) {
                         var item = snapshot.toObject(Friends::class.java)
                         FriendsList.add(item!!)
                     }
@@ -327,4 +301,5 @@ class AddGoal : AppCompatActivity() {
     }
 
 }
+
 

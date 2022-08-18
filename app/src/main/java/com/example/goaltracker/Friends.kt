@@ -10,4 +10,4 @@ import java.util.ArrayList
 // 리사이클러 뷰 아이템
 class Friends (var UserName : String? = null,
                var Email : String? = null,
-               var uid : String? = null)
+               var Uid : String? = null)

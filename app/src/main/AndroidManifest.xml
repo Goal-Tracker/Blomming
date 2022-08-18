@@ -9,7 +9,6 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-    package="com.example.myapplication">
 
     <!-- 인터넷 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,10 +27,6 @@
             android:exported="false" />
         <activity
             android:name=".StampBoardActivity"
-            android:exported="true"/>
-
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,9 +34,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".GoalList"
             android:exported="false" />
+
+        <activity
+            android:name=".AddFriendActivity"
+            android:exported="true">
+        </activity>
+
         <activity
             android:name=".AddGoal"
             android:exported="true">
