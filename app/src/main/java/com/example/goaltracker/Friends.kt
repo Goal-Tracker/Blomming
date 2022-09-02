@@ -11,4 +11,4 @@ import java.util.ArrayList
 class Friends (var UserName : String? = null,
                var Email : String? = null,
                var Uid : String? = null,
-                var UserColor : String?=null)
+               var UserColor : String? = null)

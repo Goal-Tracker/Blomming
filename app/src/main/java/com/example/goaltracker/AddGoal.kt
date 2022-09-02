@@ -1,5 +1,6 @@
 package com.example.goaltracker
 
+import android.accounts.Account
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.content.Intent
@@ -9,13 +10,17 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
 import kotlinx.android.synthetic.main.item_member.view.*
@@ -30,7 +35,7 @@ class AddGoal : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
-    private val user = Firebase.auth.currentUser?.uid // 현재
+    private val currentUser = Firebase.auth.currentUser?.uid // 현재
 
     lateinit var goalName: EditText         // 이름
     lateinit var first_day: EditText        // 시작일
@@ -44,7 +49,7 @@ class AddGoal : AppCompatActivity() {
     var first_calendar = Calendar.getInstance()
     var last_calendar = Calendar.getInstance()
 
-    var number = 0
+
     lateinit var document : String
 
     // ArrayList 생성
@@ -54,7 +59,6 @@ class AddGoal : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_goal)
-
 
         searchWord.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -78,10 +82,8 @@ class AddGoal : AppCompatActivity() {
         Memo = findViewById(R.id.Memo)
         close_btn = findViewById(R.id.close_btn)
 
-
         recyclerview.adapter = RecyclerViewAdapter()
         recyclerview.layoutManager = LinearLayoutManager(this)
-
 
         // 검색
         searchBtn.setOnClickListener {
@@ -128,13 +130,12 @@ class AddGoal : AppCompatActivity() {
         save_btn.setOnClickListener {
 
             val goal = hashMapOf(
-                "Title" to goalName.text.toString(),
-                "Start_day" to first_day.text.toString(),
-                "End_day" to last_day.text.toString(),
+                "GoalName" to goalName.text.toString(),
+                "StartDay" to first_day.text.toString(),
+                "EndDay" to last_day.text.toString(),
                 "Memo" to Memo.text.toString(),
                 "Action" to true,
                 "Day" to fewDay(),  //날짜 차이 계산
-                "Stamp_id" to UUID.randomUUID().toString(), // 인스턴스 ID
                 "Team" to teamList // 팀원 uid (배열)
             )
 
@@ -230,7 +231,6 @@ class AddGoal : AppCompatActivity() {
                     FriendsList.add(item!!)
                 }
 
-
                 notifyDataSetChanged()
             }
         }
@@ -250,7 +250,6 @@ class AddGoal : AppCompatActivity() {
             }
 
             fun addFriendsBtnOnclick(item: Friends){
-                val user = Firebase.auth.currentUser?.uid
 
                 binding.checkBox.setOnClickListener {
                     // 체크한 친구만 Goal에 추가
@@ -258,20 +257,46 @@ class AddGoal : AppCompatActivity() {
                         true -> teamList.add(item.Uid.toString())
                         false -> teamList.remove(item.Uid.toString()) // 리스트에서 제거
                     }
+
+                    if(item.Uid != currentUser){
+                        val friendRef = firestore?.collection("Goal")?.document(item.Uid.toString())
+                        val myRef = firestore?.collection("Goal")?.document("$currentUser")
+
+                        friendRef!!.get()
+                            .addOnSuccessListener { friendDocument ->
+                                myRef!!.get()
+                                    .addOnSuccessListener { myDocument->
+                                        val friend: MutableMap<String, String> = HashMap()
+                                        val mine: MutableMap<String, String> = HashMap()
+
+                                        // 친구 리스트가 없는 경우
+                                        if( myDocument.get("Team") == null ){
+                                            mine[item.Uid.toString()] = "request"
+                                            // 배열 요소 업데이트
+                                            myRef.update("Team", FieldValue.arrayUnion(mine)) // arrayUnion()은 배열에 없는 요소만 추가
+
+                                            friend[currentUser.toString()] = "requested"
+                                            friendRef.update("Team", FieldValue.arrayUnion(friend))
+
+                                            Toast.makeText(this@AddGoal,item.UserName.toString()+"에게 친구요청을 보냈습니다.", Toast.LENGTH_LONG).show()
+                                            Log.d(friendDocument.get("UserName").toString(),"에게 친구요청 성공")
+                                        }
+                                    }
+                                    .addOnFailureListener {
+                                    }
+                            }
+                    }
                 }
             }
-
         }
-
-
 
 
         // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as ViewHolder).itemView
 
-            holder.setFriendsName(FriendsList[position])
             holder.addFriendsBtnOnclick(FriendsList[position])
+            holder.setFriendsName(FriendsList[position])
             viewHolder.member_name.text = FriendsList[position].UserName
             viewHolder.member_email.text = FriendsList[position].Email
         }
@@ -294,12 +319,11 @@ class AddGoal : AppCompatActivity() {
                         FriendsList.add(item!!)
                     }
                 }
+
                 notifyDataSetChanged()
             }
         }
-
     }
-
 }
 
 
