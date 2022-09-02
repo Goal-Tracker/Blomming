@@ -84,7 +84,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/shadow_1"
                         android:fontFamily="@font/fontstyle"
-                        android:hint="친구의 이메일을 입력해 주세요."
+                        android:hint="새로운 친구를 검색해주세요."
                         android:inputType="textEmailAddress"
                         android:lineSpacingExtra="6sp"
                         android:paddingStart="30dp"
@@ -135,7 +135,7 @@
 
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/fontstyle"
-                        android:text="나의 친구"
+                        android:text="검색 결과"
                         android:textColor="#363639"
                         android:textSize="12sp"
                         app:lineHeight="38sp" />

@@ -31,6 +31,8 @@ class Notification (var goalType: Int = 0,
                     var friendId:String ?= "",
                     var goalId:String ?="")
 
+
+
 class Auth {
     companion object {
         private val TAG = Auth::class.java.simpleName

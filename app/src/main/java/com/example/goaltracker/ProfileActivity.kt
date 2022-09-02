@@ -181,6 +181,7 @@ class ProfileActivity : AppCompatActivity() {
                 curUserAccount?.update("Username", name)
                 curUserAccount?.update("UserColor", backgroundColor)
 
+
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
