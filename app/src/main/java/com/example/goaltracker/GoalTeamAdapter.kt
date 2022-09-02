@@ -1,6 +1,8 @@
 package com.example.goaltracker
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class GoalTeamAdapter (private val context: Context) : RecyclerView.Adapter<GoalTeamAdapter.ViewHolder>() {
+class GoalTeamAdapter (private val context: Context, private val goalTitle: String) : RecyclerView.Adapter<GoalTeamAdapter.ViewHolder>() {
 
     var teamDatas = ArrayList<GoalTeamData>()
 
@@ -24,7 +26,7 @@ class GoalTeamAdapter (private val context: Context) : RecyclerView.Adapter<Goal
         var dialog: PokeDialog = PokeDialog(context)
 
         val listener = View.OnClickListener {
-            dialog.start(team)
+            dialog.start(team, goalTitle)
         }
 
         holder.apply {
@@ -43,7 +45,7 @@ class GoalTeamAdapter (private val context: Context) : RecyclerView.Adapter<Goal
 
         fun bind(listener: View.OnClickListener, Data: GoalTeamData) {
             tv_profileName.text = Data.name[0].toString()
-            bgShape.setColor(ContextCompat.getColor(context, Data.profileColor))
+            bgShape.setColor(Color.parseColor(Data.profileColor))
 
             view.setOnClickListener(listener)
         }

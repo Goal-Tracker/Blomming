@@ -1,6 +1,7 @@
 package com.example.goaltracker
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -52,7 +53,7 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
 
         fun bind(listener: View.OnClickListener, Data: TodayStampData) {
             // 이미지 로드
-            if (Data.image != null) {
+            if (Data.image != "") {
                 Glide.with(context)
                     .load(Data.image)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -64,7 +65,7 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
                 certification_default_view.visibility = View.GONE
                 certification_default_textView.visibility = View.GONE
             } else {
-                bgCertDefault.setColor(ContextCompat.getColor(context, Data.theme))
+                bgCertDefault.setColor(Color.parseColor(Data.theme))
                 certification_default_textView.text = Data.nickname
                 certification_imageView.visibility = View.GONE
                 certification_default_view.visibility = View.VISIBLE

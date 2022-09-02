@@ -2,9 +2,8 @@ package com.example.goaltracker
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.nfc.Tag
-import android.opengl.Visibility
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -13,11 +12,9 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.FragmentManager
 
 
@@ -121,7 +118,6 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
         var five_memeber5_bgShape : GradientDrawable = five_memeber5_view.background as GradientDrawable
 
 
-
         fun bind(listener: View.OnClickListener, Data: StampBoardData) {
 
             Log.d(TAG, "Data info : $Data")
@@ -142,7 +138,7 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
 
                     one_member_view.visibility = GONE
 
-                    one_stamp_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[0]))
+                    one_stamp_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))
 
                 } else {
                     none_stamp_layout.visibility = GONE
@@ -155,7 +151,7 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
                     one_member_view.visibility = VISIBLE
 
                     one_stamp_bgShape.setColor(ContextCompat.getColor(context, R.color.white))
-                    one_memeber_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[0]))
+                    one_memeber_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))
                 }
 
 
@@ -170,8 +166,8 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
                 five_stamp_layout.visibility = GONE
 
                 two_stamp_bgShape.setColor(ContextCompat.getColor(context, R.color.white))
-                two_memeber1_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[0]))
-                two_memeber2_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[1]))
+                two_memeber1_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))
+                two_memeber2_bgShape.setColor(Color.parseColor(Data.stampThemeList[1]))
 
 
             } else if (Data.stampNum == 3) {  // 세 명 골 인증
@@ -185,9 +181,9 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
                 five_stamp_layout.visibility = GONE
 
                 three_stamp_bgShape.setColor(ContextCompat.getColor(context, R.color.white))
-                three_memeber1_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[0]))
-                three_memeber2_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[1]))
-                three_memeber3_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[2]))
+                three_memeber1_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))
+                three_memeber2_bgShape.setColor(Color.parseColor(Data.stampThemeList[1]))
+                three_memeber3_bgShape.setColor(Color.parseColor(Data.stampThemeList[2]))
 
             } else if (Data.stampNum == 4) {  // 네 명 골 인증
                 Log.d(TAG, "four stampNum : ${Data.stampNum}")
@@ -214,10 +210,10 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
 //                }
 
                 four_stamp_bgShape.setColor(ContextCompat.getColor(context, R.color.white))
-                four_memeber1_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[0]))
-                four_memeber2_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[1]))
-                four_memeber3_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[2]))
-                four_memeber4_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[3]))
+                four_memeber1_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))
+                four_memeber2_bgShape.setColor(Color.parseColor(Data.stampThemeList[1]))
+                four_memeber3_bgShape.setColor(Color.parseColor(Data.stampThemeList[2]))
+                four_memeber4_bgShape.setColor(Color.parseColor(Data.stampThemeList[3]))
 
 
             } else if (Data.stampNum == 5) {  // 네 명 골 인증
@@ -231,11 +227,11 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
                 five_stamp_layout.visibility = VISIBLE
 
                 five_stamp_bgShape.setColor(ContextCompat.getColor(context, R.color.white))
-                five_memeber1_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[0]))
-                five_memeber2_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[1]))
-                five_memeber3_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[2]))
-                five_memeber4_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[3]))
-                five_memeber5_bgShape.setColor(ContextCompat.getColor(context, Data.stampThemeList[4]))
+                five_memeber1_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))
+                five_memeber2_bgShape.setColor(Color.parseColor(Data.stampThemeList[1]))
+                five_memeber3_bgShape.setColor(Color.parseColor(Data.stampThemeList[2]))
+                five_memeber4_bgShape.setColor(Color.parseColor(Data.stampThemeList[3]))
+                five_memeber5_bgShape.setColor(Color.parseColor(Data.stampThemeList[4]))
 
 
             } else {

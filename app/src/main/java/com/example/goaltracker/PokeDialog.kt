@@ -1,9 +1,11 @@
 package com.example.goaltracker
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.View
@@ -28,7 +30,8 @@ class PokeDialog(context: Context) : Dialog(context) {
 
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
-    fun start(profile: GoalTeamData) {
+    @SuppressLint("ResourceType")
+    fun start(profile: GoalTeamData, goalTitle: String) {
         setContentView(R.layout.poke_dialog)
 
 //        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
@@ -45,7 +48,7 @@ class PokeDialog(context: Context) : Dialog(context) {
         var bgButton: GradientDrawable = commentUpload_button.background as GradientDrawable
 
         tv_profileName.text = profile.name[0].toString()
-        bgProfile.setColor(ContextCompat.getColor(context, profile.profileColor))
+        bgProfile.setColor(ContextCompat.getColor(context, Color.parseColor(profile.profileColor)))
 
         close_dialog_button.setOnClickListener {
             Toast.makeText(it.context, "You Click Close Button", Toast.LENGTH_SHORT).show()
@@ -65,32 +68,18 @@ class PokeDialog(context: Context) : Dialog(context) {
             commentUpload_button.setOnClickListener {
                 Toast.makeText(it.context, profile.name + "을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
 
-//            val notifyData = hashMapOf(
-//                "message" to "[콕 찌르기] " + MySharedPreferences.getUserNickname(context) + " 님이 콕 찔렀습니다.",
-//                "userColor" to MySharedPreferences.getUserColor(context),
-//                "type" to 2,
-//                "uid" to MySharedPreferences.getUserId(context)
-//            )
-//
-//            Log.d(ContentValues.TAG, "poke message : $notifyData")
-//            Log.d(ContentValues.TAG, "poke message to : ${profile.uid}")
-//
-//            db.collection("notification").document(profile.uid)
-//                .update("notified", FieldValue.arrayUnion(notifyData))
-
-
                 val notifyData = hashMapOf(
                     "timestamp" to FieldValue.serverTimestamp(),
-                    "message" to "[콕 찌르기] " + MySharedPreferences.getUserNickname(context) + " 님이 콕 찔렀습니다.",
-                    "userColor" to MySharedPreferences.getUserColor(context),
-                    "type" to 2,
-                    "uid" to MySharedPreferences.getUserId(context)
+                    "UserName" to MySharedPreferences.getUserNickname(context),
+                    "UserColor" to MySharedPreferences.getUserColor(context),
+                    "Type" to 3,
+                    "GoalName" to goalTitle
                 )
 
                 Log.d(TAG, "poke message : $notifyData")
                 Log.d(TAG, "poke message to : ${profile.uid}")
 
-                db.collection("Account/${profile.uid}/notification").add(notifyData)
+                db.collection("Account/${profile.uid}/Notification").add(notifyData)
                     .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
                     .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
 

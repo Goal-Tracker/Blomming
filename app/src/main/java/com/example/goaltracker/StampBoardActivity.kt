@@ -63,10 +63,6 @@ class StampBoardActivity : AppCompatActivity() {
         rv_team = findViewById(R.id.rv_team)
         rv_stampBoard = findViewById(R.id.rv_stampBoard)
 
-
-        goalTeamAdapter = GoalTeamAdapter(this)
-        rv_team.adapter = goalTeamAdapter
-
         stampBoardAdapter = StampBoardAdapter(this)
         rv_stampBoard.adapter = stampBoardAdapter
 
@@ -85,8 +81,11 @@ class StampBoardActivity : AppCompatActivity() {
             val stamp_id = snapshot?.get("Stamp_id") as String
             val past_date = pastCalc(start_day);
 
-            val title = snapshot?.get("Title") as String
-            val subtitle = snapshot?.get("Memo") as String
+            val title = snapshot.get("Title") as String
+            val subtitle = snapshot.get("Memo") as String
+
+            goalTeamAdapter = GoalTeamAdapter(this, title)
+            rv_team.adapter = goalTeamAdapter
 
             goalTitle_textView.text = title
             first_day_textView.text = start_day_str
@@ -128,7 +127,7 @@ class StampBoardActivity : AppCompatActivity() {
                         if (day_record["Day$i"] != null){
                             Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] inner ${day_record["Day$i"]}")
                             var commentArray = day_record["Day$i"] as List<HashMap<String, String>>
-                            var themeArray = ArrayList<Int>()
+                            var themeArray = ArrayList<String>()
                             var commentNum = commentArray.size
 
                             Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] not null :  ${commentArray}")
@@ -145,19 +144,18 @@ class StampBoardActivity : AppCompatActivity() {
                                         "[day_record[\"Day$i\"]] commentInfo :  ${commentInfo}"
                                     )
 
-                                    var theme_color: Int
-                                    theme_color = when (commentInfo["UserColor"] as String) {
-                                        "profile_color_lightBlue" -> R.color.profile_color_lightBlue
-                                        "profile_color_coral" -> R.color.profile_color_coral
-                                        "profile_color_blue" -> R.color.profile_color_blue
-                                        "profile_color_babyPink" -> R.color.profile_color_babyPink
-                                        "profile_color_lightOrange" -> R.color.profile_color_lightOrange
-                                        "profile_color_mint" -> R.color.profile_color_mint
-                                        else -> R.color.profile_color_lightBlue
-                                    }
+//                                    var theme_color: Int
+//                                    theme_color = when (commentInfo["UserColor"] as String) {
+//                                        "profile_color_lightBlue" -> R.color.profile_color_lightBlue
+//                                        "profile_color_coral" -> R.color.profile_color_coral
+//                                        "profile_color_blue" -> R.color.profile_color_blue
+//                                        "profile_color_babyPink" -> R.color.profile_color_babyPink
+//                                        "profile_color_lightOrange" -> R.color.profile_color_lightOrange
+//                                        "profile_color_mint" -> R.color.profile_color_mint
+//                                        else -> R.color.profile_color_lightBlue
+//                                    }
 
-                                    themeArray.add(theme_color)
-                                    Log.d(ContentValues.TAG, "$i : [when (theme)] $theme_color")
+                                    themeArray.add(commentInfo["UserColor"].toString())
                                     Log.d(ContentValues.TAG, "$i : [themeArray] $themeArray")
                                 }
 
@@ -186,7 +184,7 @@ class StampBoardActivity : AppCompatActivity() {
                                     stamp = notYet,
                                     participateNum = teamList.size,
                                     stampNum = 0,
-                                    stampThemeList = ArrayList<Int>()
+                                    stampThemeList = ArrayList<String>()
                                 )
                             )
                         }
@@ -200,6 +198,7 @@ class StampBoardActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     Log.d(ContentValues.TAG, "[Error] $e")
                 }
+
             }
 
 
@@ -216,23 +215,23 @@ class StampBoardActivity : AppCompatActivity() {
 
                         val nickname: String = document.get("UserName").toString()
                         val theme: String = document.get("UserColor").toString()
-                        var theme_color: Int
+//                        var theme_color: Int
 
-                        when (theme) {
-                            "profile_color_lightBlue" -> theme_color = R.color.profile_color_lightBlue
-                            "profile_color_coral" -> theme_color = R.color.profile_color_coral
-                            "profile_color_blue" -> theme_color = R.color.profile_color_blue
-                            "profile_color_babyPink" -> theme_color = R.color.profile_color_babyPink
-                            "profile_color_lightOrange" -> theme_color = R.color.profile_color_lightOrange
-                            "profile_color_mint" -> theme_color = R.color.profile_color_mint
-                            else -> theme_color = R.color.profile_color_lightBlue
-                        }
+//                        when (theme) {
+//                            "profile_color_lightBlue" -> theme_color = R.color.profile_color_lightBlue
+//                            "profile_color_coral" -> theme_color = R.color.profile_color_coral
+//                            "profile_color_blue" -> theme_color = R.color.profile_color_blue
+//                            "profile_color_babyPink" -> theme_color = R.color.profile_color_babyPink
+//                            "profile_color_lightOrange" -> theme_color = R.color.profile_color_lightOrange
+//                            "profile_color_mint" -> theme_color = R.color.profile_color_mint
+//                            else -> theme_color = R.color.profile_color_lightBlue
+//                        }
 
                         Log.d(TAG, "nickname : ${nickname}")
                         Log.d(TAG, "theme : ${theme}")
-                        Log.d(TAG, "theme_color : ${theme_color}")
+//                        Log.d(TAG, "theme_color : ${theme_color}")
 
-                        teamDatas.add(GoalTeamData(uid = member, name = nickname, profileColor = theme_color))
+                        teamDatas.add(GoalTeamData(uid = member, name = nickname, profileColor = theme))
 
                         Log.d("teamDatas result : ", teamDatas.toString())
 

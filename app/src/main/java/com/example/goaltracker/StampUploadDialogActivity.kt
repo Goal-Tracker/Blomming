@@ -2,6 +2,7 @@ package com.example.goaltracker
 
 import android.Manifest.permission.CAMERA
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
@@ -50,12 +51,13 @@ class StampUploadDialogActivity : AppCompatActivity() {
     private lateinit var stampInfo : StampBoardData
     private var stampNum : Int = -1
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_stamp_upload_dialog)
 
-        val intent: Intent = getIntent()
+        val intent: Intent = intent
         stampInfo = intent.getParcelableExtra("stampInfo")!!
         stampNum = intent.getIntExtra("stampNum", -1)
 
@@ -67,8 +69,8 @@ class StampUploadDialogActivity : AppCompatActivity() {
         certImage_imageView.setOnClickListener {
             Toast.makeText(it.context, "You Click Certification Image Button", Toast.LENGTH_SHORT).show()
 
-            if(checkPersmission()){
-                Toast.makeText(it.context, "checkPersmission()", Toast.LENGTH_SHORT).show()
+            if(checkPermission()){
+                Toast.makeText(it.context, "checkPermission()", Toast.LENGTH_SHORT).show()
                 dispatchTakePictureIntent()
             } else{
                 Toast.makeText(it.context, "requestPermission()", Toast.LENGTH_SHORT).show()
@@ -90,25 +92,22 @@ class StampUploadDialogActivity : AppCompatActivity() {
 
                         if (stampNum != -1){
                             var imgFileName = ""
-                            if (imageResultURL != null) {
-                                var timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-                                imgFileName = stamp_id + "_" + timeStamp + ".png"
-                                var storageRef = fbStorage?.reference?.child("stamp")?.child(imgFileName)
+                            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                            imgFileName = stamp_id + "_" + timeStamp + ".png"
+                            val storageRef = fbStorage.reference.child("stamp").child(imgFileName)
 
-                                storageRef?.putFile(imageResultURL!!)?.addOnSuccessListener {
-                                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
-                                }
+                            storageRef.putFile(imageResultURL).addOnSuccessListener {
+                                Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
                             }
 
                             val stampData = hashMapOf(
-//                                "timestamp" to FieldValue.serverTimestamp(),
                                 "Comment" to comment_editText.text.toString(),
                                 "Image" to imgFileName,
                                 "Uid" to MySharedPreferences.getUserId(this),
-                                "UserColor" to MySharedPreferences.getUserColor(this)
+                                "UserColor" to MySharedPreferences.getUserColor(this),
+                                "UserName" to MySharedPreferences.getUserNickname(this),
+                                "Type" to true
                             )
-
-//                            db.collection("Goal")
 
                             db.collection("Stamp").document(stamp_id)
                                 .update(
@@ -134,6 +133,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat", "QueryPermissionsNeeded")
     private fun dispatchTakePictureIntent(){
         // 갤러리 혹은 카메라 열기
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
@@ -185,6 +185,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -244,7 +245,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
     }
 
     // 카메라 권한 체크
-    private fun checkPersmission(): Boolean {
+    private fun checkPermission(): Boolean {
         return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) ==
                 PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
             android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)

@@ -5,7 +5,7 @@ data class TodayStampData(
     val stamp_id : String,
     val num : Int,
     val nickname : String,
-    val theme : Int,
+    val theme : String,
     val comment : String,
     val image : String
 )

@@ -116,41 +116,25 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                     todayStampDatas.apply {
                         for (commentInfo in commentArray) {
                             val comment = commentInfo["Comment"] as String
-                            val uid = commentInfo["Uid"] as String
+                            val name = commentInfo["UserName"] as String
+                            val theme = commentInfo["UserColor"] as String
+                            val img = commentInfo["Image"] as String
 
-                            val uid_db = db.collection("Account").document(uid)
-
-                            uid_db.addSnapshotListener { uid_snapshot, e ->
-                                val name = uid_snapshot?.get("UserName") as String
-                                val theme = uid_snapshot?.get("UserColor")
-                                var theme_color: Int
-
-                                when (theme) {
-                                    "profile_color_lightBlue" -> theme_color = R.color.profile_color_lightBlue
-                                    "profile_color_coral" -> theme_color = R.color.profile_color_coral
-                                    "profile_color_blue" -> theme_color = R.color.profile_color_blue
-                                    "profile_color_babyPink" -> theme_color = R.color.profile_color_babyPink
-                                    "profile_color_lightOrange" -> theme_color = R.color.profile_color_lightOrange
-                                    "profile_color_mint" -> theme_color = R.color.profile_color_mint
-                                    else -> theme_color = R.color.profile_color_lightBlue
-                                }
-
-                                add(
-                                    TodayStampData(
-                                        stamp_id = stamp_id,
-                                        num = stamp_num,
-                                        nickname = name,
-                                        theme = theme_color,
-                                        comment = comment,
-                                        image = ""
-                                    )
+                            add(
+                                TodayStampData(
+                                    stamp_id = stamp_id,
+                                    num = stamp_num,
+                                    nickname = name,
+                                    theme = theme,
+                                    comment = comment,
+                                    image = img
                                 )
+                            )
 
-                                Log.d("User Comment", "User todayStampDatas : " + todayStampDatas.toString())
+                            Log.d("User Comment", "User todayStampDatas : " + todayStampDatas.toString())
 
-                                todayStampAdapter.todayStampDatas = todayStampDatas
-                                todayStampAdapter.notifyDataSetChanged()
-                            }
+                            todayStampAdapter.todayStampDatas = todayStampDatas
+                            todayStampAdapter.notifyDataSetChanged()
                         }
                     }
                 } catch (e: Exception){

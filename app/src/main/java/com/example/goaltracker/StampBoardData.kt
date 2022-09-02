@@ -10,5 +10,5 @@ data class StampBoardData(
     val stamp: Boolean,
     val participateNum: Int,
     val stampNum: Int,
-    val stampThemeList: ArrayList<Int>
+    val stampThemeList: ArrayList<String>
 ) : Parcelable

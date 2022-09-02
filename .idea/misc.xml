@@ -3,53 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Goal-Tracker/app/src/main/res/drawable-v24/buttonlayout.xml" value="0.1" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/drawable-v24/x_mark.xml" value="0.1" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/drawable/add_button.xml" value="0.1875" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/drawable/ic_s.xml" value="0.1" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/drawable/round.xml" value="0.1" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/activity_add_friend.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/activity_add_friend_dialog.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/activity_add_goal.xml" value="0.1328125" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/activity_friend.xml" value="0.22" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/activity_goal_list.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/activity_search_friend.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/item_accept_friend.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/item_friend.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/item_friend_add.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/item_request.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/item_request_friend.xml" value="0.17916666666666667" />
-        <entry key="..\:/Goal-Tracker/app/src/main/res/layout/item_search_friend.xml" value="0.16458333333333333" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/comment_input_borderline.xml" value="0.15925925925925927" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/default_image.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.20585585585585586" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/ic_baseline_close_poke_24.xml" value="0.1335" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamp_board_rectangle.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamp_board_top_rectangle.xml" value="0.38229166666666664" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamp_num_circle.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamp_progressbar.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamp_upload_button.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/stamping_button.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/today_stamp_borderline.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/today_stamp_item.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/drawable/user_profile_circle.xml" value="0.33063063063063064" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/activity_stamp_board.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/activity_stamp_upload_dialog.xml" value="0.31666666666666665" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/activity_today_stamp_dialog.xml" value="0.22" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/fragment_poke_dialog.xml" value="0.31666666666666665" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/fragment_stamp_bottom_sheet.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/poke_dialog.xml" value="0.5" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/stamp_input_dialog.xml" value="0.25" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/stamp_num_item.xml" value="2.0" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/stamp_num_item2.xml" value="1.25" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/stamp_upload_dialog.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/today_stamp_dialog.xml" value="0.31666666666666665" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/today_stamp_item.xml" value="0.33" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/user_profile_item.xml" value="1.1" />
-        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.33063063063063064" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/announce_header.xml" value="0.351" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/announce_list.xml" value="0.351" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/button_profile.xml" value="0.356" />
