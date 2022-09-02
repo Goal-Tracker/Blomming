@@ -23,163 +23,163 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        name=findViewById(R.id.joinName)
-        firebaseAuth= FirebaseAuth.getInstance()
-        fireStore= FirebaseFirestore.getInstance()
+        name = findViewById(R.id.joinName)
+        firebaseAuth = FirebaseAuth.getInstance()
+        fireStore = FirebaseFirestore.getInstance()
 
         backToJoin.setOnClickListener {
             finish()
         }
 
         c_f69b94.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_f69b94.setBackgroundResource(R.drawable.p_f69b94)
-            click=true
-            backgroundColor="f69b94"
+            click = true
+            backgroundColor = "f69b94"
         }
         c_f8c8c4.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_f8c8c4.setBackgroundResource(R.drawable.p_f8c8c4)
-            click=true
-            backgroundColor="f8c8c4"
+            click = true
+            backgroundColor = "f8c8c4"
         }
         c_fcdcce.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_fcdcce.setBackgroundResource(R.drawable.p_fcdcce)
-            click=true
-            backgroundColor="fcdcce"
+            click = true
+            backgroundColor = "fcdcce"
         }
         c_96b0e5.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_96b0e5.setBackgroundResource(R.drawable.p_96b0e5)
-            click=true
-            backgroundColor="96b0e5"
+            click = true
+            backgroundColor = "96b0e5"
         }
         c_92b9e2.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_92b9e2.setBackgroundResource(R.drawable.p_92b9e2)
-            click=true
-            backgroundColor="92b9e2"
+            click = true
+            backgroundColor = "92b9e2"
         }
         c_ebc0c7.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_ebc0c7.setBackgroundResource(R.drawable.p_ebc0c7)
-            click=true
-            backgroundColor="ebc0c7"
+            click = true
+            backgroundColor = "ebc0c7"
         }
         c_7bb6c8.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_7bb6c8.setBackgroundResource(R.drawable.p_7bb6c8)
-            click=true
-            backgroundColor="7bb6c8"
+            click = true
+            backgroundColor = "7bb6c8"
         }
         c_aad3d7.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_aad3d7.setBackgroundResource(R.drawable.p_aad3d7)
-            click=true
-            backgroundColor="aad3d7"
+            click = true
+            backgroundColor = "aad3d7"
         }
         c_f5f1f0.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_f5f1f0.setBackgroundResource(R.drawable.p_f5f1f0)
-            click=true
-            backgroundColor="f5f1f0"
+            click = true
+            backgroundColor = "f5f1f0"
         }
         c_d5e3e6.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_d5e3e6.setBackgroundResource(R.drawable.p_d5e3e6)
-            click=true
-            backgroundColor="d5e3e6"
+            click = true
+            backgroundColor = "d5e3e6"
         }
         c_f2a4b1.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_f2a4b1.setBackgroundResource(R.drawable.p_f2a4b1)
-            click=true
-            backgroundColor="f2a4b1"
+            click = true
+            backgroundColor = "f2a4b1"
         }
         c_7175a5.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_7175a5.setBackgroundResource(R.drawable.p_7175a5)
-            click=true
-            backgroundColor="7175a5"
+            click = true
+            backgroundColor = "7175a5"
         }
         c_a1b3d7.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_a1b3d7.setBackgroundResource(R.drawable.p_a1b3d7)
-            click=true
-            backgroundColor="a1b3d7"
+            click = true
+            backgroundColor = "a1b3d7"
         }
         c_bd83cf.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_bd83cf.setBackgroundResource(R.drawable.p_bd83cf)
-            click=true
-            backgroundColor="bd83cf"
+            click = true
+            backgroundColor = "bd83cf"
         }
         c_e5afe9.setOnClickListener {
-            if (click==true) {
+            if (click == true) {
                 initializeProfile()
-                click=false
+                click = false
             }
             c_e5afe9.setBackgroundResource(R.drawable.p_e5afe9)
-            click=true
-            backgroundColor="e5afe9"
+            click = true
+            backgroundColor = "e5afe9"
         }
 
         pfSettingButton.setOnClickListener {
-            if (name==null) {
+            if (name == null) {
                 Toast.makeText(
                     baseContext, "이름을 입력해주세요.",
                     Toast.LENGTH_LONG
                 ).show()
             } else {
 
-                var accountName:String ?= ""
-                accountName=firebaseAuth?.currentUser?.uid.toString()
-                var currentAccount = fireStore?.collection("account")?.document(accountName)
-                currentAccount?.update("Username", name)
-                currentAccount?.update("UserColor", backgroundColor)
+                var accountName: String? = ""
+                accountName = firebaseAuth?.currentUser?.uid.toString()
+                var curUserAccount = fireStore?.collection("account")?.document(accountName)
+                curUserAccount?.update("Username", name)
+                curUserAccount?.update("UserColor", backgroundColor)
 
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()

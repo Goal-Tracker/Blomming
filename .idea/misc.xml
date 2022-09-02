@@ -85,6 +85,8 @@
         <entry key="app/src/main/res/drawable/announce_list.xml" value="0.309" />
         <entry key="app/src/main/res/drawable/button_profile_click.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/button_round.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/circle_gray.xml" value="0.136" />
+        <entry key="app/src/main/res/drawable/circle_navy.xml" value="0.136" />
         <entry key="app/src/main/res/drawable/click_profile.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/goal_list.xml" value="0.1015" />
         <entry key="app/src/main/res/drawable/gray_edittext.xml" value="0.312" />
@@ -98,17 +100,25 @@
         <entry key="app/src/main/res/drawable/string.xml" value="0.312" />
         <entry key="app/src/main/res/drawable/white_edittext.xml" value="0.312" />
         <entry key="app/src/main/res/font/fontstyle.xml" value="0.2431111111111111" />
+        <entry key="app/src/main/res/layout/activity_add_friend.xml" value="0.3380208333333333" />
+        <entry key="app/src/main/res/layout/activity_add_goal.xml" value="0.3380208333333333" />
+        <entry key="app/src/main/res/layout/activity_goal_list.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/activity_join.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.10902255639097744" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.21739130434782608" />
+        <entry key="app/src/main/res/layout/activity_stamp_board.xml" value="0.3380208333333333" />
+        <entry key="app/src/main/res/layout/activity_stamp_upload_dialog.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/announce_layer.xml" value="0.29774774774774776" />
         <entry key="app/src/main/res/layout/announce_message.xml" value="0.21823204419889503" />
         <entry key="app/src/main/res/layout/drawer_header.xml" value="0.25" />
         <entry key="app/src/main/res/layout/drawer_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_stamp_bottom_sheet.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/goals_layer.xml" value="0.2155511811023622" />
+        <entry key="app/src/main/res/layout/item_friend_add.xml" value="0.3380208333333333" />
+        <entry key="app/src/main/res/layout/item_member.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/main_toolbar.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/notice_layer.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/notice_layer_basic.xml" value="0.18568840579710144" />
         <entry key="app/src/main/res/layout/notice_layer_friend.xml" value="0.15405405405405406" />
         <entry key="app/src/main/res/layout/notice_layer_goal.xml" value="0.258051856788429" />
