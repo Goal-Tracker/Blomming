@@ -1,11 +1,14 @@
 package com.example.goaltracker
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -100,6 +103,12 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return true
     }
 }
 

@@ -1,10 +1,13 @@
 package com.example.goaltracker
 
 import android.accounts.Account
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -19,6 +22,7 @@ class JoinActivity : AppCompatActivity() {
 
     lateinit var signupID : EditText
     //lateinit var emailID_error : TextView
+    lateinit var signupPW : EditText
     lateinit var pwCheck : EditText
     lateinit var pwCheck_error : TextView
     var firebaseAuth: FirebaseAuth?=null
@@ -30,6 +34,7 @@ class JoinActivity : AppCompatActivity() {
 
         signupID=findViewById(R.id.signupID)
         //emailID_error=findViewById(R.id.emailID_error)
+        signupPW=findViewById<EditText?>(R.id.signupPW)
         pwCheck=findViewById(R.id.signupPWcheck)
         pwCheck_error=findViewById(R.id.pwCheck_error)
 
@@ -41,24 +46,6 @@ class JoinActivity : AppCompatActivity() {
             finish()
         }
 
-        /*
-        signupID.addTextChangedListener(object:TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable) {
-                if (!Patterns.EMAIL_ADDRESS.matcher(s.toString()).matches()) {
-                    emailID_error.setText("이메일 형식으로 입력해주세요.") // 경고 메세지
-                    signupID.setBackgroundResource(R.drawable.red_edittext) // 적색 테두리 적용
-                } else {
-                    emailID_error.setText("") //에러 메세지 제거
-                    signupID.setBackgroundResource(R.drawable.pwcheck_edittext) //테투리 흰색으로 변경
-                }
-            } // afterTextChanged()..
-
-        })*/
-
         pwCheck.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -66,7 +53,7 @@ class JoinActivity : AppCompatActivity() {
                 var password = signupPW.text.toString()
                 var passwordCheck = signupPWcheck.text.toString()
                 if (password != passwordCheck) {
-                    pwCheck_error.setText("이메일 형식으로 입력해주세요.") // 경고 메세지
+                    pwCheck_error.setText("비밀번호가 일치하지 않습니다.") // 경고 메세지
                     pwCheck.setBackgroundResource(R.drawable.red_edittext) // 적색 테두리 적용
                 } else {
                     pwCheck_error.setText("") //에러 메세지 제거
@@ -76,7 +63,7 @@ class JoinActivity : AppCompatActivity() {
         })
 
         joinCheckButton.setOnClickListener {
-            createAccount(signupID.text.toString(), signupPW.text.toString(), signupPWcheck.text.toString())
+            signinAndSignup()
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
@@ -84,38 +71,54 @@ class JoinActivity : AppCompatActivity() {
 
     }
 
-    private fun createAccount(email: String, password: String, passwordCheck:String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
+    fun signinAndSignup() {
+        if (signupID.text != null && signupPW.text != null) {
+            var password = signupPW.text.toString()
+            var passwordCheck = pwCheck.text.toString()
             if (password == passwordCheck) {
-                firebaseAuth?.createUserWithEmailAndPassword(email, password)
-                    ?.addOnCompleteListener(this) { task ->
+                firebaseAuth?.createUserWithEmailAndPassword(signupID.text.toString(), signupPW.text.toString())
+                    ?.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            //account db 연동
+                            //account db 저장
                             var userAccount = Account()
-                            var accountName : String
+//                            var friends = Friends()
+                            var accountName : String ?= ""
+//                            var friendsName : String = "asdfghjk"
 
                             accountName=firebaseAuth?.currentUser?.uid.toString()
-                            userAccount.userId= firebaseAuth?.currentUser?.email.toString()
-                            userAccount.password=password
+                            userAccount.Email= firebaseAuth?.currentUser?.email.toString()
+//                            userAccount.password=signupPW
+//                            friends.Email="friendsCollectionTest"
 
-                            fireStore?.collection("account")?.document(accountName)?.set(userAccount)
+                            fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
+//                            fireStore?.collection("Account")?.document(accountName)
+//                                ?.collection("Friends")?.document(friendsName)?.set(friends)
                             Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
-                            finish()
-                        } else {
+                        } else if(task.exception?.message.isNullOrEmpty()) {
+                            // Show the error message
+                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
                             Toast.makeText(this, "계정 생성 실패", Toast.LENGTH_SHORT).show()
+                        } else {
+                            // Alert if you have account
+                            Toast.makeText(this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
             } else {
                 Toast.makeText(this, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show()
             }
-        } else if (password.isEmpty()){
+        } else if (signupPW.text==null){
             Toast.makeText(this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show()
-        } else if (email.isEmpty()){
+        } else if (signupID.text==null){
             Toast.makeText(this, "이메일을 입력해주세요", Toast.LENGTH_SHORT).show()
-        } else if (passwordCheck.isEmpty()){
+        } else if (pwCheck.text==null){
             Toast.makeText(this, "비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show()
         }
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        return true
+    }
 
 }

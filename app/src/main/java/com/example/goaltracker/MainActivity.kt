@@ -24,8 +24,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // goal view 모델 가져오기
     //private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
 
-    val dialog = CustomDialog(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_main)
@@ -56,7 +54,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_goalAchieve-> {
+                val dialog = CustomDialog(this)
                 dialog.showDialog()
+                dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
+                    override fun onClicked(name: String) {
+                        Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
             R.id.nav_friendList-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
             R.id.nav_settings-> Toast.makeText(this, "설정 클릭됨", Toast.LENGTH_SHORT).show()

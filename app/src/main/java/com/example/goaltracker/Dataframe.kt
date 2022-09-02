@@ -2,12 +2,18 @@ package com.example.goaltracker
 
 import com.google.firebase.auth.FirebaseAuth
 
-class Account (var userId: String = "",
-                    var userName: String ?= null,
-                    var password: String = "",
-                    var user_color:String ?= null,
-                    var friends:List<String>?=null,
-                    var myGoalList:List<String>?=null)
+class Account (var Email: String = "",
+                    var UserName: String ?= null,
+                    var UserColor:String ?= null,
+                    var FriendsList:List<String>?=null,
+                    var MyGoalList:List<String>?=null,
+                    var NotificationList:List<String>?=null)
+
+public val curUser = Account()
+
+//class Friends (var Email: String = "",
+//                    var UserName: String ?= null,
+//                    var UserColor: String ?= null)
 
 //public class Goal (var action: Boolean?=false,
 //                 var day: Int?=null,
@@ -24,8 +30,6 @@ class Notification (var goalType: Int = 0,
                     var profile_color:String ?= "",
                     var friendId:String ?= "",
                     var goalId:String ?="")
-
-
 
 class Auth {
     companion object {
