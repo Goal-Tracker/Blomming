@@ -73,6 +73,7 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
         var two_memeber1_bgShape : GradientDrawable = two_memeber1_view.background as GradientDrawable
         var two_memeber2_bgShape : GradientDrawable = two_memeber2_view.background as GradientDrawable
 
+
         // 세 명 했을 때 변수
         private val three_stamp_layout: ConstraintLayout = itemView.findViewById(R.id.three_stamp_layout)
         private val three_stampNum_view: View = itemView.findViewById(R.id.three_stampNum_view)
@@ -140,6 +141,7 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
 
                     one_stamp_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))
 
+
                 } else {
                     none_stamp_layout.visibility = GONE
                     one_stamp_layout.visibility = VISIBLE
@@ -194,20 +196,6 @@ class StampBoardAdapter(private val context: Context) : RecyclerView.Adapter<Sta
                 three_stamp_layout.visibility = GONE
                 four_stamp_layout.visibility = VISIBLE
                 five_stamp_layout.visibility = GONE
-
-
-//                var theme_color = emptyArray<Any>()
-//
-//                for (theme in Data.stampThemeList){
-//                    when (theme) {
-//                        "profile_color_lightBlue" -> theme_color.plus(R.color.profile_color_lightBlue)
-//                        "profile_color_coral" -> theme_color.plus(R.color.profile_color_coral)
-//                        "profile_color_blue" -> theme_color.plus(R.color.profile_color_blue)
-//                        "profile_color_babyPink" -> theme_color.plus(R.color.profile_color_babyPink)
-//                        "profile_color_lightOrange" -> theme_color.plus(R.color.profile_color_lightOrange)
-//                        else -> theme_color.plus(R.color.profile_color_lightBlue)
-//                    }
-//                }
 
                 four_stamp_bgShape.setColor(ContextCompat.getColor(context, R.color.white))
                 four_memeber1_bgShape.setColor(Color.parseColor(Data.stampThemeList[0]))

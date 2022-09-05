@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/activity_stamp_upload_dialog.xml" value="0.5" />
+        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/fragment_stamp_bottom_sheet.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/poke_dialog.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudioProjects/GoalTracker/app/src/main/res/layout/today_stamp_item.xml" value="0.17685185185185184" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/announce_header.xml" value="0.351" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/announce_list.xml" value="0.351" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication/app/src/main/res/drawable/button_profile.xml" value="0.356" />

@@ -48,7 +48,7 @@ class PokeDialog(context: Context) : Dialog(context) {
         var bgButton: GradientDrawable = commentUpload_button.background as GradientDrawable
 
         tv_profileName.text = profile.name[0].toString()
-        bgProfile.setColor(ContextCompat.getColor(context, Color.parseColor(profile.profileColor)))
+        bgProfile.setColor(Color.parseColor(profile.profileColor))
 
         close_dialog_button.setOnClickListener {
             Toast.makeText(it.context, "You Click Close Button", Toast.LENGTH_SHORT).show()
@@ -57,7 +57,7 @@ class PokeDialog(context: Context) : Dialog(context) {
         }
 
         if (profile.uid == MySharedPreferences.getUserId(context)) {
-            commentUpload_button.text = "자신 입니다"
+            commentUpload_button.text = "자신입니다"
             commentUpload_button.isEnabled = false
             bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
         } else {
@@ -66,10 +66,10 @@ class PokeDialog(context: Context) : Dialog(context) {
             bgButton.setColor(ContextCompat.getColor(context, R.color.dialog_button))
 
             commentUpload_button.setOnClickListener {
-                Toast.makeText(it.context, profile.name + "을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(it.context, profile.name + " 님을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
 
                 val notifyData = hashMapOf(
-                    "timestamp" to FieldValue.serverTimestamp(),
+                    "Timestamp" to FieldValue.serverTimestamp(),
                     "UserName" to MySharedPreferences.getUserNickname(context),
                     "UserColor" to MySharedPreferences.getUserColor(context),
                     "Type" to 3,

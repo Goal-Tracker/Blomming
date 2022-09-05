@@ -2,6 +2,7 @@ package com.example.goaltracker
 
 import android.app.Activity
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -36,6 +38,8 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
     private lateinit var noneStamp_textView : TextView
     private lateinit var today_stamp_button : Button
     private lateinit var today_stamp_noneStamp_button: Button
+    private lateinit var addPastStamp: LinearLayout
+
 
     lateinit var todayStampAdapter: TodayStampAdapter
     val todayStampDatas = ArrayList<TodayStampData>()
@@ -60,6 +64,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         noneStamp_textView = view.findViewById(R.id.noneStamp_textView)
         today_stamp_button = view.findViewById(R.id.today_stamp_button)
         today_stamp_noneStamp_button = view.findViewById(R.id.today_stamp_noneStamp_button)
+        addPastStamp = view.findViewById(R.id.addPastStamp)
 
         var bgButton : GradientDrawable = today_stamp_button.background as GradientDrawable
         var bgNoneButton: GradientDrawable = today_stamp_noneStamp_button.background as GradientDrawable
@@ -85,6 +90,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             var sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
             var date = sf.parse(start_date)
             var today = Calendar.getInstance()
+            var certified = false
 
             var calcDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
 
@@ -93,6 +99,8 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             // notYet = 0 : 기간 지남
             // notYet = 1 : 오늘
             // notYet = 2 : 아직 기간이 아님
+            Log.d(TAG, "pastDate : $pastDate")
+            Log.d(TAG, "stamp_num : $stamp_num")
             if (pastDate == stamp_num) {
                 notYet = 1
             } else if(pastDate < stamp_num) {
@@ -100,6 +108,8 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             } else {
                 notYet = 0
             }
+
+            Log.d(TAG, "notYet : $notYet")
 
             val stamp_id = goal_snapshot?.get("Stamp_id") as String
             val stamp_db = db.collection("Stamp").document(stamp_id)
@@ -119,6 +129,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                             val name = commentInfo["UserName"] as String
                             val theme = commentInfo["UserColor"] as String
                             val img = commentInfo["Image"] as String
+                            val type = commentInfo["Type"] as Boolean
 
                             add(
                                 TodayStampData(
@@ -127,88 +138,125 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                                     nickname = name,
                                     theme = theme,
                                     comment = comment,
-                                    image = img
+                                    image = img,
+                                    type = type
                                 )
                             )
 
-                            Log.d("User Comment", "User todayStampDatas : " + todayStampDatas.toString())
+                            if (name == MySharedPreferences.getUserNickname(requireContext())) {
+                                certified = true
+                            }
+                        }
 
-                            todayStampAdapter.todayStampDatas = todayStampDatas
-                            todayStampAdapter.notifyDataSetChanged()
+                        Log.d("User Comment", "User todayStampDatas : " + todayStampDatas.toString())
+
+                        todayStampAdapter.todayStampDatas = todayStampDatas
+                        todayStampAdapter.notifyDataSetChanged()
+                    }
+
+                    if (certified) {
+                        addPastStamp.visibility = View.GONE
+                    } else {
+                        addPastStamp.visibility = View.VISIBLE
+                    }
+
+                    Log.d(TAG, "notYet, if : $notYet")
+                    Log.d(TAG, "notYet == 0 : ${notYet == 0}")
+                    Log.d(TAG, "notYet == 1 : ${notYet == 1}")
+                    Log.d(TAG, "notYet == 2 : ${notYet == 2}")
+
+                    if (notYet == 0){ // 이미 기간이 지난 경우
+                        Log.d("stamp status", "notYet: $notYet")
+
+                        // 스탬프가 하나라도 있는 경우
+                        noneStamp_textView.visibility = View.GONE
+                        today_stamp_noneStamp_button.visibility = View.GONE
+                        stamp_recyclerView.visibility = View.VISIBLE
+                        today_stamp_button.visibility = View.VISIBLE
+                        today_stamp_noneStamp_button.isEnabled = false
+                        today_stamp_button.isEnabled = false
+
+                        today_stamp_button.text = "기간이 지났습니다"
+                        bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+
+                    } else if(notYet == 1) {  // 오늘인 경우
+                        Log.d("stamp status", "notYet: $notYet")
+
+                        addPastStamp.visibility = View.GONE
+
+                        if (certified) {
+                            noneStamp_textView.visibility = View.GONE
+                            today_stamp_noneStamp_button.visibility = View.GONE
+                            stamp_recyclerView.visibility = View.VISIBLE
+                            today_stamp_button.visibility = View.VISIBLE
+                            today_stamp_noneStamp_button.isEnabled = false
+                            today_stamp_button.isEnabled = true
+
+                            today_stamp_button.text = "도장찍기 완료"
+                            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+
+                        } else {
+                            noneStamp_textView.visibility = View.GONE
+                            today_stamp_noneStamp_button.visibility = View.GONE
+                            stamp_recyclerView.visibility = View.VISIBLE
+                            today_stamp_button.visibility = View.VISIBLE
+                            today_stamp_noneStamp_button.isEnabled = false
+                            today_stamp_button.isEnabled = true
+
+                            today_stamp_button.text = "오늘의 도장 찍기"
+                            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.dialog_button))
                         }
                     }
                 } catch (e: Exception){
                     Log.d(ContentValues.TAG, "[Error] $e")
+
+                    if (notYet == 0){ // 이미 기간이 지난 경우
+                        Log.d("stamp status", "notYet: $notYet")
+
+                        noneStamp_textView.visibility = View.VISIBLE
+                        today_stamp_noneStamp_button.visibility = View.VISIBLE
+                        stamp_recyclerView.visibility = View.GONE
+                        today_stamp_button.visibility = View.GONE
+                        today_stamp_noneStamp_button.isEnabled = false
+                        today_stamp_button.isEnabled = false
+
+                        today_stamp_noneStamp_button.text = "기간이 지났습니다"
+                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+
+                    } else if(notYet == 2) {  // 아직 기간이 아닌 경우
+                        Log.d("stamp status", "notYet: $notYet")
+
+                        addPastStamp.visibility = View.GONE
+
+                        noneStamp_textView.visibility = View.VISIBLE
+                        today_stamp_noneStamp_button.visibility = View.VISIBLE
+                        stamp_recyclerView.visibility = View.GONE
+                        today_stamp_button.visibility = View.GONE
+                        today_stamp_noneStamp_button.isEnabled = false
+                        today_stamp_button.isEnabled = false
+
+                        today_stamp_noneStamp_button.text = "아직 기간이 아닙니다"
+                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+
+                    } else {
+                        Log.d("stamp status", "notYet: $notYet")
+
+                        addPastStamp.visibility = View.GONE
+
+                        noneStamp_textView.visibility = View.VISIBLE
+                        today_stamp_noneStamp_button.visibility = View.VISIBLE
+                        stamp_recyclerView.visibility = View.GONE
+                        today_stamp_button.visibility = View.GONE
+                        today_stamp_noneStamp_button.isEnabled = true
+                        today_stamp_button.isEnabled = false
+
+                        today_stamp_noneStamp_button.text = "오늘의 도장 찍기"
+                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.dialog_button))
+
+                    }
                 }
 
                 Log.d("todayStampDatas result : ", todayStampDatas.toString())
-            }
-
-            Log.d("stampInfo.stampNum", stampInfo.stampNum.toString())
-
-
-            if (notYet == 0){ // 이미 기간이 지난 경우
-                Log.d("stamp status", "notYet: $notYet")
-
-                if (stampInfo.stampNum == 0){   // 스탬프가 없는 경우
-                    noneStamp_textView.visibility = View.VISIBLE
-                    today_stamp_noneStamp_button.visibility = View.VISIBLE
-                    stamp_recyclerView.visibility = View.GONE
-                    today_stamp_button.visibility = View.GONE
-                    today_stamp_noneStamp_button.isEnabled = false
-                    today_stamp_button.isEnabled = false
-                    today_stamp_noneStamp_button.text = "기간이 지났습니다"
-                    bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-
-                } else {  // 스탬프가 하나라도 있는 경우
-                    noneStamp_textView.visibility = View.GONE
-                    today_stamp_noneStamp_button.visibility = View.GONE
-                    stamp_recyclerView.visibility = View.VISIBLE
-                    today_stamp_button.visibility = View.VISIBLE
-                    today_stamp_noneStamp_button.isEnabled = false
-                    today_stamp_button.isEnabled = false
-                    today_stamp_button.text = "기간이 지났습니다"
-                    bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-                }
-
-
-            } else if(notYet == 2) {  // 아직 기간이 아닌 경우
-                Log.d("stamp status", "notYet: $notYet")
-
-                noneStamp_textView.visibility = View.VISIBLE
-                today_stamp_noneStamp_button.visibility = View.VISIBLE
-                stamp_recyclerView.visibility = View.GONE
-                today_stamp_button.visibility = View.GONE
-                today_stamp_noneStamp_button.isEnabled = false
-                today_stamp_button.isEnabled = false
-
-                today_stamp_noneStamp_button.text = "아직 기간이 아닙니다"
-                bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-            } else {
-                Log.d("stamp status", "notYet: $notYet")
-
-                if (stampInfo.stampNum == 0){
-                    noneStamp_textView.visibility = View.VISIBLE
-                    today_stamp_noneStamp_button.visibility = View.VISIBLE
-                    stamp_recyclerView.visibility = View.GONE
-                    today_stamp_button.visibility = View.GONE
-                    today_stamp_noneStamp_button.isEnabled = true
-                    today_stamp_button.isEnabled = false
-
-                    today_stamp_noneStamp_button.text = "오늘의 도장 찍기"
-                    bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.dialog_button))
-
-                } else {
-                    noneStamp_textView.visibility = View.GONE
-                    today_stamp_noneStamp_button.visibility = View.GONE
-                    stamp_recyclerView.visibility = View.VISIBLE
-                    today_stamp_button.visibility = View.VISIBLE
-                    today_stamp_noneStamp_button.isEnabled = false
-                    today_stamp_button.isEnabled = true
-
-                    today_stamp_button.text = "도장찍기 완료"
-                    bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-                }
             }
         }
 
@@ -225,6 +273,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             val intent = Intent(context, StampUploadDialogActivity::class.java)
             intent.putExtra("stampInfo", stampInfo)
             intent.putExtra("stampNum", stamp_num)
+            intent.putExtra("type", true)
             startActivity(intent)
         }
 
@@ -233,6 +282,16 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             val intent = Intent(context, StampUploadDialogActivity::class.java)
             intent.putExtra("stampInfo", stampInfo)
             intent.putExtra("stampNum", stamp_num)
+            intent.putExtra("type", true)
+            startActivity(intent)
+        }
+
+        addPastStamp.setOnClickListener {
+            Toast.makeText(requireContext(), "addPastStamp", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, StampUploadDialogActivity::class.java)
+            intent.putExtra("stampInfo", stampInfo)
+            intent.putExtra("stampNum", stamp_num)
+            intent.putExtra("type", false)
             startActivity(intent)
         }
 

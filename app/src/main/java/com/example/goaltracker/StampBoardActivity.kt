@@ -50,7 +50,7 @@ class StampBoardActivity : AppCompatActivity() {
         // uid 저장
         MySharedPreferences.setUserId(this, "QL5QEcUUl5QKxKWOKQ2J")
         MySharedPreferences.setUserNickname(this, "임정수")
-        MySharedPreferences.setUserColor(this, "profile_color_lightOrange")
+        MySharedPreferences.setUserColor(this, "#fcdcce")
 
         goalTitle_textView = findViewById(R.id.goalTitle_textView)
         first_day_textView = findViewById(R.id.first_day_textView)
@@ -144,19 +144,10 @@ class StampBoardActivity : AppCompatActivity() {
                                         "[day_record[\"Day$i\"]] commentInfo :  ${commentInfo}"
                                     )
 
-//                                    var theme_color: Int
-//                                    theme_color = when (commentInfo["UserColor"] as String) {
-//                                        "profile_color_lightBlue" -> R.color.profile_color_lightBlue
-//                                        "profile_color_coral" -> R.color.profile_color_coral
-//                                        "profile_color_blue" -> R.color.profile_color_blue
-//                                        "profile_color_babyPink" -> R.color.profile_color_babyPink
-//                                        "profile_color_lightOrange" -> R.color.profile_color_lightOrange
-//                                        "profile_color_mint" -> R.color.profile_color_mint
-//                                        else -> R.color.profile_color_lightBlue
-//                                    }
-
-                                    themeArray.add(commentInfo["UserColor"].toString())
-                                    Log.d(ContentValues.TAG, "$i : [themeArray] $themeArray")
+                                    if (commentInfo["Type"] as Boolean) {
+                                        themeArray.add(commentInfo["UserColor"].toString())
+                                        Log.d(ContentValues.TAG, "$i : [themeArray] $themeArray")
+                                    }
                                 }
 
                                 Log.d(ContentValues.TAG, "$i : [inner themeArray] $themeArray")
@@ -168,7 +159,7 @@ class StampBoardActivity : AppCompatActivity() {
                                         num = i,
                                         stamp = notYet,
                                         participateNum = teamList.size,
-                                        stampNum = commentNum,
+                                        stampNum = themeArray.size,
                                         stampThemeList = themeArray
                                     )
                                 )

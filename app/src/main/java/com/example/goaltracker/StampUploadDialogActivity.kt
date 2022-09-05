@@ -16,7 +16,7 @@ import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View.inflate
+import android.view.View.*
 import android.view.Window
 import android.widget.*
 import androidx.core.app.ActivityCompat
@@ -40,6 +40,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
     private lateinit var certImage_imageView : ImageView
     private lateinit var comment_editText : EditText
     private lateinit var commentUpload_button : Button
+    private lateinit var infoText2 : TextView
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var currentPhotoPath : String
@@ -50,6 +51,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
 
     private lateinit var stampInfo : StampBoardData
     private var stampNum : Int = -1
+    private var type : Boolean = false
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +62,19 @@ class StampUploadDialogActivity : AppCompatActivity() {
         val intent: Intent = intent
         stampInfo = intent.getParcelableExtra("stampInfo")!!
         stampNum = intent.getIntExtra("stampNum", -1)
+        type = intent.getBooleanExtra("type", false)
 
-        close_dialog_button = findViewById(com.example.goaltracker.R.id.close_dialog_button)
-        certImage_imageView = findViewById(com.example.goaltracker.R.id.certImage_imageView)
-        comment_editText = findViewById(com.example.goaltracker.R.id.comment_editText)
-        commentUpload_button = findViewById(com.example.goaltracker.R.id.commentUpload_button)
+        close_dialog_button = findViewById(R.id.close_dialog_button)
+        certImage_imageView = findViewById(R.id.certImage_imageView)
+        comment_editText = findViewById(R.id.comment_editText)
+        commentUpload_button = findViewById(R.id.commentUpload_button)
+        infoText2 = findViewById(R.id.infoText2)
+
+        if (type) {
+            infoText2.visibility = GONE
+        } else {
+            infoText2.visibility = VISIBLE
+        }
 
         certImage_imageView.setOnClickListener {
             Toast.makeText(it.context, "You Click Certification Image Button", Toast.LENGTH_SHORT).show()
@@ -106,7 +116,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
                                 "Uid" to MySharedPreferences.getUserId(this),
                                 "UserColor" to MySharedPreferences.getUserColor(this),
                                 "UserName" to MySharedPreferences.getUserNickname(this),
-                                "Type" to true
+                                "Type" to type
                             )
 
                             db.collection("Stamp").document(stamp_id)

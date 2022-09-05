@@ -1,12 +1,15 @@
 package com.example.goaltracker
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +17,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.firebase.storage.FirebaseStorage
+import java.lang.Exception
 
 class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<TodayStampAdapter.ViewHolder>() {
 
@@ -54,16 +59,33 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
         fun bind(listener: View.OnClickListener, Data: TodayStampData) {
             // 이미지 로드
             if (Data.image != "") {
-                Glide.with(context)
-                    .load(Data.image)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .centerCrop()
-                    .into(certification_imageView)
-                certification_imageView.visibility = View.VISIBLE
-                certification_imageView.clipToOutline = true
+                var fbStorage = FirebaseStorage.getInstance()
+                val storageRef = fbStorage.reference.child("stamp/${Data.image}")
+                bgCertDefault.setColor(ContextCompat.getColor(context, R.color.gray))
 
-                certification_default_view.visibility = View.GONE
-                certification_default_textView.visibility = View.GONE
+                storageRef.downloadUrl.addOnCompleteListener { task ->
+                    try {
+                        Glide.with(context)
+                            .load(task.result)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .centerCrop()
+                            .into(certification_imageView)
+                        certification_imageView.visibility = View.VISIBLE
+                        certification_imageView.clipToOutline = true
+
+                        certification_default_view.visibility = View.GONE
+                        certification_default_textView.visibility = View.GONE
+                    } catch (E : Exception) {
+                        Toast.makeText(context, "이미지 불러오기를 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                        bgCertDefault.setColor(Color.parseColor(Data.theme))
+                        certification_default_textView.text = Data.nickname
+                        certification_imageView.visibility = View.GONE
+                        certification_default_view.visibility = View.VISIBLE
+                        certification_default_textView.visibility = View.VISIBLE
+                    }
+                }
+
+
             } else {
                 bgCertDefault.setColor(Color.parseColor(Data.theme))
                 certification_default_textView.text = Data.nickname
@@ -72,8 +94,13 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
                 certification_default_textView.visibility = View.VISIBLE
             }
 
-            nickname_textView.text = Data.nickname
             comment_textView.text = Data.comment
+
+            if (Data.type) {
+                nickname_textView.text = Data.nickname
+            } else {
+                nickname_textView.text = Data.nickname + " (지각)"
+            }
 
             view.setOnClickListener(listener)
         }

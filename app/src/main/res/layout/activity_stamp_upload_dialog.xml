@@ -64,6 +64,7 @@
 
 
     <TextView
+        android:id="@+id/infoText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -75,5 +76,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commentUpload_button" />
+
+    <TextView
+        android:id="@+id/infoText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="39dp"
+        android:text="지각제출로 도장을 찍을 시 지각 처리가 표시됩니다."
+        android:textColor="@color/greyish_brown"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoText1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

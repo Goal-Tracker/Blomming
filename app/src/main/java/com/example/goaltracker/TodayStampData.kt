@@ -7,5 +7,6 @@ data class TodayStampData(
     val nickname : String,
     val theme : String,
     val comment : String,
-    val image : String
+    val image : String,
+    val type : Boolean
 )
