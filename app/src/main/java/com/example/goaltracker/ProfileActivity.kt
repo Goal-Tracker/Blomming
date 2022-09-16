@@ -175,13 +175,15 @@ class ProfileActivity : AppCompatActivity() {
                 ).show()
             } else {
 
-                var accountName: String? = ""
-                accountName = firebaseAuth?.currentUser?.uid.toString()
-                var curUserAccount = fireStore?.collection("Account")?.document(accountName)
-                curUserAccount?.update("Username", name)
-                curUserAccount?.update("UserColor", backgroundColor)
+                var accountUId: String? = ""
+                accountUId = firebaseAuth?.currentUser?.uid.toString()
 
+                curUser.Email = firebaseAuth?.currentUser?.email.toString()
+                Log.d("이름", name.text.toString())
+                curUser.UserName = name.text.toString()
+                curUser.UserColor = backgroundColor
 
+                fireStore?.collection("Account")?.document(accountUId)?.set(curUser)
 
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
@@ -190,7 +192,7 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    fun initializeProfile() {  // 프로필 색상 선택 초기화 함수
+    private fun initializeProfile() {  // 프로필 색상 선택 초기화 함수
         c_f69b94.setBackgroundResource(R.drawable.b_f69b94)
         c_f8c8c4.setBackgroundResource(R.drawable.b_f8c8c4)
         c_fcdcce.setBackgroundResource(R.drawable.b_fcdcce)
