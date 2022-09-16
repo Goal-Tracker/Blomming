@@ -194,7 +194,7 @@ class CustomDialog(context: Context) {
 
                 var accountName: String? = ""
                 accountName = firebaseAuth?.currentUser?.uid.toString()
-                var curUserAccount = fireStore?.collection("account")?.document(accountName)
+                var curUserAccount = fireStore?.collection("Account")?.document(accountName)
                 curUserAccount?.update("Username", edit_nick)
                 curUserAccount?.update("UserColor", edit_profile_color)
             }
