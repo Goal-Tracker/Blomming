@@ -91,8 +91,9 @@ class JoinActivity : AppCompatActivity() {
 //                            friends.Email="friendsCollectionTest"
 
                             fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
-//                            fireStore?.collection("Account")?.document(accountName)
-//                                ?.collection("Friends")?.document(friendsName)?.set(friends)
+                            //Friends, Notification 콜렉션 생성
+                            fireStore?.collection("Account")?.document(accountName)?.collection("Friends")
+                            fireStore?.collection("Account")?.document(accountName)?.collection("Notification")
                             Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
                         } else if(task.exception?.message.isNullOrEmpty()) {
                             // Show the error message
