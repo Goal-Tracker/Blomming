@@ -3,6 +3,7 @@ package com.example.goaltracker
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.Toast
@@ -192,11 +193,15 @@ class CustomDialog(context: Context) {
                 
             } else {
 
-                var accountName: String? = ""
-                accountName = firebaseAuth?.currentUser?.uid.toString()
-                var curUserAccount = fireStore?.collection("Account")?.document(accountName)
-                curUserAccount?.update("Username", edit_nick)
-                curUserAccount?.update("UserColor", edit_profile_color)
+                var accountUId: String? = ""
+                accountUId = firebaseAuth?.currentUser?.uid.toString()
+
+                curUser.Email = firebaseAuth?.currentUser?.email.toString()
+                Log.d("이름", edit_nick.toString())
+                curUser.UserName = edit_nick.toString()
+                curUser.UserColor = edit_profile_color
+
+                var curUserAccount = fireStore?.collection("Account")?.document(accountUId)
             }
             dialog.dismiss()
         }

@@ -2,7 +2,7 @@ package com.example.goaltracker
 
 import com.google.firebase.auth.FirebaseAuth
 
-class Account (var Email: String = "",
+data class Account (var Email: String = "",
                     var UserName: String ?= null,
                     var UserColor:String ?= null,
                     var FriendsList:List<String>?=null,
@@ -24,7 +24,7 @@ public val curUser = Account()
 //                 var team: List<String>?=null,
 //                 var title: String="")
 
-class Notification (var goalType: Int = 0,
+data class Notification (var goalType: Int = 0,
                     var message: String = "",
                     var name_short:String ?= null,
                     var profile_color:String ?= "",
