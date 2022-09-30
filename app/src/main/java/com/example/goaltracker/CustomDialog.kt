@@ -196,12 +196,12 @@ class CustomDialog(context: Context) {
                 var accountUId: String? = ""
                 accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-                curUser.Email = firebaseAuth?.currentUser?.email.toString()
-                Log.d("이름", edit_nick.toString())
-                curUser.UserName = edit_nick.toString()
-                curUser.UserColor = edit_profile_color
+                val curUser = hashMapOf<String, Any?>(
+                    "userName" to edit_nick.text.toString(),
+                    "userColor" to edit_profile_color
+                )
 
-                var curUserAccount = fireStore?.collection("Account")?.document(accountUId)
+                fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
             }
             dialog.dismiss()
         }

@@ -178,12 +178,18 @@ class ProfileActivity : AppCompatActivity() {
                 var accountUId: String? = ""
                 accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-                curUser.Email = firebaseAuth?.currentUser?.email.toString()
-                Log.d("이름", name.text.toString())
-                curUser.UserName = name.text.toString()
-                curUser.UserColor = backgroundColor
+                val curUser = hashMapOf<String, Any?>(
+                    "userName" to name.text.toString(),
+                    "userColor" to backgroundColor
+                )
 
-                fireStore?.collection("Account")?.document(accountUId)?.set(curUser)
+//                curUser.Email = firebaseAuth?.currentUser?.email.toString()
+                Log.d("이름", name.text.toString())
+//                curUser.UserName = name.text.toString()
+//                curUser.UserColor = backgroundColor
+                Log.d("현재유저", curUser.toString())
+
+                fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
 
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()

@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 class NoticeAdapter (private val context:Context) : RecyclerView.Adapter<NoticeAdapter.ViewHolder>(){
 
-    private var noticeList = mutableListOf<Notification>()
+    private var notices = mutableListOf<Notification>()
 
     fun setListData(data:MutableList<Notification>){
-        noticeList = data
+        notices = data
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeAdapter.ViewHolder {
