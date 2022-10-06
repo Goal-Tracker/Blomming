@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -32,6 +33,7 @@ class StampBoardActivity() : AppCompatActivity() {
     lateinit var stampBoardAdapter: StampBoardAdapter
     val teamDatas = ArrayList<GoalTeamData>()
 
+    lateinit var goal_back_imageButton: ImageButton
     lateinit var goalTitle_textView : TextView
     lateinit var first_day_textView : TextView
     lateinit var last_day_textView : TextView
@@ -51,6 +53,12 @@ class StampBoardActivity() : AppCompatActivity() {
         MySharedPreferences.setUserId(this, "QL5QEcUUl5QKxKWOKQ2J")
         MySharedPreferences.setUserNickname(this, "임정수")
         MySharedPreferences.setUserColor(this, "#fcdcce")
+
+        goal_back_imageButton = findViewById(R.id.goal_back_imageButton)
+
+        goal_back_imageButton.setOnClickListener {
+            finish()
+        }
 
         goalTitle_textView = findViewById(R.id.goalTitle_textView)
         first_day_textView = findViewById(R.id.first_day_textView)
