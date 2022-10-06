@@ -13,4 +13,13 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="Theme.GoalTracker.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.GoalTracker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.GoalTracker.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
