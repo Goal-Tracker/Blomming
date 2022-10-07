@@ -21,6 +21,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageButton
+            android:id="@+id/goal_back_imageButton"
+            android:layout_width="13.5dp"
+            android:layout_height="13.5dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/goal_record_close"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="22.8dp"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/goalTitle_textView"
             android:layout_width="wrap_content"
