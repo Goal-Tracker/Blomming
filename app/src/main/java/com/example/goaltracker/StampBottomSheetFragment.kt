@@ -84,7 +84,9 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         val goal_db = db.collection("Goal").document(goal_id)
 
         goal_db.addSnapshotListener { goal_snapshot, e ->
-            val start_day = goal_snapshot?.get("Start_day") as String
+            val goal_day = goal_snapshot?.get("day").toString().toInt()
+
+            val start_day = goal_snapshot?.get("startDay") as String
 
             var start_date = start_day + " 00:00:00"
             var sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
@@ -111,7 +113,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
             Log.d(TAG, "notYet : $notYet")
 
-            val stamp_id = goal_snapshot?.get("Stamp_id") as String
+            val stamp_id = goal_snapshot?.get("stampId") as String
             val stamp_db = db.collection("Stamp").document(stamp_id)
 
             stamp_db.addSnapshotListener { stamp_snapshot, e ->
@@ -154,10 +156,10 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         todayStampAdapter.notifyDataSetChanged()
                     }
 
-                    if (certified) {
-                        addPastStamp.visibility = View.GONE
-                    } else {
+                    if (!certified && pastDate <= goal_day) {
                         addPastStamp.visibility = View.VISIBLE
+                    } else {
+                        addPastStamp.visibility = View.GONE
                     }
 
                     Log.d(TAG, "notYet, if : $notYet")

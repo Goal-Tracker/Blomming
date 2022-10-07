@@ -158,10 +158,8 @@ class StampBoardActivity() : AppCompatActivity() {
                                                 "[day_record[\"Day$i\"]] commentInfo :  ${commentInfo}"
                                             )
 
-                                            if (commentInfo["Type"] as Boolean) {
-                                                themeArray.add(commentInfo["UserColor"].toString())
-                                                Log.d(TAG, "$i : [themeArray] $themeArray")
-                                            }
+                                            themeArray.add(commentInfo["UserColor"].toString())
+                                            Log.d(TAG, "$i : [themeArray] $themeArray")
                                         }
 
                                         Log.d(TAG, "$i : [inner themeArray] $themeArray")
