@@ -16,11 +16,11 @@ data class Account (
 //public val curUser = Account()
 
 @Parcelize
-data class Notification (
-    var GoalName:String ?="",
-    var Message: String = "",
-    var GoalType: Int = 0,
-    var UserColor:String ?= "",
-    var UserName:String ?= null,
-    var FriendId:String ?= ""
+data class Notifications (
+    var goalName:String ?="",
+    var message: String = "",
+    var type: Int = 0,
+    var userColor:String ?= "",
+    var userName:String ?= null,
+    var friendId:String ?= ""
 ) : Parcelable

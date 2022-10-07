@@ -52,21 +52,42 @@
             android:name=".StampBoardActivity"
             android:exported="true">
         </activity>
-        <activity
-            android:name=".GoogleLogin"
-            android:exported="true" />
-        <activity
-            android:name=".FacebookLogin"
-            android:exported="true" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="true" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true" />
+
+        <activity android:name=".StampBoardActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".GoogleLogin"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".FacebookLogin"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".MainActivity"
+            android:exported="true">
+
+        </activity>
+
+        <activity android:name=".ProfileActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".LoginActivity"
+            android:exported="true">
+
+        </activity>
+
+        <activity android:name=".NoticeActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

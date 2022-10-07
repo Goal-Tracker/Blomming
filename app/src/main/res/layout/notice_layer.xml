@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="115dp"
+    android:layout_height="100dp"
     android:background="@drawable/announce_list"
     android:orientation="vertical">
 
@@ -20,13 +20,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
+                <View
                     android:id="@+id/notice_profile"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/profile_view"
-                    android:backgroundTint="#f8c8c4"></ImageView>
+                    android:background="@drawable/profile_view"></View>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -70,7 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="23dp"
             android:layout_gravity="center"
-            android:layout_weight="0.5">
+            android:layout_weight="0.8">
 
             <Button
                 android:id="@+id/notice_button"
@@ -81,9 +80,15 @@
                 android:textColor="#ffffff"
                 android:textSize="10sp"
                 android:fontFamily="@font/ko_pub_world_dotum_medium"
-                android:background="@drawable/notice_button">
+                android:background="@drawable/notice_button"/>
 
-            </Button>
+            <Button
+                android:id="@+id/notice_cancel_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="3dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_close_poke_24"/>
 
         </LinearLayout>
 

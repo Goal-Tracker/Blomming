@@ -125,7 +125,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.nav_goalAchieve-> {
+            R.id.nav_goalAchieve-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
+            R.id.nav_friendList-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
+            R.id.nav_settings-> {
                 val dialog = CustomDialog(this)
                 dialog.showDialog()
                 dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
@@ -134,8 +136,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 })
             }
-            R.id.nav_friendList-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
-            R.id.nav_settings-> Toast.makeText(this, "설정 클릭됨", Toast.LENGTH_SHORT).show()
             R.id.nav_notice-> Toast.makeText(this, "공지사항 클릭됨", Toast.LENGTH_SHORT).show()
             R.id.nav_logOut-> Toast.makeText(this, "로그아웃 클릭됨", Toast.LENGTH_SHORT).show()
         }

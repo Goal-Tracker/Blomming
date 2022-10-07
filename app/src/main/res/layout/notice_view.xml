@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="45dp"
                 android:layout_marginBottom="28dp"
                 android:text="알림 메시지"
                 android:textColor="#ffffff"
