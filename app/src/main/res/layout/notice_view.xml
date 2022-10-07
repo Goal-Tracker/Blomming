@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,8 +21,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="56dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="28dp"
                 android:text="알림 메시지"
                 android:textColor="#ffffff"
                 android:textSize="15sp"
@@ -32,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="258.7dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="50dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/alarm_close"
                 tools:ignore="TouchTargetSizeCheck"></ImageButton>
@@ -46,20 +48,18 @@
             android:orientation="vertical"
             android:background="#ffffff">
 
-            <ScrollView
-                android:id="@+id/goal_scroll"
+            <!-- 알림 공지 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notice_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
-
-                <!-- 알림 공지 -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/notice_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </ScrollView>
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                tools:listitem="@layout/notice_layer"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+            </androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
 

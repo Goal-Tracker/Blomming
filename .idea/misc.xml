@@ -87,6 +87,7 @@
         <entry key="app/src/main/res/layout/activity_join.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.10902255639097744" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37196197509765627" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.21739130434782608" />
         <entry key="app/src/main/res/layout/activity_stamp_board.xml" value="0.273972602739726" />
         <entry key="app/src/main/res/layout/activity_stamp_upload_dialog.xml" value="0.3380208333333333" />
@@ -99,7 +100,7 @@
         <entry key="app/src/main/res/layout/fragment_goal_record_ongoing.xml" value="0.30416666666666664" />
         <entry key="app/src/main/res/layout/fragment_goal_record_ongoing2.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/layout/fragment_stamp_bottom_sheet.xml" value="0.3182291666666667" />
-        <entry key="app/src/main/res/layout/goals_layer.xml" value="0.2155511811023622" />
+        <entry key="app/src/main/res/layout/goals_layer.xml" value="0.45223178412970605" />
         <entry key="app/src/main/res/layout/item_friend_add.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/item_goal_record.xml" value="0.25860238449565376" />
         <entry key="app/src/main/res/layout/item_member.xml" value="0.3380208333333333" />

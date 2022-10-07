@@ -8,7 +8,9 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" /> <!-- 인터넷 권한 -->
+        android:required="true" />
+
+    <!-- 인터넷 권한 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -39,6 +41,7 @@
         <activity
             android:name=".GoalList"
             android:exported="false" />
+
         <activity
             android:name=".AddFriendActivity"
             android:exported="true" />
@@ -67,17 +70,17 @@
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"/>
 
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
+            android:theme="@style/Base.Theme.AppCompat"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.goaltracker.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            android:exported="false">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
