@@ -145,7 +145,6 @@ class AddGoal : AppCompatActivity() {
                     document =  documentReference.id}
                 .addOnFailureListener { exception -> Log.d("DatabaseTest", exception.message!!) }
 
-
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
         }
     }
