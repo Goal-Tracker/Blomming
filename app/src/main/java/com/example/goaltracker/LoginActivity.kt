@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                             baseContext, "로그인에 성공 하였습니다.",
                             Toast.LENGTH_SHORT
                         ).show()
-                        moveProfilePage(firebaseAuth?.currentUser)
+                        moveMainPage(firebaseAuth?.currentUser)
                     } else {
                         Toast.makeText(
                             baseContext, "로그인에 실패 하였습니다.",
@@ -86,9 +86,9 @@ class LoginActivity : AppCompatActivity() {
 
 
     // 유저정보 넘겨주고 프로필 설정 액티비티 호출
-    fun moveProfilePage(user: FirebaseUser?){
+    fun moveMainPage(user: FirebaseUser?){
         if( user!= null){
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
             Toast.makeText(

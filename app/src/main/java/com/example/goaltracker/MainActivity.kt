@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
@@ -25,6 +26,8 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     val db = FirebaseFirestore.getInstance()
+    var firebaseAuth: FirebaseAuth?=null
+    var currentUserName : String?= ""
 
     lateinit var goalRecordOngoingAdapter: GoalRecordAdapter
     val onGoingGoalDatas = ArrayList<GoalRecordData>()
@@ -39,6 +42,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_main)
+
+        var currentUserId : String?=""
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        currentUserId = firebaseAuth?.currentUser?.uid.toString()
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
         supportActionBar?.setDisplayShowTitleEnabled(false)  //툴바에 타이틀 안보이게
@@ -60,7 +68,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         menubtn.setOnClickListener {
             drawer_layout.openDrawer(GravityCompat.END)
         }
-
 
         rv_goal = findViewById(R.id.rv_goal)
 
@@ -130,14 +137,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_settings-> {
                 val dialog = CustomDialog(this)
                 dialog.showDialog()
+                onBackPressed()
                 dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
                     override fun onClicked(name: String) {
                         Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
-            R.id.nav_notice-> Toast.makeText(this, "공지사항 클릭됨", Toast.LENGTH_SHORT).show()
-            R.id.nav_logOut-> Toast.makeText(this, "로그아웃 클릭됨", Toast.LENGTH_SHORT).show()
+            R.id.nav_notice-> {
+                startActivity(Intent(this, AppNotifyActivity::class.java))
+                onBackPressed()
+            }
+            R.id.nav_logOut-> {
+                if (firebaseAuth?.currentUser != null) {
+                    firebaseAuth?.signOut()
+                    onBackPressed()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                } else {
+                    throw Exception ("현재 유저가 없습니다.")
+                }
+            }
         }
         return false
     }
@@ -145,7 +164,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.END)) {
             drawer_layout.closeDrawers()
-            Toast.makeText(this, "back btn clicked", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "back btn clicked", Toast.LENGTH_SHORT).show()
         } else {
             super.onBackPressed()
         }
