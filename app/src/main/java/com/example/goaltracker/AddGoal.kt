@@ -246,7 +246,7 @@ class AddGoal : AppCompatActivity() {
             RecyclerView.ViewHolder(binding.root){
 
             fun setFriendsName(item: Friends){
-                binding.memberName.text = item.UserName
+                binding.memberName.text = item.userName
             }
 
             fun addFriendsBtnOnclick(item: Friends){
@@ -254,12 +254,12 @@ class AddGoal : AppCompatActivity() {
                 binding.checkBox.setOnClickListener {
                     // 체크한 친구만 Goal에 추가
                     when ((it as CheckBox).isChecked) {
-                        true -> teamList.add(item.Uid.toString())
-                        false -> teamList.remove(item.Uid.toString()) // 리스트에서 제거
+                        true -> teamList.add(item.uid.toString())
+                        false -> teamList.remove(item.uid.toString()) // 리스트에서 제거
                     }
 
-                    if(item.Uid != currentUser){
-                        val friendRef = firestore?.collection("Goal")?.document(item.Uid.toString())
+                    if(item.uid != currentUser){
+                        val friendRef = firestore?.collection("Goal")?.document(item.uid.toString())
                         val myRef = firestore?.collection("Goal")?.document("$currentUser")
 
                         friendRef!!.get()
@@ -271,14 +271,14 @@ class AddGoal : AppCompatActivity() {
 
                                         // 친구 리스트가 없는 경우
                                         if( myDocument.get("Team") == null ){
-                                            mine[item.Uid.toString()] = "request"
+                                            mine[item.uid.toString()] = "request"
                                             // 배열 요소 업데이트
                                             myRef.update("Team", FieldValue.arrayUnion(mine)) // arrayUnion()은 배열에 없는 요소만 추가
 
                                             friend[currentUser.toString()] = "requested"
                                             friendRef.update("Team", FieldValue.arrayUnion(friend))
 
-                                            Toast.makeText(this@AddGoal,item.UserName.toString()+"에게 친구요청을 보냈습니다.", Toast.LENGTH_LONG).show()
+                                            Toast.makeText(this@AddGoal,item.userName.toString()+"에게 친구요청을 보냈습니다.", Toast.LENGTH_LONG).show()
                                             Log.d(friendDocument.get("UserName").toString(),"에게 친구요청 성공")
                                         }
                                     }
@@ -297,8 +297,8 @@ class AddGoal : AppCompatActivity() {
 
             holder.addFriendsBtnOnclick(FriendsList[position])
             holder.setFriendsName(FriendsList[position])
-            viewHolder.member_name.text = FriendsList[position].UserName
-            viewHolder.member_email.text = FriendsList[position].Email
+            viewHolder.member_name.text = FriendsList[position].userName
+            viewHolder.member_email.text = FriendsList[position].email
         }
 
         // 리사이클러뷰의 아이템 총 개수 반환

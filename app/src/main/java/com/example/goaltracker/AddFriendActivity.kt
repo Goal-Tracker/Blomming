@@ -1,15 +1,18 @@
 package com.example.goaltracker
 
-import FriendAdd
+
+
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,29 +20,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.goaltracker.MainActivity
-import com.example.goaltracker.R
-import com.facebook.internal.CallbackManagerImpl
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.item_friend_add.view.*
 import kotlinx.android.synthetic.main.activity_add_friend.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+
 
 
 class AddFriendActivity : AppCompatActivity() {
     var firestore : FirebaseFirestore? = null
-    private val uid = Firebase.auth.currentUser?.uid
-    //private var friendDocRef: DocumentReference? = null
-    //private var myDocRef: DocumentReference? = null
+    private val currentUser = Firebase.auth.currentUser?.uid
+    var searchcount = 0
+    private lateinit var dialog : ReportDialog
 
-    //private lateinit var viewModel: ShareViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +42,6 @@ class AddFriendActivity : AppCompatActivity() {
 
         // 파이어스토어 인스턴스 초기화
         firestore = FirebaseFirestore.getInstance()
-
 
         FriendAddRecyclerView.adapter = RecyclerViewAdapter()
         FriendAddRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -78,10 +71,17 @@ class AddFriendActivity : AppCompatActivity() {
         })
 
     }
+    fun getCount(){
+        var text_count = findViewById<TextView>(R.id.search_count)
+        text_count.text =  ""+ searchcount + "명"
+    }
+
+
 
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         // Friend 클래스 ArrayList 생성성
-        var friend_add: ArrayList<Friends> = arrayListOf()
+        var friend_add: ArrayList<FriendAdd> = arrayListOf()
+
 
         init {  // Account의 문서를 불러온 뒤 Friend으로 변환해 ArrayList에 담음
             firestore?.collection("Account")
@@ -90,11 +90,14 @@ class AddFriendActivity : AppCompatActivity() {
                     friend_add.clear()
 
                     for (snapshot in querySnapshot!!.documents) {
-                        var item = snapshot.toObject(Friends::class.java)
+                        var item = snapshot.toObject(FriendAdd::class.java)
                         friend_add.add(item!!)
                     }
+                    searchcount = friend_add.size
+                    getCount()
                     notifyDataSetChanged()
                 }
+
         }
 
         // xml파일을 inflate하여 ViewHolder를 생성
@@ -112,7 +115,14 @@ class AddFriendActivity : AppCompatActivity() {
             holder.SetFriendAddColor(friend_add[position])
             holder.SetFriendAddEmail(friend_add[position])
 
+            //아이템을 클릭하면 다이얼로그 생성
+            holder.itemView.setOnClickListener {
+                callDialog(it.context, item = Account())
+            }
+
         }
+
+
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -121,58 +131,143 @@ class AddFriendActivity : AppCompatActivity() {
             private val AddColor: ImageView = itemView.findViewById(R.id.AddColor)
             private val AddBtn: Button = itemView.findViewById(R.id.AddBtn)
 
-            fun SetFriendAddName(item: Friends) {
-                AddName.text = item.UserName
+
+            fun SetFriendAddName(item: FriendAdd) {
+                AddName.text = item.userName
             }
 
 
-            fun SetFriendAddColor(item: Friends) {
-                Glide.with(itemView)
-                    .load(item.UserColor).circleCrop()
-                    .into(AddColor)
+            fun SetFriendAddColor(item: FriendAdd) {
+                var circleResource = 0
+                when (item.userColor) {
+                    "f69b94" -> circleResource = R.drawable.b_f69b94
+                    "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
+                    "fcdcce" -> circleResource = R.drawable.b_fcdcce
+                    "96b0e5" -> circleResource = R.drawable.b_96b0e5
+                    "92b9e2" -> circleResource = R.drawable.b_92b9e2
+                    "ebc0c7" -> circleResource = R.drawable.b_ebc0c7
+                    "7bb6c8" -> circleResource = R.drawable.b_7bb6c8
+                    "aad3d7" -> circleResource = R.drawable.b_aad3d7
+                    "f5f1f0" -> circleResource = R.drawable.b_f5f1f0
+                    "d5e3e6" -> circleResource = R.drawable.b_d5e3e6
+                    "f2a4b1" -> circleResource = R.drawable.b_f2a4b1
+                    "7175a5" -> circleResource = R.drawable.b_7175a5
+                    "a1b3d7" -> circleResource = R.drawable.b_a1b3d7
+                    "bd83cf" -> circleResource = R.drawable.b_bd83cf
+                    "e5afe9" -> circleResource = R.drawable.b_e5afe9
+
+                }
+                AddColor.setImageResource(circleResource)
             }
 
-            fun SetFriendAddEmail(item: Friends) {
-                AddEmail.text = item.Email
+            fun SetFriendAddEmail(item: FriendAdd) {
+                AddEmail.text = item.email
             }
 
             //0: ADD(친구된 상태) 1:ACCEPT(친구허락) 2: REQUEST(신청 보냄)
-            fun AddFriendBtnOnclick(item: Friends) {
+            fun AddFriendBtnOnclick(item: FriendAdd) {
                 AddBtn.setOnClickListener {
-                    if (item.Uid != uid) {
-                        FirebaseFirestore.getInstance().collection("Account")
-                            .document(FirebaseAuth.getInstance().uid.toString())
-                            .collection("Friends")
-                            .document(item.Uid.toString())
-                            .get().addOnSuccessListener {
-                                //이미 친구인지 확인
-                                if (it.exists()) {
-                                    Toast.makeText(this@AddFriendActivity, "이미 친구입니다.", Toast.LENGTH_SHORT).show()
-                                } else {
-                                    //자기자신과 친구못하게 막음
-                                    if (item.Uid != FirebaseAuth.getInstance().uid.toString()) {
-                                        Toast.makeText(
-                                            this@AddFriendActivity, " '${item.UserName}' 님과 친구가 되었습니다.", Toast.LENGTH_SHORT).show()
+                    if(item.uid != currentUser) {
+                        val friendDocRef =
+                            firestore?.collection("Account")?.document(item.uid.toString())
+                        val myDocRef = firestore?.collection("Account")?.document("$currentUser")
+                        friendDocRef!!.get()
+                            .addOnSuccessListener { friendDoc ->
+                                val friendlist: MutableMap<String, Any> = HashMap()
+                                myDocRef!!.get()
+                                    .addOnSuccessListener { myDoc ->
+                                        val mylist: MutableMap<String, Any> = HashMap()
 
-                                        FirebaseFirestore.getInstance()
-                                            .collection("Account")
-                                            .document(FirebaseAuth.getInstance().uid.toString())
-                                            .collection("Friends")
-                                            .document(item.Uid.toString())
-                                            .set(item)
-                                    } else {
+
+                                        // 친구 리스트가 없는 경우
+                                        if (myDoc.get("Friends") == null) {
+
+                                            mylist[item.uid!!] = "request"
+                                            // 배열 요소 업데이트
+                                            myDocRef.update(
+                                                "Friends",
+                                                FieldValue.arrayUnion(mylist)
+                                            )
+
+                                            friendlist[currentUser.toString()] = "accept"
+                                            // 배열 요소 업데이트
+                                            friendDocRef.update(
+                                                "Friends",
+                                                FieldValue.arrayUnion(friendlist)
+                                            )
+
+                                            Toast.makeText(
+                                                this@AddFriendActivity,
+                                                "친구 신청을 보냈습니다.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+
+                                        // 친구 리스트가 있는 경우
+                                        else {
+                                            val hashMap: ArrayList<Map<String, String>> =
+                                                myDoc.get("Friends") as ArrayList<Map<String, String>>
+                                            var notFriend = true
+                                            // 이미 신청 보냄
+                                            for (keys in hashMap) {
+                                                if (keys == mapOf(item.uid to "request")) {
+                                                    Toast.makeText(
+                                                        this@AddFriendActivity,
+                                                        "이미 친구 신청을 보냈습니다.",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    notFriend = false
+
+                                                }
+                                            }
+                                            // 친구 아닐 때
+                                            if (notFriend) {
+                                                mylist[item.uid!!] = "request"
+                                                myDocRef.update(
+                                                    "Friends",
+                                                    FieldValue.arrayUnion(mylist)
+                                                )
+
+                                                friendlist[currentUser.toString()] = "accept"
+                                                friendDocRef.update(
+                                                    "Friends",
+                                                    FieldValue.arrayUnion(friendlist)
+                                                )
+
+                                                Toast.makeText(
+                                                    this@AddFriendActivity,
+                                                    "친구 신청을 보냈습니다.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+
+                                        }
+                                    }
+                                    .addOnFailureListener {
                                         Toast.makeText(
                                             this@AddFriendActivity,
-                                            "자기자신을 친구로 추가할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                                            "친구 신청을 실패하였습니다",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-
-
-                                }
                             }
+
+                    } else{
+                        Toast.makeText(
+                            this@AddFriendActivity,
+                            "자기자신을 친구로 추가할 수 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
+
+
+
+
+
         }
+
+
+
 
 
 
@@ -182,6 +277,49 @@ class AddFriendActivity : AppCompatActivity() {
             return friend_add.size
         }
 
+        fun callDialog(context: Context, item: Account){
+
+
+            dialog = ReportDialog(
+                context = context,
+                userColor = item.UserColor,
+                userName = item.UserName,
+                email = item.Email,
+                namebtnListener = reNameListener,
+                messagebtnListener = reMessageListener,
+                blockbtnListener = blockbtnListener)
+
+
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
+
+        private val reNameListener = View.OnClickListener{
+            Toast.makeText(
+                this@AddFriendActivity,
+                "닉네임 신고가 되었습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        private val reMessageListener = View.OnClickListener{
+            Toast.makeText(
+                this@AddFriendActivity,
+                "상태 메세지 신고가 되었습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        private val blockbtnListener = View.OnClickListener{
+            Toast.makeText(
+                this@AddFriendActivity,
+                "차단 되었습니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
         // 파이어스토어에서 데이터를 불러와서 검색어가 있는지 판단
         fun search(searchWord: String) {
             firestore?.collection("Account")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -189,8 +327,8 @@ class AddFriendActivity : AppCompatActivity() {
                 friend_add.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                    if (snapshot.getString("Email")!!.contains(searchWord) || snapshot.getString("UserName")!!.contains(searchWord)) {
-                        var item = snapshot.toObject(Friends::class.java)
+                    if (snapshot.getString("email")!!.contains(searchWord) || snapshot.getString("userName")!!.contains(searchWord)) {
+                        var item = snapshot.toObject(FriendAdd::class.java)
                         friend_add.add(item!!)
                     }
                 }
@@ -199,5 +337,4 @@ class AddFriendActivity : AppCompatActivity() {
         }
     }
 
-    }
-
+}

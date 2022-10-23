@@ -36,6 +36,11 @@
             android:exported="false" />
 
         <activity
+            android:name=".FriendActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
             android:name=".AddFriendActivity"
             android:exported="true">
         </activity>
