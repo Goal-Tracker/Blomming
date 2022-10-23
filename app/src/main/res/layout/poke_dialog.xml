@@ -50,17 +50,42 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <TextView
-            android:id="@+id/comment_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="34dp"
-            android:text="친구가 오늘의 목표를 완료하지 못했습니다.\n목표를 완료할 수 있도록 알림을 보내세요!"
-            android:textColor="@color/greyish_brown"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+    <TextView
+        android:id="@+id/profile_nick_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="닉네임"
+        android:textColor="@color/greyish_brown"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+
+    <TextView
+        android:id="@+id/profile_message_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="상태메시지"
+        android:textColor="@color/greyish_brown"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_nick_textView" />
+
+    <TextView
+        android:id="@+id/comment_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="친구가 오늘의 목표를 완료하지 못했습니다.\n목표를 완료할 수 있도록 알림을 보내보세요!"
+        android:textColor="@color/greyish_brown"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_message_textView" />
 
         <Button
             android:id="@+id/commentUpload_button"
@@ -68,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="39dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="51dp"
             android:background="@drawable/stamp_upload_button"
             android:text="콕 찌르기"
