@@ -1,9 +1,11 @@
 package com.example.goaltracker
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -13,12 +15,19 @@ class AnnouncementActivity : AppCompatActivity() {
 
     lateinit var announcementAdapter: AnnouncementAdapter
     lateinit var announcement_list: RecyclerView
+    lateinit var backtomain: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_announcement)
 
         announcement_list = findViewById(R.id.announcement_list)
+        backtomain = findViewById(R.id.backtomain)
+
+        backtomain.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         announcementAdapter = AnnouncementAdapter(this)
         announcement_list.adapter = announcementAdapter

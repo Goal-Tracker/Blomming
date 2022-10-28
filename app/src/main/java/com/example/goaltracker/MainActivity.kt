@@ -3,6 +3,7 @@ package com.example.goaltracker
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -17,9 +18,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     // goal view 모델 가져오기
     //private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
 
+    lateinit var goalAddButton: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_main)
+
+        goalAddButton = findViewById(R.id.goalAddButton)
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
         supportActionBar?.setDisplayShowTitleEnabled(false)  //툴바에 타이틀 안보이게
@@ -42,11 +47,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawer_layout.openDrawer(GravityCompat.END)
         }
 
+        goalAddButton.setOnClickListener {
+            val intent = Intent(this, AddGoal::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_goalAchieve-> {
+                val intent = Intent(this, GoalRecordActivity::class.java)
+                startActivity(intent)
+                Toast.makeText(this, "골 기록 추가", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_friendList->
+            {
+                val intent = Intent(this, FriendActivity::class.java)
+                startActivity(intent)
+                Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
+            }
+            R.id.nav_settings-> {
+                Toast.makeText(this, "설정 클릭됨", Toast.LENGTH_SHORT).show()
                 val dialog = CustomDialog(this)
                 dialog.showDialog()
                 dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
@@ -55,14 +77,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 })
             }
-            R.id.nav_friendList->
-            {
-                val intent = Intent(this, FriendActivity::class.java)
+            R.id.nav_notice-> {
+                val intent = Intent(this, AnnouncementActivity::class.java)
                 startActivity(intent)
-                Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "공지사항 클릭됨", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_settings-> Toast.makeText(this, "설정 클릭됨", Toast.LENGTH_SHORT).show()
-            R.id.nav_notice-> Toast.makeText(this, "공지사항 클릭됨", Toast.LENGTH_SHORT).show()
             R.id.nav_logOut-> Toast.makeText(this, "로그아웃 클릭됨", Toast.LENGTH_SHORT).show()
         }
         return false
