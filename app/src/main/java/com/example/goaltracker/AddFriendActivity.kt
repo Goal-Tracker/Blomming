@@ -115,9 +115,11 @@ class AddFriendActivity : AppCompatActivity() {
             holder.SetFriendAddColor(friend_add[position])
             holder.SetFriendAddEmail(friend_add[position])
 
+            var account = friend_add[position]
+
             //아이템을 클릭하면 다이얼로그 생성
             holder.itemView.setOnClickListener {
-                callDialog(it.context, item = Account())
+                callDialog(it.context, account)
             }
 
         }
@@ -277,14 +279,14 @@ class AddFriendActivity : AppCompatActivity() {
             return friend_add.size
         }
 
-        fun callDialog(context: Context, item: Account){
+        fun callDialog(context: Context, item: FriendAdd){
 
 
             dialog = ReportDialog(
                 context = context,
-                userColor = item.UserColor,
-                userName = item.UserName,
-                email = item.Email,
+                userColor = item.userColor,
+                userName = item.userName,
+                email = item.email,
                 namebtnListener = reNameListener,
                 messagebtnListener = reMessageListener,
                 blockbtnListener = blockbtnListener)
