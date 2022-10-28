@@ -323,57 +323,57 @@ class FriendActivity : AppCompatActivity() {
                 RequestColor.setImageResource(circleResource)
             }
 
-                fun RequestBtnOnclick(item: Friends) {
-                    RequestBtn.setOnClickListener {
+            fun RequestBtnOnclick(item: Friends) {
+                RequestBtn.setOnClickListener {
 
-                        var myDocRef = firestore?.collection("Account")?.document("$currentUser")
-                        myDocRef!!.get()
-                            .addOnSuccessListener { document ->
-                                if (document.get("Friends") != null) {
-                                    val hashMap: ArrayList<Map<String, String>> =
-                                        document.get("Friends") as ArrayList<Map<String, String>>
-                                    for (keys in hashMap) {
-                                        val friendlist: MutableMap<String, Any> = HashMap()
-                                        val mylist: MutableMap<String, Any> = HashMap()
-                                        val key = keys.keys.iterator().next()
-                                        if (keys[key] == "request") {
-                                            val friendDocRef =
-                                                firestore?.collection("Account")?.document(key)
-                                            friendDocRef!!.get()
-                                                .addOnSuccessListener { document ->
-                                                    mylist[key] = "request"
-                                                    myDocRef.update(
-                                                        "Friends",
-                                                        FieldValue.arrayRemove(mylist)
-                                                    )
+                    var myDocRef = firestore?.collection("Account")?.document("$currentUser")
+                    myDocRef!!.get()
+                        .addOnSuccessListener { document ->
+                            if (document.get("Friends") != null) {
+                                val hashMap: ArrayList<Map<String, String>> =
+                                    document.get("Friends") as ArrayList<Map<String, String>>
+                                for (keys in hashMap) {
+                                    val friendlist: MutableMap<String, Any> = HashMap()
+                                    val mylist: MutableMap<String, Any> = HashMap()
+                                    val key = keys.keys.iterator().next()
+                                    if (keys[key] == "request") {
+                                        val friendDocRef =
+                                            firestore?.collection("Account")?.document(key)
+                                        friendDocRef!!.get()
+                                            .addOnSuccessListener { document ->
+                                                mylist[key] = "request"
+                                                myDocRef.update(
+                                                    "Friends",
+                                                    FieldValue.arrayRemove(mylist)
+                                                )
 
-                                                    friendlist[currentUser.toString()] = "accept"
-                                                    friendDocRef.update(
-                                                        "Friends",
-                                                        FieldValue.arrayRemove(friendlist)
-                                                    )
+                                                friendlist[currentUser.toString()] = "accept"
+                                                friendDocRef.update(
+                                                    "Friends",
+                                                    FieldValue.arrayRemove(friendlist)
+                                                )
 
-                                                    Log.d(TAG, "이것도 성공")
+                                                Log.d(TAG, "이것도 성공")
 
-                                                }
+                                            }
 
-                                        }
                                     }
                                 }
                             }
-                    }
-
+                        }
                 }
 
             }
 
-            // 리사이클러뷰의 아이템 총 개수 반환
-            override fun getItemCount() = friend_request.size
-
         }
 
+        // 리사이클러뷰의 아이템 총 개수 반환
+        override fun getItemCount() = friend_request.size
 
     }
+
+
+}
 
 
 

@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.nav_friendList->
             {
-                val intent = Intent(this, AddFriendActivity::class.java)
+                val intent = Intent(this, FriendActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
             }
