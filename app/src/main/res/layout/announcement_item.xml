@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/announce_list"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/announcement_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="90dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -25,7 +25,7 @@
                     android:layout_width="55dp"
                     android:layout_height="55dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/profile_view"></View>
+                    android:background="@drawable/profile_view" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -38,7 +38,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ko_pub_world_dotum_bold"
-                        android:text="효"
+                        android:text="관"
                         android:textColor="#ffffff"
                         android:textSize="18sp" />
 
@@ -56,10 +56,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/notice_text"
+                android:id="@+id/announcement_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="윤지이님이 친구 요청을 보냈습니다."
+                android:fontFamily="@font/ko_pub_world_dotum_bold"
+                android:text="공지사항 입니다."
                 android:textColor="#585858"
                 android:textSize="12sp" />
 
@@ -68,44 +69,45 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="23dp"
-            android:layout_gravity="center"
+            android:layout_gravity="bottom"
             android:layout_weight="0.7">
 
-            <Button
-                android:id="@+id/notice_button"
+            <TextView
+                android:id="@+id/announcement_createDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="친구 수락"
-                android:textColor="#ffffff"
-                android:textSize="10sp"
-                android:fontFamily="@font/ko_pub_world_dotum_medium"
-                android:background="@drawable/notice_button"/>
-
-            <Button
-                android:id="@+id/notice_cancel_button"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="3dp"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_baseline_close_poke_24"/>
+                android:text="2022-10-23 10:26:10"
+                android:textColor="#585858"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/stamp_item" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.05"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@color/stamp_item">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+        <TextView
+            android:id="@+id/announcement_content"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="#707070" />
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
