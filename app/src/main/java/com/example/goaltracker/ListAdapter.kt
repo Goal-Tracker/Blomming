@@ -19,7 +19,7 @@ class ListAdapter(val itemList: ArrayList<Friends>): RecyclerView.Adapter<ListAd
     }
 
     override fun onBindViewHolder(holder: ListAdapter.ViewHolder, position: Int) {
-        holder.name.text = itemList[position].UserName
+        holder.name.text = itemList[position].userName
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

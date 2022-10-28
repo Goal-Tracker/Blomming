@@ -125,18 +125,33 @@
                         android:layout_marginTop="10dp"
                         tools:listitem="@layout/item_friend_add" />
 
+
                     <TextView
                         android:id="@+id/title1"
                         android:layout_width="wrap_content"
                         android:layout_height="19dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="25dp"
 
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="25dp"
                         android:fontFamily="@font/fontstyle"
                         android:text="검색 결과"
                         android:textColor="#363639"
+                        android:textSize="12sp"
+                        app:lineHeight="38sp" />
+
+                    <TextView
+                        android:id="@+id/search_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="19dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="81dp"
+                        android:layout_marginTop="25dp"
+                        android:fontFamily="@font/fontstyle"
+                        android:text="카운트"
+                        android:textColor="#606060"
                         android:textSize="12sp"
                         app:lineHeight="38sp" />
 
