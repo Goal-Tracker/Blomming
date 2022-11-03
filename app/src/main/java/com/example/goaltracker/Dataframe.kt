@@ -10,7 +10,8 @@ data class Account (
     var UserColor:String ?= null,
     var FriendsList:List<String>?=null,
     var MyGoalList:List<String>?=null,
-    var NotificationList:List<String>?=null
+    var NotificationList:List<String>?=null,
+    var UserMessage:String?=null
 ) : Parcelable
 
 //public val curUser = Account()

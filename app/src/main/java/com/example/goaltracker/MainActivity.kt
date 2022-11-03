@@ -9,6 +9,7 @@ import android.widget.Toast
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.ListAdapter
+import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -26,27 +27,23 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     val db = FirebaseFirestore.getInstance()
-    var firebaseAuth: FirebaseAuth?=null
-    var currentUserName : String?= ""
+    val firebaseAuth =FirebaseAuth.getInstance()
 
     lateinit var goalRecordOngoingAdapter: GoalRecordAdapter
     val onGoingGoalDatas = ArrayList<GoalRecordData>()
 
     private lateinit var rv_goal : RecyclerView
 
-    //어댑터 연결
-    //private lateinit var adapter: MainAdapter
-    // goal view 모델 가져오기
-    //private val viewModel by lazy { ViewModelProvider(this).get(ListViewModel::class.java) }
+    var curUser = Account()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_main)
 
-        var currentUserId : String?=""
+        var accountUId : String?=""
+        accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-        firebaseAuth = FirebaseAuth.getInstance()
-        currentUserId = firebaseAuth?.currentUser?.uid.toString()
+        val curUserName = findViewById<TextView>(R.id.user_name)
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
         supportActionBar?.setDisplayShowTitleEnabled(false)  //툴바에 타이틀 안보이게
@@ -54,13 +51,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //네비게이션 드로어 내에 있는 화면의 이벤트를 처리하기 위해 생성
         nav_view.setNavigationItemSelectedListener(this) //Navigation 리스너
 
-        //adapter = MainAdapter(this)
+        val nav_header = nav_view.getHeaderView(0)
+        val navUserName = nav_header.findViewById<TextView>(R.id.nav_userName)
+        val navUserEmail = nav_header.findViewById<TextView>(R.id.nav_userId)
 
-//        val recyclerView : RecyclerView = findViewById(R.id.goal_recycler_view)
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//        recyclerView.adapter=adapter
-//        observerData()
+        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+            curUser = it.toObject(Account::class.java)!!
+            curUserName.text = curUser?.UserName.toString()
+            navUserName.text = curUser?.UserName.toString()
+            navUserEmail.text = curUser?.Email.toString()
+        }
 
+        //버튼 클릭시 동작
         alarmButton.setOnClickListener {
             startActivity(Intent(this, NoticeActivity::class.java))
         }
@@ -183,14 +185,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         return (calcDate+1).toInt()
     }
-
-
-//    fun observerData() {
-//        viewModel.fetchData().observe(this, Observer {
-//            adapter.setListData(it)
-//            adapter.notifyDataSetChanged()
-//        })
-//    }
-
 }
 

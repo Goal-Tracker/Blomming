@@ -215,8 +215,9 @@ class StampBoardActivity() : AppCompatActivity() {
                         val uid: String = member.get("uid").toString()
                         val nickname: String = member.get("userName").toString()
                         val theme: String = member.get("profileColor").toString()
+                        val message: String = member.get("message").toString()
 
-                        teamDatas.add(GoalTeamData(uid = uid, name = nickname, profileColor = theme))
+                        teamDatas.add(GoalTeamData(uid = uid, name = nickname, profileColor = theme, message=message))
 
                         Log.d("teamDatas result : ", teamDatas.toString())
 

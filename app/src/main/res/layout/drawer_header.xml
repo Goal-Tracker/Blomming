@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_header"
+    android:id="@+id/nav_drawer_header"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:orientation="horizontal">
@@ -43,7 +43,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/user_name"
+            android:id="@+id/nav_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="76dp"
@@ -53,7 +53,7 @@
             android:textSize="15sp"></TextView>
 
         <TextView
-            android:id="@+id/user_id"
+            android:id="@+id/nav_userId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ko_pub_world_dotum_bold"
