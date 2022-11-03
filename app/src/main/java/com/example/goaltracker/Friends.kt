@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
 // 리사이클러 뷰 아이템
-class Friends (var UserName : String? = null,
-               var Email : String? = null,
-               var Uid : String? = null,
-               var UserColor : String? = null)
+class Friends(var userName : String? = null,
+              var email : String? = null,
+              var uid : String? = null,
+              var userColor : String? = null)
+

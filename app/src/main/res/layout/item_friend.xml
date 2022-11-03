@@ -9,7 +9,7 @@
 
 
     <ImageView
-        android:id="@+id/AddColor"
+        android:id="@+id/FriendColor"
         android:layout_width="31dp"
         android:layout_height="31dp"
         android:layout_marginLeft="10dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent"></ImageView>
 
     <TextView
-        android:id="@+id/AddName"
+        android:id="@+id/FriendName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -31,12 +31,13 @@
         android:text="이름"
         android:textColor="#363639"
         android:textSize="15sp"
-        app:layout_constraintStart_toEndOf="@+id/AddColor"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/FriendColor"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnknownIdInLayout" />
 
 
     <TextView
-        android:id="@+id/AddEmail"
+        android:id="@+id/FriendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -46,22 +47,7 @@
         android:text="이메일"
         android:textColor=" #676767"
         android:textSize="11sp"
-        app:layout_constraintStart_toEndOf="@+id/AddName"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/AddBtn"
-        android:layout_width="74dp"
-        android:layout_height="23dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/color_circle_btn_shape"
-        android:fontFamily="@font/fontstyle"
-        android:text="친구 요청"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/FriendName"
         app:layout_constraintTop_toTopOf="parent" />
 
 
