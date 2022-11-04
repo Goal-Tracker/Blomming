@@ -19,6 +19,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import com.squareup.okhttp.Dispatcher
+import kotlinx.android.synthetic.main.goals_layer.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import org.w3c.dom.Text
@@ -35,18 +36,19 @@ class StampBoardActivity() : AppCompatActivity() {
     lateinit var stampBoardAdapter: StampBoardAdapter
     val teamDatas = ArrayList<GoalTeamData>()
 
-    lateinit var view_top_rectangle: View
     lateinit var goal_back_imageButton: ImageButton
-    lateinit var goalTitle_textView: TextView
-    lateinit var first_day_textView: TextView
-    lateinit var last_day_textView: TextView
-    lateinit var subtitle_textView: TextView
-    lateinit var goalDate_textView: TextView
-    lateinit var goal_progressBar: ProgressBar
-    lateinit var goalToadyDate_textView: TextView
+    lateinit var edit_goal: ImageButton
 
-    lateinit var rv_stampBoard: RecyclerView
-    lateinit var rv_team: RecyclerView
+    lateinit var goalTitle_textView : TextView
+    lateinit var first_day_textView : TextView
+    lateinit var last_day_textView : TextView
+    lateinit var subtitle_textView : TextView
+    lateinit var goalDate_textView : TextView
+    lateinit var goal_progressBar : ProgressBar
+    lateinit var goalToadyDate_textView : TextView
+
+    lateinit var rv_stampBoard : RecyclerView
+    lateinit var rv_team : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(MySharedPreferences.getTheme(this))
@@ -58,13 +60,12 @@ class StampBoardActivity() : AppCompatActivity() {
         MySharedPreferences.setUserNickname(this, "임정수")
         MySharedPreferences.setUserColor(this, "#fcdcce")
 
+        edit_goal = findViewById(R.id.edit_goal)
         goal_back_imageButton = findViewById(R.id.goal_back_imageButton)
 
         goal_back_imageButton.setOnClickListener {
             finish()
         }
-
-        view_top_rectangle = findViewById(R.id.view_top_rectangle)
 
         goalTitle_textView = findViewById(R.id.goalTitle_textView)
         first_day_textView = findViewById(R.id.first_day_textView)
@@ -84,6 +85,15 @@ class StampBoardActivity() : AppCompatActivity() {
 
         // 읽고 스탬프 추가 (테스트용)
         val goal_db = db.collection("Goal").document(goal_id)
+
+        // ------------------------------------------------------------------------
+        // 골 수정 화면으로 이동
+        edit_goal.setOnClickListener {
+            val intent = Intent(this, EditGoalActivity::class.java)
+            intent.putExtra("goalID", goal_id) // 데이터 보내기
+            startActivity(intent)
+        }
+        //------------------------------------------------------------------------
 
         goal_db.addSnapshotListener { snapshot, e ->
             val goal_day = snapshot?.get("day").toString().toInt()
@@ -161,7 +171,7 @@ class StampBoardActivity() : AppCompatActivity() {
                                         for (commentInfo in commentArray) {
                                             Log.d(
                                                 TAG,
-                                                "[dayRecord[\"Day$i\"]] commentInfo :  ${commentInfo}"
+                                                "[day_record[\"Day$i\"]] commentInfo :  ${commentInfo}"
                                             )
 
                                             themeArray.add(commentInfo["UserColor"].toString())
@@ -221,6 +231,7 @@ class StampBoardActivity() : AppCompatActivity() {
                         val uid: String = member.get("uid").toString()
                         val nickname: String = member.get("userName").toString()
                         val theme: String = member.get("profileColor").toString()
+                        val message: String = member.get("message").toString()
 
                         teamDatas.add(
                             GoalTeamData(

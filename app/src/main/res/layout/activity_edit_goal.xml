@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AddGoal">
+    tools:context=".EditGoalActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="56dp"
-                        android:text="GOAL 추가"
+                        android:text="GOAL 수정"
                         android:textColor="@color/white"
                         android:textSize="15sp"
                         android:textStyle="bold"
@@ -90,87 +90,6 @@
                         android:hint="목표 이름을 입력해 주세요."
                         android:textSize="12sp"
                         android:textStyle="normal"/>
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
-                        android:textColor="#363639"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:text="목표 기간" />
-
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="10dp"
-                        android:fillViewport="true"
-                        android:scrollbars="none">
-
-                        <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-                            android:id="@+id/DayButtonGroup"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            app:alignItems="center">
-
-                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                                android:id="@+id/btn_7"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                app:toggle_selectedBackgroundColor="@color/main_color"
-                                app:toggle_text="07일"
-                                app:toggle_btnCornerRadius="200dp"
-                                app:toggle_textColor="@color/white" />
-
-                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                                android:id="@+id/btn_30"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                app:toggle_selectedBackgroundColor="@color/main_color"
-                                app:toggle_text="30일"
-                                app:toggle_btnCornerRadius="200dp"
-                                app:toggle_textColor="@color/white" />
-
-                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                                android:id="@+id/btn_50"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
-                                app:toggle_selectedBackgroundColor="@color/main_color"
-                                app:toggle_text="50일"
-                                app:toggle_btnCornerRadius="200dp"
-                                app:toggle_textColor="@color/white" />
-
-                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                                android:id="@+id/btn_100"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
-                                app:toggle_selectedBackgroundColor="@color/main_color"
-                                app:toggle_text="100일"
-                                app:toggle_textSize="12dp"
-                                app:toggle_btnCornerRadius="200dp"
-                                app:toggle_textColor="@color/white" />
-
-                            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                                android:id="@+id/btn_etc"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
-                                app:toggle_selectedBackgroundColor="@color/main_color"
-                                app:toggle_text="기타"
-                                app:toggle_btnCornerRadius="200dp"
-                                app:toggle_textColor="@color/white" />
-
-                        </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
-
-
-                    </HorizontalScrollView>
-
-
 
                     <TextView
                         android:id="@+id/textView9"
@@ -292,7 +211,6 @@
                             android:background="@drawable/ic_baseline_search_24" />
                     </RelativeLayout>
 
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -325,7 +243,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="40dp"
                         android:layout_marginBottom="90dp"
-                        android:text="GOAL 추가하기"
+                        android:text="GOAL 수정하기"
                         android:textColor="@color/white"
                         android:background="@drawable/add_button"/>
 

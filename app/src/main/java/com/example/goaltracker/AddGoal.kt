@@ -13,10 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_add_goal.*
-import kotlinx.android.synthetic.main.activity_add_goal.recyclerview
-import kotlinx.android.synthetic.main.activity_add_goal.searchWord
 import kotlinx.android.synthetic.main.item_member.view.*
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
@@ -28,6 +27,9 @@ import java.util.concurrent.TimeUnit
 class AddGoal : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
+    var firebaseAuth : FirebaseAuth?= null
+    var accountUId = firebaseAuth?.currentUser?.uid.toString()
+
 
     lateinit var title: EditText         // 이름
     lateinit var startDay: EditText        // 시작일
@@ -38,6 +40,7 @@ class AddGoal : AppCompatActivity() {
     lateinit var searchBtn: ImageButton     // 검색
 
     var goalID : String = UUID.randomUUID().toString()
+    var stampID : String = UUID.randomUUID().toString()
 
     // 달력
     var startDay_calendar = Calendar.getInstance()
@@ -123,22 +126,44 @@ class AddGoal : AppCompatActivity() {
         // 데이터 저장
         save_btn.setOnClickListener {
 
+            // Goal에 저장
             val goal = hashMapOf(
                 "title" to title.text.toString(),
                 "startDay" to startDay.text.toString(),
                 "endDay" to endDay.text.toString(),
                 "memo" to memo.text.toString(),
                 "action" to true,
-                "stampId" to UUID.randomUUID().toString(),
+                "stampId" to stampID,
                 "day" to fewDay(),  //날짜 차이 계산
-                // "Team" to teamList // 팀원 uid (배열)
             )
             firestore!!.collection("Goal").document(goalID).set(goal)
 
+            /////////////////////////////////////////////////////////////////////////
+            // Dataframe -> Notifications 객체 이용하여 저장
+            // Account에 저장
+            val notification_goal = hashMapOf(
+                "goalName" to title.text.toString(),
+                "goalUid" to goalID
+            )
+            firestore!!.collection("Account").document("1k8mYTUpqKVAlHBMM6sxBckaeP13")
+                .collection("Notification").document()
+                .set(notification_goal)
+            //////////////////////////////////////////////////////////////////////////
+
+            // Stamp에 저장
+            val hashMap = HashMap<String, String>()
+
+            val goal_ID = hashMapOf(
+                "Goal_id" to goalID,
+                "dayRecord" to hashMap
+            )
+            firestore!!.collection("Stamp").document(stampID).set(goal_ID)
+
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
 
+            // 메인 화면으로 이동
             val intent = Intent(this, MainActivity::class.java)
-            this.startActivity(intent)
+            startActivity(intent)
         }
     }
 
@@ -147,7 +172,6 @@ class AddGoal : AppCompatActivity() {
         // DatePicker
         startDay.setText(SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()))
         endDay.setText(SimpleDateFormat("yyyy-MM-dd").format(System.currentTimeMillis()))
-
 
         // 시작일 직접 설정
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -174,7 +198,6 @@ class AddGoal : AppCompatActivity() {
             dialog.datePicker.maxDate = CalendarHelper.getCurrentDateInMills()
             dialog.show()
         }
-
 
         // 종료일 직접 설정
         val dateSetListener2 = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -211,25 +234,22 @@ class AddGoal : AppCompatActivity() {
     }
 
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
         init {  // 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
-
             firestore?.collection("Account")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 // ArrayList 비워줌
                 FriendsList.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(Friends::class.java)
+                    val item = snapshot.toObject(Friends::class.java)
                     FriendsList.add(item!!)
                 }
-
                 notifyDataSetChanged()
             }
         }
 
         // xml파일을 inflate하여 ViewHolder를 생성
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
+            // var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
             val binding = ItemMemberBinding.inflate(layoutInflater,parent,false)
             return ViewHolder(binding)
         }
@@ -244,28 +264,32 @@ class AddGoal : AppCompatActivity() {
             fun addFriendsBtnOnclick(item: Friends){
 
                 binding.checkBox.setOnClickListener {
-                    val request : Boolean
+//                    val request : Boolean
+//                    val checked : Boolean
 
                     // 체크한 친구만 Goal에 추가
                     if ((it as CheckBox).isChecked) {
-                        request = false
+//                        request = false
+//                        checked = true
 
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
-                            "request" to request,
+//                            "request" to request,
+//                            "checked" to checked,
                             "profileColor" to item.userColor.toString()
                         )
 
                         firestore!!.collection("Goal")
-                            .document(title.text.toString())
+                            .document(goalID)
                             .collection("team")
-                            .document(item.uid.toString()).set(team)
+                            .document(item.uid.toString())
+                            .set(team)
                     }
                     // 체크 해제 시 삭제
                     else {
                         firestore!!.collection("Goal")
-                            .document(title.text.toString())
+                            .document(goalID)
                             .collection("team")
                             .document(item.uid.toString())
                             .delete()
@@ -277,7 +301,7 @@ class AddGoal : AppCompatActivity() {
 
         // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            var viewHolder = (holder as ViewHolder).itemView
+            val viewHolder = (holder as ViewHolder).itemView
 
             holder.addFriendsBtnOnclick(FriendsList[position])
             holder.setFriendsName(FriendsList[position])
@@ -297,8 +321,9 @@ class AddGoal : AppCompatActivity() {
                 FriendsList.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                    if (snapshot.getString("UserName")!!.contains(searchWord) || snapshot.getString("Email")!!.contains(searchWord)) {
-                        var item = snapshot.toObject(Friends::class.java)
+                    if (snapshot.getString("userName")?.contains(searchWord) == true
+                        ||snapshot.getString("email")?.contains(searchWord) == true) {
+                        val item = snapshot.toObject(Friends::class.java)
                         FriendsList.add(item!!)
                     }
                 }
@@ -307,3 +332,4 @@ class AddGoal : AppCompatActivity() {
         }
     }
 }
+

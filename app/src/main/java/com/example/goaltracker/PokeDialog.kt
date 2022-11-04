@@ -25,6 +25,8 @@ class PokeDialog(context: Context) : Dialog(context) {
     private lateinit var view_profile: View
     private lateinit var tv_profileName: TextView
     private lateinit var commentUpload_button:Button
+    private lateinit var profile_name: TextView
+    private lateinit var profile_message: TextView
 
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
@@ -40,6 +42,8 @@ class PokeDialog(context: Context) : Dialog(context) {
         view_profile = dlg.findViewById(R.id.view_profile)
         tv_profileName = dlg.findViewById(R.id.tv_profileName)
         commentUpload_button = dlg.findViewById(R.id.commentUpload_button)
+        profile_name = dlg.findViewById(R.id.profile_nick_textView)
+        profile_message = dlg.findViewById(R.id.profile_message_textView)
 
         // 프로필 초기화
         var bgProfile : GradientDrawable = view_profile.background as GradientDrawable
@@ -47,6 +51,9 @@ class PokeDialog(context: Context) : Dialog(context) {
 
         tv_profileName.text = profile.name[0].toString()
         bgProfile.setColor(Color.parseColor(profile.profileColor))
+
+        profile_name.text = profile.name.toString()
+        profile_message.text = profile.message.toString()
 
         close_dialog_button.setOnClickListener {
             Toast.makeText(it.context, "You Click Close Button", Toast.LENGTH_SHORT).show()
