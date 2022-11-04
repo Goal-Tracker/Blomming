@@ -59,6 +59,8 @@
         <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/stamp_num_item.xml" value="0.25885416666666666" />
         <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/today_stamp_item.xml" value="0.25885416666666666" />
         <entry key="..\:/Users/youjin/AndroidStudioProjects/Goal-Tracker/app/src/main/res/layout/user_profile_item.xml" value="0.25885416666666666" />
+        <entry key="app/src/main/res/drawable/add_button.xml" value="0.1845" />
+        <entry key="app/src/main/res/drawable/announce_header.xml" value="0.1845" />
         <entry key="app/src/main/res/drawable/announce_list.xml" value="0.309" />
         <entry key="app/src/main/res/drawable/button_profile_click.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/button_round.xml" value="0.1" />
@@ -95,6 +97,7 @@
         <entry key="app/src/main/res/layout/announce_layer.xml" value="0.29774774774774776" />
         <entry key="app/src/main/res/layout/announce_message.xml" value="0.21823204419889503" />
         <entry key="app/src/main/res/layout/announcement_item.xml" value="0.3978201634877384" />
+        <entry key="app/src/main/res/layout/change_pw_dialog.xml" value="0.28442028985507245" />
         <entry key="app/src/main/res/layout/drawer_header.xml" value="0.25" />
         <entry key="app/src/main/res/layout/drawer_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_goal_record_activity2.xml" value="0.3182291666666667" />

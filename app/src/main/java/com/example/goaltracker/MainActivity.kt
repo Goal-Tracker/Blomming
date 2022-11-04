@@ -1,6 +1,7 @@
 package com.example.goaltracker
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 import java.text.SimpleDateFormat
@@ -62,8 +64,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             navUserEmail.text = curUser?.Email.toString()
         }
 
+        val notReadNotices = arrayListOf<Notifications>()
+        db?.collection("Account")
+            ?.document(accountUId)
+            ?.collection("Notification")
+            ?.whereArrayContains("read", false)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                notReadNotices.clear()
+
+                for (snapshot in querySnapshot!!.documents) {
+                    var item = snapshot.toObject(Notifications::class.java)
+//                    Log.d("item", item.toString())
+                    notReadNotices.add(item!!)
+                }
+
+                if (notReadNotices.size!=0) {
+                    alarmButton.setBackgroundResource(R.drawable.alarm_close)
+                }
+            }
         //버튼 클릭시 동작
         alarmButton.setOnClickListener {
+            alarmButton.setBackgroundResource(R.drawable.alarmbtn)
             startActivity(Intent(this, NoticeActivity::class.java))
         }
 
@@ -142,13 +162,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 onBackPressed()
                 dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
                     override fun onClicked(name: String) {
-                        Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_LONG).show()
                     }
                 })
             }
             R.id.nav_notice-> {
                 startActivity(Intent(this, AppNotifyActivity::class.java))
                 onBackPressed()
+            }
+            R.id.nav_changePW -> {
+                val curUserEmail = firebaseAuth.currentUser?.email
+
+                if (curUserEmail!=null) {
+                    firebaseAuth.sendPasswordResetEmail(curUserEmail).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "Email sent.")
+                            Toast.makeText(this@MainActivity, "메일을 성공적으로 보냈습니다.", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
             }
             R.id.nav_logOut-> {
                 if (firebaseAuth?.currentUser != null) {
