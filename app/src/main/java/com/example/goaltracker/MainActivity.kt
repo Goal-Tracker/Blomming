@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     notReadNotices.add(item!!)
                 }
 
-                if (notReadNotices.size!=0) {
+                if (notReadNotices.isNotEmpty()) {
                     alarmButton.setBackgroundResource(R.drawable.alarm_close)
                 }
             }
