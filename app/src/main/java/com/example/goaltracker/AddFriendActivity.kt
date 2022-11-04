@@ -2,6 +2,7 @@ package com.example.goaltracker
 
 
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -9,6 +10,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,8 +37,8 @@ class AddFriendActivity : AppCompatActivity() {
     private lateinit var dialog : ReportDialog
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_friend)
 
@@ -121,7 +123,6 @@ class AddFriendActivity : AppCompatActivity() {
             holder.itemView.setOnClickListener {
                 callDialog(it.context, account)
             }
-
         }
 
 
@@ -261,18 +262,7 @@ class AddFriendActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
-
-
-
         }
-
-
-
-
-
-
 
         // 리사이클러뷰의 아이템 총 개수 반환
         override fun getItemCount(): Int {
@@ -280,8 +270,6 @@ class AddFriendActivity : AppCompatActivity() {
         }
 
         fun callDialog(context: Context, item: FriendAdd){
-
-
             dialog = ReportDialog(
                 context = context,
                 userColor = item.userColor,

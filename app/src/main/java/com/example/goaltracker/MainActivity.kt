@@ -1,13 +1,18 @@
 package com.example.goaltracker
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.bumptech.glide.Glide.init
+import com.facebook.gamingservices.cloudgaming.CloudGameLoginHandler.init
 import com.google.android.material.navigation.NavigationView
+import com.google.rpc.context.AttributeContext
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 
@@ -21,6 +26,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var goalAddButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        MySharedPreferences.setTheme(this, "#fcdcce")
+        setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_main)
 
@@ -55,43 +62,42 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.nav_goalAchieve-> {
+        when (item.itemId) {
+            R.id.nav_goalAchieve -> {
                 val intent = Intent(this, GoalRecordActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "골 기록 추가", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_friendList->
-            {
+            R.id.nav_friendList -> {
                 val intent = Intent(this, FriendActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_settings-> {
+            R.id.nav_settings -> {
                 Toast.makeText(this, "설정 클릭됨", Toast.LENGTH_SHORT).show()
                 val dialog = CustomDialog(this)
                 dialog.showDialog()
-                dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
+                dialog.setOnClickListener(object : CustomDialog.OnDialogClickListener {
                     override fun onClicked(name: String) {
                         Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
-            R.id.nav_notice-> {
+            R.id.nav_notice -> {
                 val intent = Intent(this, AnnouncementActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "공지사항 클릭됨", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_logOut-> Toast.makeText(this, "로그아웃 클릭됨", Toast.LENGTH_SHORT).show()
+            R.id.nav_logOut -> Toast.makeText(this, "로그아웃 클릭됨", Toast.LENGTH_SHORT).show()
         }
         return false
     }
 
     override fun onBackPressed() {
-        if(drawer_layout.isDrawerOpen(GravityCompat.END)){
+        if (drawer_layout.isDrawerOpen(GravityCompat.END)) {
             drawer_layout.closeDrawers()
             Toast.makeText(this, "back btn clicked", Toast.LENGTH_SHORT).show()
-        } else{
+        } else {
             super.onBackPressed()
         }
     }

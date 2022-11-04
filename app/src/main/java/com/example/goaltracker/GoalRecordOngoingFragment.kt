@@ -87,23 +87,6 @@ class GoalRecordOngoingFragment : Fragment() {
                             Log.d(TAG, "Error getting documents: ", exception)
                         }
                 }
-
-
-
-//                // 데이터 수정 시
-//                db.collection("Goal").document(goal_id).collection("team")
-//                    .addSnapshotListener { snapshots, e ->
-//                        if (e != null) {
-//                            Log.w(TAG, "listen:error", e)
-//                            return@addSnapshotListener
-//                        }
-//
-//                        for (dc in snapshots!!.documentChanges) {
-//                            if (dc.type == DocumentChange.Type.MODIFIED) {
-//                                Log.d(TAG, "New city: ${dc.document.data}")
-//                            }
-//                        }
-//                    }
             }
         }
 
