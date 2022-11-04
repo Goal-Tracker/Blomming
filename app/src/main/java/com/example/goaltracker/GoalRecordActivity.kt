@@ -43,7 +43,7 @@ class GoalRecordActivity : AppCompatActivity() {
         tab_viewPager.adapter = ViewPagerAdapter(this)
 
         // 추후엔 Dataframe에서 가져다 사용하기"
-        val temp_goal_lsit = arrayOf("a6jyD0k2MSJliDJq1wHb", "IyJXNQPcIx2a5EzLUoeN", "1dbd8086-cbed-42cc-a9e7-f8e579907c6a", "5a3804eb-46bd-44d2-9afd-e1ead8edd076")
+        val temp_goal_lsit = arrayOf("a6jyD0k2MSJliDJq1wHb", "IyJXNQPcIx2a5EzLUoeN", "62476cb2-33a7-4acb-af3f-17a37a9071ae")
 
         var pastNum = 0
         var tabName = arrayOf<String>("진행중  ", "완료된  ")

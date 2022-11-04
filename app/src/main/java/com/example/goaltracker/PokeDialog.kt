@@ -2,22 +2,20 @@ package com.example.goaltracker
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.View
-import android.view.Window
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.example.goaltracker.MySharedPreferences.setTheme
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 
 class PokeDialog(context: Context) : Dialog(context) {
 
@@ -63,7 +61,7 @@ class PokeDialog(context: Context) : Dialog(context) {
         } else {
             commentUpload_button.text = "콕 찌르기"
             commentUpload_button.isEnabled = true
-            bgButton.setColor(ContextCompat.getColor(context, R.color.dialog_button))
+            bgButton.setColor(ContextCompat.getColor(context, MySharedPreferences.getUserColorInt(context)))
 
             commentUpload_button.setOnClickListener {
                 Toast.makeText(it.context, profile.name + " 님을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()

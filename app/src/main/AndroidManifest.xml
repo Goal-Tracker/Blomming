@@ -33,9 +33,6 @@
             android:name=".JoinActivity"
             android:exported="true" />
         <activity
-            android:name=".GoalList"
-            android:exported="false" />
-        <activity
             android:name=".FriendActivity"
             android:exported="true">
         </activity>

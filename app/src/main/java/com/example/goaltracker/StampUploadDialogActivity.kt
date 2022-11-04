@@ -8,6 +8,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.ImageDecoder
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -68,6 +69,8 @@ class StampUploadDialogActivity : AppCompatActivity() {
         certImage_imageView = findViewById(R.id.certImage_imageView)
         comment_editText = findViewById(R.id.comment_editText)
         commentUpload_button = findViewById(R.id.commentUpload_button)
+        var bgButton: GradientDrawable = commentUpload_button.background as GradientDrawable
+        bgButton.setColor(ContextCompat.getColor(this, MySharedPreferences.getUserColorInt(this)))
         infoText2 = findViewById(R.id.infoText2)
 
         if (type) {
@@ -111,17 +114,17 @@ class StampUploadDialogActivity : AppCompatActivity() {
                             }
 
                             val stampData = hashMapOf(
-                                "Comment" to comment_editText.text.toString(),
-                                "Image" to imgFileName,
-                                "Uid" to MySharedPreferences.getUserId(this),
-                                "UserColor" to MySharedPreferences.getUserColor(this),
-                                "UserName" to MySharedPreferences.getUserNickname(this),
-                                "Type" to type
+                                "comment" to comment_editText.text.toString(),
+                                "image" to imgFileName,
+                                "uid" to MySharedPreferences.getUserId(this),
+                                "userColor" to MySharedPreferences.getUserColor(this),
+                                "userName" to MySharedPreferences.getUserNickname(this),
+                                "type" to type
                             )
 
                             db.collection("Stamp").document(stamp_id)
                                 .update(
-                                    mapOf("Day_record.Day${stampNum}" to FieldValue.arrayUnion(stampData))
+                                    mapOf("dayRecord.day${stampNum}" to FieldValue.arrayUnion(stampData))
                                 )
                         } else {
                             Log.d("TAG", "Stamp num receive fail")

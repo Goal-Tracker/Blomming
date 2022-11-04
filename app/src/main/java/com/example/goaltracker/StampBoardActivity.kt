@@ -3,10 +3,12 @@ package com.example.goaltracker
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -33,19 +35,21 @@ class StampBoardActivity() : AppCompatActivity() {
     lateinit var stampBoardAdapter: StampBoardAdapter
     val teamDatas = ArrayList<GoalTeamData>()
 
+    lateinit var view_top_rectangle: View
     lateinit var goal_back_imageButton: ImageButton
-    lateinit var goalTitle_textView : TextView
-    lateinit var first_day_textView : TextView
-    lateinit var last_day_textView : TextView
-    lateinit var subtitle_textView : TextView
-    lateinit var goalDate_textView : TextView
-    lateinit var goal_progressBar : ProgressBar
-    lateinit var goalToadyDate_textView : TextView
+    lateinit var goalTitle_textView: TextView
+    lateinit var first_day_textView: TextView
+    lateinit var last_day_textView: TextView
+    lateinit var subtitle_textView: TextView
+    lateinit var goalDate_textView: TextView
+    lateinit var goal_progressBar: ProgressBar
+    lateinit var goalToadyDate_textView: TextView
 
-    lateinit var rv_stampBoard : RecyclerView
-    lateinit var rv_team : RecyclerView
+    lateinit var rv_stampBoard: RecyclerView
+    lateinit var rv_team: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stamp_board)
 
@@ -59,6 +63,8 @@ class StampBoardActivity() : AppCompatActivity() {
         goal_back_imageButton.setOnClickListener {
             finish()
         }
+
+        view_top_rectangle = findViewById(R.id.view_top_rectangle)
 
         goalTitle_textView = findViewById(R.id.goalTitle_textView)
         first_day_textView = findViewById(R.id.first_day_textView)
@@ -85,7 +91,6 @@ class StampBoardActivity() : AppCompatActivity() {
             val start_day_str = start_day.replace("-", ".")
             val end_day = snapshot?.get("endDay").toString()
             val end_day_str = end_day.replace("-", ".")
-//            val teamList = snapshot?.get("Team") as List<String>
             val stamp_id = snapshot?.get("stampId") as String
             val past_date = pastCalc(start_day);
 
@@ -109,7 +114,6 @@ class StampBoardActivity() : AppCompatActivity() {
             goal_progressBar.progress = past_date
 
             Log.d("goal_db", "Date : $goal_day")
-//            Log.d("goal_db", "teamList : $teamList")
             Log.d("goal_db", "stamp_id : $stamp_id")
 
             var start_date = start_day + " 00:00:00"
@@ -119,7 +123,7 @@ class StampBoardActivity() : AppCompatActivity() {
 
             var calcDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
 
-            val pastDate = (calcDate+1).toInt()
+            val pastDate = (calcDate + 1).toInt()
 
             db.collection("Goal").document(goal_id).collection("team")
                 .whereEqualTo("request", true)
@@ -136,26 +140,28 @@ class StampBoardActivity() : AppCompatActivity() {
                             for (i in 1..goal_day) {
                                 val notYet: Boolean = pastDate <= i
 
-                                val day_record = stamp_snapshot?.get("Day_record") as HashMap<String, List<HashMap<String, String>>>
-                                Log.d(TAG, "[day_record[\"Day$i\"]] ${day_record["Day$i"]}")
-                                if (day_record["Day$i"] != null){
-                                    Log.d(TAG, "[day_record[\"Day$i\"]] inner ${day_record["Day$i"]}")
-                                    var commentArray = day_record["Day$i"] as List<HashMap<String, String>>
+                                val dayRecord =
+                                    stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
+                                Log.d(TAG, "[dayRecord[\"Day$i\"]] ${dayRecord["Day$i"]}")
+                                if (dayRecord["Day$i"] != null) {
+                                    Log.d(TAG, "[dayRecord[\"Day$i\"]] inner ${dayRecord["Day$i"]}")
+                                    var commentArray =
+                                        dayRecord["Day$i"] as List<HashMap<String, String>>
                                     var themeArray = ArrayList<String>()
                                     var commentNum = commentArray.size
 
-                                    Log.d(TAG, "[day_record[\"Day$i\"]] not null :  ${commentArray}")
+                                    Log.d(TAG, "[dayRecord[\"Day$i\"]] not null :  ${commentArray}")
 
                                     if (commentNum > 0) {
                                         Log.d(
                                             TAG,
-                                            "[day_record[\"Day$i\"]] commentNum > 0 :  ${commentArray}"
+                                            "[dayRecord[\"Day$i\"]] commentNum > 0 :  ${commentArray}"
                                         )
 
                                         for (commentInfo in commentArray) {
                                             Log.d(
                                                 TAG,
-                                                "[day_record[\"Day$i\"]] commentInfo :  ${commentInfo}"
+                                                "[dayRecord[\"Day$i\"]] commentInfo :  ${commentInfo}"
                                             )
 
                                             themeArray.add(commentInfo["UserColor"].toString())
@@ -201,22 +207,28 @@ class StampBoardActivity() : AppCompatActivity() {
                         } catch (e: Exception) {
                             Log.d(ContentValues.TAG, "[Error] $e")
                         }
+                    }
                 }
-            }
 
             // 팀원
             db.collection("Goal").document(goal_id).collection("team")
                 .whereEqualTo("request", true)
                 .get()
                 .addOnSuccessListener { result ->
-                    for (member in result){
+                    for (member in result) {
                         Log.d("Add stamp member : ", member.toString())
 
                         val uid: String = member.get("uid").toString()
                         val nickname: String = member.get("userName").toString()
                         val theme: String = member.get("profileColor").toString()
 
-                        teamDatas.add(GoalTeamData(uid = uid, name = nickname, profileColor = theme))
+                        teamDatas.add(
+                            GoalTeamData(
+                                uid = uid,
+                                name = nickname,
+                                profileColor = theme
+                            )
+                        )
 
                         Log.d("teamDatas result : ", teamDatas.toString())
 
@@ -240,6 +252,6 @@ class StampBoardActivity() : AppCompatActivity() {
 
         Log.d("test: 날짜!!", "$calcDate 일 차이남!!")
 
-        return (calcDate+1).toInt()
+        return (calcDate + 1).toInt()
     }
 }

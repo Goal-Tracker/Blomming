@@ -27,11 +27,13 @@
             android:layout_height="13.5dp"
             android:background="@android:color/transparent"
             android:src="@drawable/goal_record_close"
+            android:tint="?attr/colorButtonNormal"
             android:layout_marginTop="80dp"
             android:layout_marginRight="22.8dp"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
 
         <TextView
             android:id="@+id/goalTitle_textView"
@@ -40,7 +42,6 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="76dp"
             android:text="스트레칭"
-            android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,7 +53,6 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:text="2022.01.27"
-            android:textColor="@color/white"
             android:textSize="13dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/goalTitle_textView" />
@@ -64,7 +64,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:text="~"
-            android:textColor="@color/white"
             android:textSize="13dp"
             app:layout_constraintStart_toEndOf="@+id/first_day_textView"
             app:layout_constraintTop_toBottomOf="@+id/goalTitle_textView" />
@@ -76,7 +75,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:text="2022.02.27"
-            android:textColor="@color/white"
             android:textSize="13dp"
             app:layout_constraintStart_toEndOf="@+id/symbol_textView"
             app:layout_constraintTop_toBottomOf="@+id/goalTitle_textView" />
@@ -88,7 +86,6 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="3dp"
             android:text="일찍 일어나서 스트레칭 꼭 하기!"
-            android:textColor="@color/white"
             android:textSize="13dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/first_day_textView" />

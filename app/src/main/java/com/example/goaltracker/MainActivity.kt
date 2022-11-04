@@ -1,18 +1,13 @@
 package com.example.goaltracker
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import com.bumptech.glide.Glide.init
-import com.facebook.gamingservices.cloudgaming.CloudGameLoginHandler.init
 import com.google.android.material.navigation.NavigationView
-import com.google.rpc.context.AttributeContext
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 
@@ -27,6 +22,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         MySharedPreferences.setTheme(this, "#fcdcce")
+        MySharedPreferences.setUserColorInt(this, "#fcdcce")
         setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_main)

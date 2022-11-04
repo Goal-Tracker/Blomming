@@ -43,6 +43,32 @@ object MySharedPreferences {
         return prefs.getString("userColor", "").toString()
     }
 
+    fun setUserColorInt(context: Context, input: String) {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = prefs.edit()
+        var themeName = R.color.profile_color_coral
+        if (input == "#f69b94") {
+            themeName = R.color.profile_color_coral
+        } else if (input == "#96b0e5") {
+            themeName = R.color.profile_color_blue
+        } else if (input == "#f8c8c4") {
+            themeName = R.color.profile_color_babyPink
+        } else if (input == "#fcdcce") {
+            themeName = R.color.profile_color_lightOrange
+        } else if (input == "#92b9e2") {
+            themeName = R.color.profile_color_lightBlue
+        } else if (input == "#aad3d7") {
+            themeName = R.color.profile_color_mint
+        }
+        editor.putInt("userColorInt", themeName)
+        editor.commit()
+    }
+
+    fun getUserColorInt(context: Context): Int {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        return prefs.getInt("userColorInt", R.color.profile_color_coral)
+    }
+
     fun setTheme(context: Context, theme: String){
         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()

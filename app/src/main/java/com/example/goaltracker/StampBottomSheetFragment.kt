@@ -30,10 +30,6 @@ import kotlin.collections.ArrayList
 class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragment() {
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
-    private lateinit var certification_default_layout: ConstraintLayout
-    private lateinit var certification_default_view: View
-    private lateinit var certification_default_textView: TextView
-
     private lateinit var stamp_recyclerView : RecyclerView
     private lateinit var noneStamp_textView : TextView
     private lateinit var today_stamp_button : Button
@@ -118,8 +114,8 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
             stamp_db.addSnapshotListener { stamp_snapshot, e ->
                 try {
-                    val day_record = stamp_snapshot?.get("Day_record") as HashMap<String, List<HashMap<String, String>>>
-                    val commentArray = day_record["Day$stamp_num"] as List<HashMap<String, String>>
+                    val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
+                    val commentArray = dayRecord["day$stamp_num"] as List<HashMap<String, String>>
 
                     Log.d("StampBottomSheetFragment", "commentArray length : ${commentArray.size}")
 
@@ -127,11 +123,11 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
                     todayStampDatas.apply {
                         for (commentInfo in commentArray) {
-                            val comment = commentInfo["Comment"] as String
-                            val name = commentInfo["UserName"] as String
-                            val theme = commentInfo["UserColor"] as String
-                            val img = commentInfo["Image"] as String
-                            val type = commentInfo["Type"] as Boolean
+                            val comment = commentInfo["comment"] as String
+                            val name = commentInfo["userName"] as String
+                            val theme = commentInfo["userColor"] as String
+                            val img = commentInfo["image"] as String
+                            val type = commentInfo["type"] as Boolean
 
                             add(
                                 TodayStampData(
@@ -206,7 +202,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                             today_stamp_button.isEnabled = true
 
                             today_stamp_button.text = "오늘의 도장 찍기"
-                            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.dialog_button))
+                            bgButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
                         }
                     }
                 } catch (e: Exception){
@@ -253,7 +249,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         today_stamp_button.isEnabled = false
 
                         today_stamp_noneStamp_button.text = "오늘의 도장 찍기"
-                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.dialog_button))
+                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
 
                     }
                 }
