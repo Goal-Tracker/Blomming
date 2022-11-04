@@ -1,14 +1,12 @@
 package com.example.goaltracker
 
 import android.app.DatePickerDialog
-import android.app.Notification
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -16,20 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
-import kotlinx.android.synthetic.main.activity_add_goal.recyclerview
-import kotlinx.android.synthetic.main.activity_add_goal.searchWord
 import kotlinx.android.synthetic.main.item_member.view.*
-import kotlinx.android.synthetic.main.notice_view.*
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 class AddGoal : AppCompatActivity() {
@@ -146,7 +138,26 @@ class AddGoal : AppCompatActivity() {
             )
             firestore!!.collection("Goal").document(goalID).set(goal)
 
+            /////////////////////////////////////////////////////////////////////////
+            // Dataframe -> Notifications 객체 이용하여 저장
+            // Account에 저장
+            val notification_goal = hashMapOf(
+                "goalName" to title.text.toString(),
+                "goalUid" to goalID
+            )
+            firestore!!.collection("Account").document("1k8mYTUpqKVAlHBMM6sxBckaeP13")
+                .collection("Notification").document()
+                .set(notification_goal)
+            //////////////////////////////////////////////////////////////////////////
 
+            // Stamp에 저장
+            val hashMap = HashMap<String, String>()
+
+            val goal_ID = hashMapOf(
+                "Goal_id" to goalID,
+                "dayRecord" to hashMap
+            )
+            firestore!!.collection("Stamp").document(stampID).set(goal_ID)
 
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
 
@@ -229,7 +240,7 @@ class AddGoal : AppCompatActivity() {
                 FriendsList.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(Friends::class.java)
+                    val item = snapshot.toObject(Friends::class.java)
                     FriendsList.add(item!!)
                 }
                 notifyDataSetChanged()
@@ -238,7 +249,7 @@ class AddGoal : AppCompatActivity() {
 
         // xml파일을 inflate하여 ViewHolder를 생성
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
+            // var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
             val binding = ItemMemberBinding.inflate(layoutInflater,parent,false)
             return ViewHolder(binding)
         }
@@ -290,7 +301,7 @@ class AddGoal : AppCompatActivity() {
 
         // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            var viewHolder = (holder as ViewHolder).itemView
+            val viewHolder = (holder as ViewHolder).itemView
 
             holder.addFriendsBtnOnclick(FriendsList[position])
             holder.setFriendsName(FriendsList[position])
@@ -312,7 +323,7 @@ class AddGoal : AppCompatActivity() {
                 for (snapshot in querySnapshot!!.documents) {
                     if (snapshot.getString("userName")?.contains(searchWord) == true
                         ||snapshot.getString("email")?.contains(searchWord) == true) {
-                        var item = snapshot.toObject(Friends::class.java)
+                        val item = snapshot.toObject(Friends::class.java)
                         FriendsList.add(item!!)
                     }
                 }
