@@ -8,12 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
 // 리사이클러 뷰 아이템
-class FriendAdd (
-    val uid : String,
-    val email : String,
-    val userName : String,
-    val userColor: String
-) {
-    constructor():this("","", "", "")
-}
-
+class FriendAccept (var userName : String? = null,
+                    var email : String? = null,
+                    var uid : String? = null,
+                    var userColor : String? = null)

@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 onBackPressed()
                 dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
                     override fun onClicked(name: String) {
-                        Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
