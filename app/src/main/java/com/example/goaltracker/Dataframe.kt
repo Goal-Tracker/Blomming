@@ -10,7 +10,8 @@ data class Account (
     var UserColor:String ?= null,
     var FriendsList:List<String>?=null,
     var MyGoalList:List<String>?=null,
-    var NotificationList:List<String>?=null
+    var NotificationList:List<String>?=null,
+    var UserMessage:String?=null
 ) : Parcelable
 
 //public val curUser = Account()
@@ -20,7 +21,9 @@ data class Notifications (
     var goalName:String ?="",
     var message: String = "",
     var type: Int = 0,
+    var read: Boolean = false,
     var userColor:String ?= "",
     var userName:String ?= null,
-    var friendId:String ?= ""
+    var requestUserId:String ?= "",
+    var requestGoalId:String ?= ""
 ) : Parcelable

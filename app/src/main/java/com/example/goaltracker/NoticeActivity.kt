@@ -109,6 +109,12 @@ class NoticeActivity : AppCompatActivity() {
                 profileColor.setColor(Color.parseColor(color))
             }
 
+            var accountUId: String? = ""
+            accountUId = firebaseAuth?.currentUser?.uid.toString()
+            viewHolder.notice_button.setOnClickListener {
+//                firestore?.collection("Account")?.document(accountUId)?.collection("Friends")?.
+            }
+
         } else if (item.type == 2) {  // 골 초대
             viewHolder.notice_text.text = item.userName+"\n새로운 골에 초대받았습니다."
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)

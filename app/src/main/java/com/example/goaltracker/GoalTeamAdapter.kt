@@ -39,11 +39,15 @@ class GoalTeamAdapter (private val context: Context, private val goalTitle: Stri
 
         private val tv_profileName: TextView = itemView.findViewById(R.id.tv_profileName)
         private val view_profile: View = itemView.findViewById(R.id.view_profile)
+        private val profile_name: TextView = itemView.findViewById(R.id.profile_nick_textView)
+        private val profile_message: TextView = itemView.findViewById(R.id.profile_message_textView)
         var bgShape : GradientDrawable = view_profile.background as GradientDrawable
 
         fun bind(listener: View.OnClickListener, Data: GoalTeamData) {
             tv_profileName.text = Data.name[0].toString()
             bgShape.setColor(Color.parseColor(Data.profileColor))
+            profile_name.text = Data.name.toString()
+            profile_message.text = Data.message.toString()
 
             view.setOnClickListener(listener)
         }
