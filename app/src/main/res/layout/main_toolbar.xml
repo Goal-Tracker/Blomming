@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="100dp"
-    android:background="#33334f">
+    android:background="?attr/colorPrimary">
 
     <ImageButton
         android:id="@+id/alarmButton"
@@ -13,7 +14,9 @@
         android:layout_marginLeft="310dp"
         android:layout_marginTop="50dp"
         android:background="#00ff0000"
-        android:src="@drawable/alarmbtn"></ImageButton>
+        android:src="@drawable/alarmbtn"
+        android:tint="?attr/colorButtonNormal"
+        tools:ignore="UseAppTint" />
 
     <ImageButton
         android:id="@+id/menubtn"
@@ -22,6 +25,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="54dp"
         android:background="#00ff0000"
-        android:src="@drawable/menubtn"></ImageButton>
+        android:tint="?attr/colorButtonNormal"
+        android:src="@drawable/menubtn"
+        tools:ignore="UseAppTint" />
 
 </androidx.appcompat.widget.Toolbar>

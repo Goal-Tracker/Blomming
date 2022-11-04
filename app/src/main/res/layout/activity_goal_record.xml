@@ -28,7 +28,6 @@
             android:layout_marginTop="56dp"
             android:layout_marginBottom="28dp"
             android:text="GOAL 기록"
-            android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,11 +39,13 @@
             android:layout_height="13.5dp"
             android:background="@android:color/transparent"
             android:src="@drawable/goal_record_close"
+            android:tint="?attr/colorButtonNormal"
             android:layout_marginTop="61.6dp"
             android:layout_marginRight="22.8dp"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -52,9 +53,9 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabTextColor="@color/black"
-        app:tabSelectedTextColor="@color/main_color"
-        app:tabIndicatorColor="@color/main_color" />
+        app:tabTextColor="@color/greyish_brown"
+        app:tabSelectedTextColor="?attr/colorButtonNormal" />
+<!--        app:tabIndicatorColor="@color/main_color" />-->
 
 
     <androidx.viewpager2.widget.ViewPager2

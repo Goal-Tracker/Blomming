@@ -20,11 +20,11 @@
         android:theme="@style/Theme.GoalTracker">
         <activity
             android:name=".AnnouncementActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".GoalRecordActivity"
-            android:exported="true"></activity>
+            android:exported="true" >
+        </activity>
         <activity
             android:name=".StampUploadDialogActivity"
             android:exported="false"
@@ -49,19 +49,19 @@
             android:exported="true" />
         <activity
             android:name=".StampBoardActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
         <activity
             android:name=".GoogleLogin"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".FacebookLogin"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ProfileActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -73,10 +73,10 @@
         </activity>
         <activity
             android:name=".NoticeActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".AppNotifyActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

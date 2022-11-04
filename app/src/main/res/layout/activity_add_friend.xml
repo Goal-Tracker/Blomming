@@ -40,7 +40,6 @@
                     android:layout_alignBottom="@id/imageView"
                     android:fontFamily="@font/fontstyle"
                     android:text="친구 목록"
-                    android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:translationX="20dp"
                     android:translationY="56dp"
@@ -55,9 +54,11 @@
                     android:layout_marginTop="61.1dp"
                     android:layout_marginEnd="22.8dp"
                     android:background="@android:color/transparent"
+                    android:tint="?attr/colorButtonNormal"
                     android:padding="0sp"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon" />
+                    app:srcCompat="@drawable/icon"
+                    tools:ignore="UseAppTint" />
 
             </RelativeLayout>
 
