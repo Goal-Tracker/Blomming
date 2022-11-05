@@ -35,7 +35,6 @@
                         android:background="@drawable/ic_title_bar"
                         tools:ignore="MissingConstraints" />
 
-
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
