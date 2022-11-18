@@ -88,7 +88,8 @@
                         android:layout_marginTop="10dp"
                         android:hint="목표 이름을 입력해 주세요."
                         android:textSize="12sp"
-                        android:textStyle="normal"/>
+                        android:textStyle="normal"
+                        android:focusableInTouchMode="false"/>
 
                     <TextView
                         android:id="@+id/textView9"
@@ -109,7 +110,8 @@
                         android:focusable="false"
                         android:textColor="#585858"
                         android:textSize="12sp"
-                        android:textStyle="normal"/>
+                        android:textStyle="normal"
+                        android:focusableInTouchMode="false"/>
 
                     <TextView
                         android:id="@+id/textView10"
@@ -147,7 +149,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="한줄 메모를 입력해 보세요."
+                        android:hint="한 줄 메모를 입력해 보세요."
                         android:textColor="#585858"
                         android:textSize="12sp"
                         android:textStyle="normal"/>

@@ -24,11 +24,10 @@ import java.util.concurrent.TimeUnit
 class EditGoalActivity : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
-    // private val currentUser = Firebase.auth.currentUser?.uid
 
-    lateinit var title: EditText         // 이름
-    lateinit var startDay: EditText        // 시작일
-    lateinit var endDay: EditText         // 종료일
+    lateinit var title: EditText            // 이름
+    lateinit var startDay: EditText         // 시작일
+    lateinit var endDay: EditText           // 종료일
     lateinit var memo: EditText             // 메모
     lateinit var save_btn: Button           // 저장
     lateinit var close_btn: ImageButton     // 메인 화면으로
@@ -47,6 +46,7 @@ class EditGoalActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_goal)
+
 
         searchWord.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -73,7 +73,7 @@ class EditGoalActivity : AppCompatActivity() {
         recyclerview.adapter = RecyclerViewAdapter()
         recyclerview.layoutManager = LinearLayoutManager(this)
 
-        // goalID 값 받아오기 //
+        // goalID 값 받아오기
         val goal_id = intent.getStringExtra("goalID") as String
 
         // goal 데이터 받아오기
@@ -98,10 +98,10 @@ class EditGoalActivity : AppCompatActivity() {
 
         // 이전 화면으로 이동
         close_btn.setOnClickListener {
-            onBackPressed();
+            onBackPressed()
         }
 
-        // 날짜 버튼
+        // 날짜 수정
         showDatePicker()
 
         // 데이터 저장
@@ -126,9 +126,6 @@ class EditGoalActivity : AppCompatActivity() {
     }
 
     fun showDatePicker() {
-
-        // 시작일 비활성화 (수정 불가)
-        startDay.isClickable = false
 
         // 종료일 직접 설정
         val dateSetListener2 = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -165,7 +162,7 @@ class EditGoalActivity : AppCompatActivity() {
     }
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        init {  // 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
+        init {
 
             firestore?.collection("Account")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 // ArrayList 비워줌
@@ -199,13 +196,10 @@ class EditGoalActivity : AppCompatActivity() {
                     // 값 받아오기
                     val goal_id = intent.getStringExtra("goalID") as String
 
-
                     if ((it as CheckBox).isChecked) {
-
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
-                            //"checked" to true,
                             "profileColor" to item.userColor.toString()
                         )
 
