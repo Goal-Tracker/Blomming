@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -30,10 +29,9 @@ class AddGoal : AppCompatActivity() {
     var firebaseAuth : FirebaseAuth?= null
     var accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-
-    lateinit var title: EditText         // 이름
-    lateinit var startDay: EditText        // 시작일
-    lateinit var endDay: EditText         // 종료일
+    lateinit var title: EditText            // 이름
+    lateinit var startDay: EditText         // 시작일
+    lateinit var endDay: EditText           // 종료일
     lateinit var memo: EditText             // 메모
     lateinit var save_btn: Button           // 저장
     lateinit var close_btn: ImageButton     // 메인 화면으로
@@ -94,7 +92,6 @@ class AddGoal : AppCompatActivity() {
         }
 
         // 날짜 버튼
-        showDatePicker()
         val themedButtonGroup = findViewById<ThemedToggleButtonGroup>(R.id.DayButtonGroup)
 
         // 시작일 : 현재 날짜
@@ -120,6 +117,10 @@ class AddGoal : AppCompatActivity() {
                 // 종료일 : 100일 뒤
                 endDay_calendar.add(Calendar.DATE, +100)
             }
+            if (btn_etc.isSelected){
+                // 기타 : 사용자 설정
+                showDatePicker()
+            }
             endDay.setText(sdf.format(endDay_calendar.time))
         }
 
@@ -138,17 +139,11 @@ class AddGoal : AppCompatActivity() {
             )
             firestore!!.collection("Goal").document(goalID).set(goal)
 
-            /////////////////////////////////////////////////////////////////////////
-            // Dataframe -> Notifications 객체 이용하여 저장
             // Account에 저장
-            val notification_goal = hashMapOf(
-                "goalName" to title.text.toString(),
-                "goalUid" to goalID
-            )
-            firestore!!.collection("Account").document("1k8mYTUpqKVAlHBMM6sxBckaeP13")
-                .collection("Notification").document()
+            val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString())
+
+            firestore!!.collection("Account")?.document(accountUId)?.collection("Notification").document()
                 .set(notification_goal)
-            //////////////////////////////////////////////////////////////////////////
 
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
@@ -249,7 +244,6 @@ class AddGoal : AppCompatActivity() {
 
         // xml파일을 inflate하여 ViewHolder를 생성
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            // var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
             val binding = ItemMemberBinding.inflate(layoutInflater,parent,false)
             return ViewHolder(binding)
         }
@@ -264,19 +258,13 @@ class AddGoal : AppCompatActivity() {
             fun addFriendsBtnOnclick(item: Friends){
 
                 binding.checkBox.setOnClickListener {
-//                    val request : Boolean
-//                    val checked : Boolean
 
                     // 체크한 친구만 Goal에 추가
                     if ((it as CheckBox).isChecked) {
-//                        request = false
-//                        checked = true
 
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
-//                            "request" to request,
-//                            "checked" to checked,
                             "profileColor" to item.userColor.toString()
                         )
 
