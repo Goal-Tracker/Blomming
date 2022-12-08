@@ -3,24 +3,20 @@ package com.example.goaltracker
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import android.view.MenuItem
-import android.widget.ImageButton
-import android.widget.ListAdapter
 import android.widget.TextView
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.android.synthetic.main.drawer_header.view.*
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 import java.text.SimpleDateFormat
@@ -56,12 +52,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val nav_header = nav_view.getHeaderView(0)
         val navUserName = nav_header.findViewById<TextView>(R.id.nav_userName)
         val navUserEmail = nav_header.findViewById<TextView>(R.id.nav_userId)
+        var navUserProfile :GradientDrawable = nav_header.nav_profile_icon.background as GradientDrawable
+        val navUserNameShort = nav_header.findViewById<TextView>(R.id.nav_profile_name)
 
         db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
             curUserName.text = curUser?.UserName.toString()
             navUserName.text = curUser?.UserName.toString()
             navUserEmail.text = curUser?.Email.toString()
+            val color = curUser?.UserColor.toString()
+            if (color != null) {
+                navUserProfile.setColor(Color.parseColor(color))
+            }
+            navUserNameShort.text = curUser?.UserName.toString().substring(0 until 1)
         }
 
         val notReadNotices = arrayListOf<Notifications>()
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     notReadNotices.add(item!!)
                 }
 
-                if (notReadNotices.size!=0) {
+                if (notReadNotices.isNotEmpty()) {
                     alarmButton.setBackgroundResource(R.drawable.alarm_close)
                 }
             }
@@ -156,31 +159,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.nav_goalAchieve-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
             R.id.nav_friendList-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
+            R.id.nav_notice-> {
+                startActivity(Intent(this, AppNotifyActivity::class.java))
+                onBackPressed()
+            }
             R.id.nav_settings-> {
-                val dialog = CustomDialog(this)
+                val dialog = ProfileSettingDialog(this)
                 dialog.showDialog()
                 onBackPressed()
-                dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
+                dialog.setOnClickListener(object: ProfileSettingDialog.OnDialogClickListener {
                     override fun onClicked(name: String) {
                         Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
-            R.id.nav_notice-> {
-                startActivity(Intent(this, AppNotifyActivity::class.java))
-                onBackPressed()
-            }
             R.id.nav_changePW -> {
-                val curUserEmail = firebaseAuth.currentUser?.email
-
-                if (curUserEmail!=null) {
-                    firebaseAuth.sendPasswordResetEmail(curUserEmail).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(TAG, "Email sent.")
-                            Toast.makeText(this@MainActivity, "메일을 성공적으로 보냈습니다.", Toast.LENGTH_LONG).show()
-                        }
+                val dialog = ChangePWDialog(this)
+                dialog.showDialog()
+                onBackPressed()
+                dialog.setOnClickListener(object: ChangePWDialog.OnDialogClickListener {
+                    override fun onClicked(name: String) {
+                        Toast.makeText(this@MainActivity, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
                     }
-                }
+                })
             }
             R.id.nav_logOut-> {
                 if (firebaseAuth?.currentUser != null) {
