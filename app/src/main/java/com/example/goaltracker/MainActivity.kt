@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
@@ -39,8 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.drawer_main)
 
         var accountUId : String?=""
-        accountUId = firebaseAuth?.currentUser?.uid.toString()
-
+        // accountUId = firebaseAuth?.currentUser?.uid.toString()
+        accountUId = "1k8mYTUpqKVAlHBMM6sxBckaeP13"
         val curUserName = findViewById<TextView>(R.id.user_name)
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
@@ -84,6 +85,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     alarmButton.setBackgroundResource(R.drawable.alarm_close)
                 }
             }
+
+
+        // --------------------------------골 추가 버튼 연결--------------------------------------- //
+
+        goalAddButton.setOnClickListener{
+            startActivity(Intent(this, AddGoal::class.java))
+        }
+
+        // ------------------------------------------------------------------------------------- //
+
+
         //버튼 클릭시 동작
         alarmButton.setOnClickListener {
             alarmButton.setBackgroundResource(R.drawable.alarmbtn)
@@ -159,10 +171,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.nav_goalAchieve-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
             R.id.nav_friendList-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
-            R.id.nav_notice-> {
-                startActivity(Intent(this, AppNotifyActivity::class.java))
-                onBackPressed()
-            }
             R.id.nav_settings-> {
                 val dialog = ProfileSettingDialog(this)
                 dialog.showDialog()

@@ -17,6 +17,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.MetadataChanges
 import com.squareup.okhttp.Dispatcher
+import kotlinx.android.synthetic.main.goals_layer.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import org.w3c.dom.Text
@@ -34,6 +35,8 @@ class StampBoardActivity() : AppCompatActivity() {
     val teamDatas = ArrayList<GoalTeamData>()
 
     lateinit var goal_back_imageButton: ImageButton
+    lateinit var edit_goal: ImageButton
+
     lateinit var goalTitle_textView : TextView
     lateinit var first_day_textView : TextView
     lateinit var last_day_textView : TextView
@@ -54,6 +57,7 @@ class StampBoardActivity() : AppCompatActivity() {
         MySharedPreferences.setUserNickname(this, "임정수")
         MySharedPreferences.setUserColor(this, "#fcdcce")
 
+        edit_goal = findViewById(R.id.edit_goal)
         goal_back_imageButton = findViewById(R.id.goal_back_imageButton)
 
         goal_back_imageButton.setOnClickListener {
@@ -78,6 +82,15 @@ class StampBoardActivity() : AppCompatActivity() {
 
         // 읽고 스탬프 추가 (테스트용)
         val goal_db = db.collection("Goal").document(goal_id)
+
+        // ------------------------------------------------------------------------
+        // 골 수정 화면으로 이동
+        edit_goal.setOnClickListener {
+            val intent = Intent(this, EditGoalActivity::class.java)
+            intent.putExtra("goalID", goal_id) // 데이터 보내기
+            startActivity(intent)
+        }
+        //------------------------------------------------------------------------
 
         goal_db.addSnapshotListener { snapshot, e ->
             val goal_day = snapshot?.get("day").toString().toInt()
