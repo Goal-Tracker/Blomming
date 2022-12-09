@@ -120,7 +120,7 @@ class AddFriendActivity : AppCompatActivity() {
             var viewHolder = (holder as ViewHolder).itemView
             holder.SetFriendAddName(friend_add[position])
             holder.SetFriendUid(friend_add[position])
-            //holder.SetProfileAddName(friend_add[position])
+            holder.SetProfileAddName(friend_add[position])
             holder.AddFriendBtnOnclick(friend_add[position])
             holder.SetFriendAddColor(friend_add[position])
             holder.SetFriendAddEmail(friend_add[position])
@@ -140,7 +140,7 @@ class AddFriendActivity : AppCompatActivity() {
 
             private val AddName: TextView = itemView.findViewById(R.id.AddName)
             private val Adduid: TextView = itemView.findViewById(R.id.Adduid)
-            //private val ProfileName: TextView = itemView.findViewById(R.id.AddProfileName)
+            private val ProfileName: TextView = itemView.findViewById(R.id.AddProfileName)
             private val AddEmail: TextView = itemView.findViewById(R.id.AddEmail)
             private val AddColor: ImageView = itemView.findViewById(R.id.AddColor)
             private val AddBtn: Button = itemView.findViewById(R.id.AddBtn)
@@ -154,12 +154,12 @@ class AddFriendActivity : AppCompatActivity() {
             fun SetFriendUid(item: Friend) {
                 Adduid.text = item.uid
             }
-            /*
-                        //친구 프로필 이름
-                        fun SetProfileAddName(item: Friend) {
-                            ProfileName.text = item.UserName!![0].toString()
-                        }
-            */
+
+            //친구 프로필 이름
+            fun SetProfileAddName(item: Friend) {
+                ProfileName.text = item.userName?.get(0).toString()
+            }
+
             //친구 추가 프로필
             fun SetFriendAddColor(item: Friend) {
                 var circleResource = 0
@@ -215,7 +215,7 @@ class AddFriendActivity : AppCompatActivity() {
                                                 "email" to item.email,
                                                 "userColor" to item.userColor
 
-                                                )
+                                            )
                                         )
                                         ?.addOnSuccessListener {
                                             Toast.makeText(
@@ -239,7 +239,7 @@ class AddFriendActivity : AppCompatActivity() {
                                                 "email" to item.email,
                                                 "userColor" to item.userColor
 
-                                                )
+                                            )
                                         )
                                         ?.addOnSuccessListener {
                                         }
@@ -264,7 +264,7 @@ class AddFriendActivity : AppCompatActivity() {
                                                 "email" to item.email,
                                                 "userColor" to item.userColor
 
-                                                )
+                                            )
                                         )
                                         ?.addOnSuccessListener {
                                             Toast.makeText(
@@ -288,7 +288,7 @@ class AddFriendActivity : AppCompatActivity() {
                                                 "email" to item.email,
                                                 "userColor" to item.userColor
 
-                                                )
+                                            )
                                         )
                                         ?.addOnSuccessListener {
                                         }
@@ -346,7 +346,7 @@ class AddFriendActivity : AppCompatActivity() {
                         "index" to index,
                         "id" to dialog.uid,
 
-                    )
+                        )
                 )
 
             Toast.makeText(
@@ -388,7 +388,10 @@ class AddFriendActivity : AppCompatActivity() {
                     for (snapshot in querySnapshot!!.documents) {
                         //에러처리(안 해주면 오류)
                         if (snapshot.getString("email") != null && snapshot.getString("userName") != null)
-                            if (snapshot.getString("email")!!.contains(searchWord) || snapshot.getString("userName")!!.contains(searchWord)) {
+                            if (snapshot.getString("email")!!
+                                    .contains(searchWord) || snapshot.getString("userName")!!
+                                    .contains(searchWord)
+                            ) {
                                 val item = snapshot.toObject(Friend::class.java)
                                 friend_add.add(item!!)
                             }
