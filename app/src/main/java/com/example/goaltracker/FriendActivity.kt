@@ -1,9 +1,5 @@
 package com.example.goaltracker
 
-
-
-import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,32 +9,29 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_friend.backBtn
 import kotlinx.android.synthetic.main.activity_friend.*
-import kotlinx.android.synthetic.main.activity_profile.*
-import kotlinx.android.synthetic.main.item_accept_friend.*
 
 
 class FriendActivity : AppCompatActivity() {
+    // 파이어스토어
     var firestore: FirebaseFirestore? = null
     private val currentUser = Firebase.auth.currentUser?.uid
-    var searchcount = 0
+
+    var searchcount = 0 //사람 수
     private lateinit var adapter: FriendAdapter
     private lateinit var accept_adapter: FriendAcceptAdapter
     private lateinit var request_adapter: FriendRequestAdapter
-    private val friend = mutableListOf<Friends>()
-    private val friend_accept = mutableListOf<Friends>()
-    private val friend_request = mutableListOf<Friends>()
-    val TAG: String = "로그"
+
+    private val friend = mutableListOf<Friend>()
+    private val friend_accept = mutableListOf<Friend>()
+    private val friend_request = mutableListOf<Friend>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,24 +39,27 @@ class FriendActivity : AppCompatActivity() {
 
         // 파이어스토어 인스턴스 초기화
         firestore = FirebaseFirestore.getInstance()
-        setFriends()
+
+        //친구 목록
         adapter = FriendAdapter(friend)
         FriendRecyclerView.adapter = adapter
         FriendRecyclerView.layoutManager = LinearLayoutManager(this)
         FriendRecyclerView.setHasFixedSize(true)
-        //setRequests()
+
+        //친구 신청 수락
         accept_adapter = FriendAcceptAdapter(friend_accept)
         FriendAcceptRecyclerView.adapter = accept_adapter
         FriendAcceptRecyclerView.layoutManager =
-            LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL } //리사이클러뷰 가로로
         FriendAcceptRecyclerView.setHasFixedSize(true)
 
+        //친구 신청 취소
         request_adapter = FriendRequestAdapter(friend_request)
         FriendRequestRecyclerView.adapter = request_adapter
         FriendRequestRecyclerView.layoutManager =
-            LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL }
+            LinearLayoutManager(this).also { it.orientation = LinearLayoutManager.HORIZONTAL } //리사이클러뷰 가로로
         FriendRequestRecyclerView.setHasFixedSize(true)
-//initRecycler()
+
 
 
         //x버튼 누르면 main 화면으로 이동
@@ -72,68 +68,48 @@ class FriendActivity : AppCompatActivity() {
         }
 
 
+        //돋보기 버튼 누르면 친구추가 화면으로 이동
+        searchBtn.setOnClickListener {
+            startActivity(Intent(this, AddFriendActivity::class.java))
+        }
+
+
     }
 
+    //친구 수
     fun getCount() {
         var text_count = findViewById<TextView>(R.id.search_friendcount)
         text_count.text = "" + searchcount + "명"
     }
 
+    //친구 신청받은 수
     fun getAcCount() {
         var text_count = findViewById<TextView>(R.id.accept_friendcount)
         text_count.text = "" + searchcount + "명"
     }
 
+    //친구 신청보낸 수
     fun getReCount() {
         var text_count = findViewById<TextView>(R.id.request_friendcount)
         text_count.text = "" + searchcount + "명"
     }
 
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun setFriends() {
-        val myDocRef = firestore?.collection("Account")?.document("$currentUser")
-        myDocRef!!.get()
-            .addOnSuccessListener { document ->
-                if (document.get("Friends") != null) {
-                    val hashMap: ArrayList<HashMap<String, String>> =
-                        document.get("Friends") as ArrayList<HashMap<String, String>>
-                    friend.clear()
-                    for (keys in hashMap) {
-                        val key = keys.keys.iterator().next()
-                        if (keys[key].toString() == "friend") {
-                            val friendDocRef = firestore?.collection("Account")?.document(key)
-                            friendDocRef?.get()?.addOnSuccessListener { document ->
-                                friend.apply {
-                                    val UserName = document.get("UserName").toString()
-                                    val Email = document.get("Email").toString()
-                                    val UserColor = document.get("UserColor").toString()
-                                    add(Friends(UserName, Email, UserColor))
-                                    Log.d(TAG, "성공")
-                                    searchcount = friend.size
-                                    getCount()
-                                    adapter.loadFriend(friend)
-                                    adapter.notifyDataSetChanged()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-    }
-
-    inner class FriendAcceptAdapter(private val context: MutableList<Friends>) :
+    //친구 신청 수락
+    inner class FriendAcceptAdapter(private val context: MutableList<Friend>) :
         RecyclerView.Adapter<FriendAcceptAdapter.ViewHolder>() {
-        private var friend_accept = mutableListOf<Friends>()
+        private var friend_accept = mutableListOf<Friend>()
 
-        init {  // Account의 문서를 불러온 뒤 Friend으로 변환해 ArrayList에 담음
-            firestore?.collection("Account")
+        //status가 accept인 것만 불러오기
+        init {
+            firestore?.collection("Account")?.document("$currentUser")
+                ?.collection("Friend")
+                ?.whereEqualTo("status", "accept")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     // ArrayList 비워줌
                     friend_accept.clear()
 
                     for (snapshot in querySnapshot!!.documents) {
-                        var item = snapshot.toObject(Friends::class.java)
+                        var item = snapshot.toObject(Friend::class.java)
                         friend_accept.add(item!!)
                     }
                     searchcount = friend_accept.size
@@ -166,13 +142,15 @@ class FriendActivity : AppCompatActivity() {
             private val AcceptColor: ImageView = itemView.findViewById(R.id.AcceptColor)
             private val AcceptBtn: Button = itemView.findViewById(R.id.AcceptBtn)
 
-            fun setFriendAcceptName(item: Friends) {
-                AcceptName.text = item.userName
+            //친구 이름
+            fun setFriendAcceptName(item: Friend) {
+                AcceptName.text = item.UserName?.get(0).toString()
             }
 
-            fun SetFriendAcceptColor(item: Friends) {
+            //친구 프로필
+            fun SetFriendAcceptColor(item: Friend) {
                 var circleResource = 0
-                when (item.userColor) {
+                when (item.UserColor) {
                     "f69b94" -> circleResource = R.drawable.b_f69b94
                     "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
                     "fcdcce" -> circleResource = R.drawable.b_fcdcce
@@ -193,53 +171,25 @@ class FriendActivity : AppCompatActivity() {
                 AcceptColor.setImageResource(circleResource)
             }
 
-            fun AcceptBtnOnclick(item: Friends) {
+            //친구 수락 버튼
+            fun AcceptBtnOnclick(item: Friend) {
                 AcceptBtn.setOnClickListener {
+                    // 내 친구 목록
+                    firestore?.collection("Account")?.document("$currentUser")
+                        ?.collection("Friend")
+                        ?.document("${item.Uid}")
+                        ?.update("status", "friend")
+                        ?.addOnSuccessListener { }
+                        ?.addOnFailureListener { }
 
-                    var myDocRef = firestore?.collection("Account")?.document("$currentUser")
-                    myDocRef!!.get()
-                        .addOnSuccessListener { document ->
-                            if (document.get("Friends") != null) {
-                                val hashMap: ArrayList<Map<String, String>> =
-                                    document.get("Friends") as ArrayList<Map<String, String>>
-                                for (keys in hashMap) {
-                                    val friendlist: MutableMap<String, Any> = HashMap()
-                                    val mylist: MutableMap<String, Any> = HashMap()
-                                    val key = keys.keys.iterator().next()
-                                    if (keys[key] == "accept") {
-                                        val friendDocRef =
-                                            firestore?.collection("Account")?.document(key)
-                                        friendDocRef!!.get()
-                                            .addOnSuccessListener { document ->
-                                                mylist[key] = "accept"
-                                                myDocRef.update(
-                                                    "Friends",
-                                                    FieldValue.arrayRemove(mylist)
-                                                )
-                                                mylist[key] = "friend"
-                                                myDocRef.update(
-                                                    "Friends",
-                                                    FieldValue.arrayUnion(mylist)
-                                                )
+                    // 상대방 친구 목록
+                    firestore?.collection("Account")?.document(item.Uid.toString())
+                        ?.collection("Friend")
+                        ?.document("${currentUser}")
+                        ?.update("status", "friend")
+                        ?.addOnSuccessListener { }
+                        ?.addOnFailureListener { }
 
-                                                friendlist[currentUser.toString()] = "request"
-                                                friendDocRef.update(
-                                                    "Friends",
-                                                    FieldValue.arrayRemove(friendlist)
-                                                )
-                                                friendlist[currentUser.toString()] = "friend"
-                                                friendDocRef.update(
-                                                    "Friends",
-                                                    FieldValue.arrayUnion(friendlist)
-                                                )
-                                                Log.d(TAG, "이것도 성공")
-
-                                            }
-
-                                    }
-                                }
-                            }
-                        }
                 }
 
             }
@@ -251,18 +201,25 @@ class FriendActivity : AppCompatActivity() {
 
     }
 
-    inner class FriendRequestAdapter(private val context: MutableList<Friends>) :
-        RecyclerView.Adapter<FriendRequestAdapter.ViewHolder>() {
-        private var friend_request = mutableListOf<Friends>()
 
-        init {  // Account의 문서를 불러온 뒤 Friend으로 변환해 ArrayList에 담음
-            firestore?.collection("Account")
+
+
+    //친구 신청 취소
+    inner class FriendRequestAdapter(private val context: MutableList<Friend>) :
+        RecyclerView.Adapter<FriendRequestAdapter.ViewHolder>() {
+        private var friend_request = mutableListOf<Friend>()
+
+        //status가 request인 것만 불러오기
+        init {
+            firestore?.collection("Account")?.document("$currentUser")
+                ?.collection("Friend")
+                ?.whereEqualTo("status", "request")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                     // ArrayList 비워줌
                     friend_request.clear()
 
                     for (snapshot in querySnapshot!!.documents) {
-                        var item = snapshot.toObject(Friends::class.java)
+                        var item = snapshot.toObject(Friend::class.java)
                         friend_request.add(item!!)
                     }
                     searchcount = friend_request.size
@@ -296,13 +253,15 @@ class FriendActivity : AppCompatActivity() {
             private val RequestColor: ImageView = itemView.findViewById(R.id.RequestColor)
             private val RequestBtn: Button = itemView.findViewById(R.id.RequestBtn)
 
-            fun setFriendRequestName(item: Friends) {
-                RequestName.text = item.userName
+            //친구 이름
+            fun setFriendRequestName(item: Friend) {
+                RequestName.text = item.UserName?.get(0).toString()
             }
 
-            fun SetFriendRequestColor(item: Friends) {
+            //친구 프로필
+            fun SetFriendRequestColor(item: Friend) {
                 var circleResource = 0
-                when (item.userColor) {
+                when (item.UserColor) {
                     "f69b94" -> circleResource = R.drawable.b_f69b94
                     "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
                     "fcdcce" -> circleResource = R.drawable.b_fcdcce
@@ -323,44 +282,21 @@ class FriendActivity : AppCompatActivity() {
                 RequestColor.setImageResource(circleResource)
             }
 
-            fun RequestBtnOnclick(item: Friends) {
+            //친구 신청 취소 버튼
+            fun RequestBtnOnclick(item: Friend) {
                 RequestBtn.setOnClickListener {
+                    // 내 친구 목록
+                    firestore?.collection("Account")?.document("$currentUser")
+                        ?.collection("Friend")
+                        ?.document("${item.Uid}")
+                        ?.delete()
 
-                    var myDocRef = firestore?.collection("Account")?.document("$currentUser")
-                    myDocRef!!.get()
-                        .addOnSuccessListener { document ->
-                            if (document.get("Friends") != null) {
-                                val hashMap: ArrayList<Map<String, String>> =
-                                    document.get("Friends") as ArrayList<Map<String, String>>
-                                for (keys in hashMap) {
-                                    val friendlist: MutableMap<String, Any> = HashMap()
-                                    val mylist: MutableMap<String, Any> = HashMap()
-                                    val key = keys.keys.iterator().next()
-                                    if (keys[key] == "request") {
-                                        val friendDocRef =
-                                            firestore?.collection("Account")?.document(key)
-                                        friendDocRef!!.get()
-                                            .addOnSuccessListener { document ->
-                                                mylist[key] = "request"
-                                                myDocRef.update(
-                                                    "Friends",
-                                                    FieldValue.arrayRemove(mylist)
-                                                )
+                    // 상대방 친구 목록
+                    firestore?.collection("Account")?.document(item.Uid.toString())
+                        ?.collection("Friend")
+                        ?.document("${currentUser}")
+                        ?.delete()
 
-                                                friendlist[currentUser.toString()] = "accept"
-                                                friendDocRef.update(
-                                                    "Friends",
-                                                    FieldValue.arrayRemove(friendlist)
-                                                )
-
-                                                Log.d(TAG, "이것도 성공")
-
-                                            }
-
-                                    }
-                                }
-                            }
-                        }
                 }
 
             }
@@ -373,8 +309,107 @@ class FriendActivity : AppCompatActivity() {
     }
 
 
-}
 
+
+    //친구 목록
+    inner class FriendAdapter(private val context: MutableList<Friend>) :
+        RecyclerView.Adapter<FriendAdapter.ViewHolder>() {
+        private var friend = mutableListOf<Friend>()
+
+        //status가 friend인 것만 불러오기
+        init {  
+            firestore?.collection("Account")?.document("$currentUser")
+                ?.collection("Friend")
+                ?.whereEqualTo("status", "friend")
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    // ArrayList 비워줌
+                    friend.clear()
+
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(Friend::class.java)
+                        friend.add(item!!)
+                    }
+                    searchcount = friend.size
+                    getCount()
+                    adapter.notifyDataSetChanged()
+                }
+        }
+
+        // xml파일을 inflate하여 ViewHolder를 생성
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            var view =
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_friend, parent, false)
+            return ViewHolder(view)
+        }
+
+        // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            var viewHolder = (holder as ViewHolder).itemView
+            holder.setFriendName(friend[position])
+            holder.setProfileName(friend[position])
+            holder.SetFriendColor(friend[position])
+            holder.SetFriendEmail(friend[position])
+
+
+        }
+
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+            private val FriendName: TextView = itemView.findViewById(R.id.FriendName)
+            private val FriendProfileName: TextView = itemView.findViewById(R.id.FriendProfileName)
+            private val FriendEmail: TextView = itemView.findViewById(R.id.FriendEmail)
+            private val FriendColor: ImageView = itemView.findViewById(R.id.FriendColor)
+
+
+            //친구 이름
+            fun setFriendName(item: Friend){
+                FriendName.text = item.UserName
+            }
+
+            //친구 프로필 이름
+            fun setProfileName(item: Friend){
+                FriendProfileName.text = item.UserName?.get(0).toString()
+            }
+
+            //친구 프로필
+            fun SetFriendColor(item:Friend){
+                var circleResource = 0
+                when (item.UserColor) {
+                    "f69b94" -> circleResource = R.drawable.b_f69b94
+                    "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
+                    "fcdcce" -> circleResource = R.drawable.b_fcdcce
+                    "96b0e5" -> circleResource = R.drawable.b_96b0e5
+                    "92b9e2" -> circleResource = R.drawable.b_92b9e2
+                    "ebc0c7" -> circleResource = R.drawable.b_ebc0c7
+                    "7bb6c8" -> circleResource = R.drawable.b_7bb6c8
+                    "aad3d7" -> circleResource = R.drawable.b_aad3d7
+                    "f5f1f0" -> circleResource = R.drawable.b_f5f1f0
+                    "d5e3e6" -> circleResource = R.drawable.b_d5e3e6
+                    "f2a4b1" -> circleResource = R.drawable.b_f2a4b1
+                    "7175a5" -> circleResource = R.drawable.b_7175a5
+                    "a1b3d7" -> circleResource = R.drawable.b_a1b3d7
+                    "bd83cf" -> circleResource = R.drawable.b_bd83cf
+                    "e5afe9" -> circleResource = R.drawable.b_e5afe9
+
+                }
+                FriendColor.setImageResource(circleResource)
+            }
+
+            //친구 이메일
+            fun SetFriendEmail(item:Friend){
+                FriendEmail.text = item.Email
+            }
+
+        }
+
+        // 리사이클러뷰의 아이템 총 개수 반환
+        override fun getItemCount() = friend.size
+
+    }
+
+
+}
 
 
 

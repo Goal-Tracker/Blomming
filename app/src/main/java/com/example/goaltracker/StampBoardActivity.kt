@@ -86,7 +86,7 @@ class StampBoardActivity() : AppCompatActivity() {
         // ------------------------------------------------------------------------
         // 골 수정 화면으로 이동
         edit_goal.setOnClickListener {
-            val intent = Intent(this, EditGoalActivity::class.java)
+            //val intent = Intent(this, EditGoalActivity::class.java)
             intent.putExtra("goalID", goal_id) // 데이터 보내기
             startActivity(intent)
         }

@@ -150,7 +150,6 @@
                         android:layout_marginStart="81dp"
                         android:layout_marginTop="25dp"
                         android:fontFamily="@font/fontstyle"
-                        android:text="카운트"
                         android:textColor="#606060"
                         android:textSize="12sp"
                         app:lineHeight="38sp" />

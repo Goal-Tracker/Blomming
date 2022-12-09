@@ -21,22 +21,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"></ImageView>
 
+
     <TextView
         android:id="@+id/RequestName"
-        android:layout_width="22dp"
-        android:layout_height="15dp"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="16dp"
-        android:clickable="false"
-        android:fontFamily="@font/fontstyle"
-        android:gravity="center"
-        android:lineSpacingExtra="10sp"
-        android:text="이름"
-        android:textColor="#363639"
-        android:textSize="10sp"
-        android:visibility="invisible"
+        android:layout_width="16dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="11dp"
+        android:text="신"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/RequestColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.311"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/RequestColor"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/RequestBtn"

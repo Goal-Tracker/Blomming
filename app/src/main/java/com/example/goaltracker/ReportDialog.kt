@@ -13,9 +13,12 @@ class ReportDialog(
     val userColor: String?,
     val userName: String?,
     val email: String,
+    val uid: String?,
     val namebtnListener: View.OnClickListener,
     val messagebtnListener: View.OnClickListener,
-    val blockbtnListener: View.OnClickListener) : Dialog(context
+    val blockbtnListener: View.OnClickListener,
+
+    ) : Dialog(context
 ) {
 
 
@@ -59,6 +62,11 @@ class ReportDialog(
         //이름 설정
 
         Profile_name_dialog.text = userName
+
+        //프로필 이름 설정
+        profile.text = userName?.get(0).toString()
+
+
         //이메일 설정
         Profile_email_dialog.text = email
 
