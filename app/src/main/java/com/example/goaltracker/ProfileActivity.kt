@@ -180,7 +180,8 @@ class ProfileActivity : AppCompatActivity() {
 
                 val curUser = hashMapOf<String, Any?>(
                     "userName" to name.text.toString(),
-                    "userColor" to backgroundColor
+                    "userColor" to backgroundColor,
+                    "uid" to firebaseAuth?.currentUser?.uid.toString()
                 )
 
 //                curUser.Email = firebaseAuth?.currentUser?.email.toString()

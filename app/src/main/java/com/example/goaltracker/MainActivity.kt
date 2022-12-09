@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.drawer_main)
 
         var accountUId : String?=""
-        // accountUId = firebaseAuth?.currentUser?.uid.toString()
-        accountUId = "1k8mYTUpqKVAlHBMM6sxBckaeP13"
+        accountUId = firebaseAuth?.currentUser?.uid.toString()
+        //accountUId = "1k8mYTUpqKVAlHBMM6sxBckaeP13"
         val curUserName = findViewById<TextView>(R.id.user_name)
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정

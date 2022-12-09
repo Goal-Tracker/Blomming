@@ -147,12 +147,12 @@ class AddFriendActivity : AppCompatActivity() {
 
             //친구 추가 이름
             fun SetFriendAddName(item: Friend) {
-                AddName.text = item.UserName
+                AddName.text = item.userName
             }
 
             //친구 uid
             fun SetFriendUid(item: Friend) {
-                Adduid.text = item.Uid
+                Adduid.text = item.uid
             }
             /*
                         //친구 프로필 이름
@@ -163,7 +163,7 @@ class AddFriendActivity : AppCompatActivity() {
             //친구 추가 프로필
             fun SetFriendAddColor(item: Friend) {
                 var circleResource = 0
-                when (item.UserColor) {
+                when (item.userColor) {
                     "f69b94" -> circleResource = R.drawable.b_f69b94
                     "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
                     "fcdcce" -> circleResource = R.drawable.b_fcdcce
@@ -186,18 +186,18 @@ class AddFriendActivity : AppCompatActivity() {
 
             //친구 추가 이메일
             fun SetFriendAddEmail(item: Friend) {
-                AddEmail.text = item.Email
+                AddEmail.text = item.email
             }
 
             //친구 추가 버튼
             @SuppressLint("SuspiciousIndentation")
             fun AddFriendBtnOnclick(item: Friend) {
                 AddBtn.setOnClickListener {
-                    if (item.Uid != currentUser) {
+                    if (item.uid != currentUser) {
 
                         firestore?.collection("Account")?.document("$currentUser")
                             ?.collection("Friend")
-                            ?.whereEqualTo("Uid", item.Uid.toString())?.get()
+                            ?.whereEqualTo("uid", item.uid.toString())?.get()
                             ?.addOnCompleteListener { task ->
 
 
@@ -206,11 +206,14 @@ class AddFriendActivity : AppCompatActivity() {
                                     // 내 친구 목록
                                     firestore?.collection("Account")?.document("$currentUser")
                                         ?.collection("Friend")
-                                        ?.document("${item.Uid}")
+                                        ?.document("${item.uid}")
                                         ?.set(
                                             hashMapOf(
-                                                "Uid" to item.Uid,
+                                                "uid" to item.uid,
                                                 "status" to "request",
+                                                "userName" to item.userName,
+                                                "email" to item.email,
+                                                "userColor" to item.userColor
 
                                                 )
                                         )
@@ -225,13 +228,16 @@ class AddFriendActivity : AppCompatActivity() {
                                         ?.addOnFailureListener {}
 
                                     // 상대방 친구 목록
-                                    firestore?.collection("Account")?.document(item.Uid.toString())
+                                    firestore?.collection("Account")?.document(item.uid.toString())
                                         ?.collection("Friend")
                                         ?.document("${currentUser}")
                                         ?.set(
                                             hashMapOf(
-                                                "Uid" to currentUser,
+                                                "uid" to currentUser,
                                                 "status" to "accept",
+                                                "userName" to item.userName,
+                                                "email" to item.email,
+                                                "userColor" to item.userColor
 
                                                 )
                                         )
@@ -249,11 +255,14 @@ class AddFriendActivity : AppCompatActivity() {
                                     // 내 친구 목록
                                     firestore?.collection("Account")?.document("$currentUser")
                                         ?.collection("Friend")
-                                        ?.document("${item.Uid}")
+                                        ?.document("${item.uid}")
                                         ?.set(
                                             hashMapOf(
-                                                "Uid" to item.Uid,
+                                                "uid" to item.uid,
                                                 "status" to "request",
+                                                "userName" to item.userName,
+                                                "email" to item.email,
+                                                "userColor" to item.userColor
 
                                                 )
                                         )
@@ -268,13 +277,16 @@ class AddFriendActivity : AppCompatActivity() {
                                         ?.addOnFailureListener {}
 
                                     // 상대방 친구 목록
-                                    firestore?.collection("Account")?.document(item.Uid.toString())
+                                    firestore?.collection("Account")?.document(item.uid.toString())
                                         ?.collection("Friend")
                                         ?.document("${currentUser}")
                                         ?.set(
                                             hashMapOf(
-                                                "Uid" to currentUser,
+                                                "uid" to currentUser,
                                                 "status" to "accept",
+                                                "userName" to item.userName,
+                                                "email" to item.email,
+                                                "userColor" to item.userColor
 
                                                 )
                                         )
@@ -308,10 +320,10 @@ class AddFriendActivity : AppCompatActivity() {
 
             dialog = ReportDialog(
                 context = context,
-                userColor = item.UserColor,
-                userName = item.UserName,
-                uid = item.Uid,
-                email = item.Email!!,
+                userColor = item.userColor,
+                userName = item.userName,
+                uid = item.uid,
+                email = item.email!!,
                 namebtnListener = reNameListener,
                 messagebtnListener = reMessageListener,
                 blockbtnListener = blockbtnListener
@@ -375,8 +387,8 @@ class AddFriendActivity : AppCompatActivity() {
 
                     for (snapshot in querySnapshot!!.documents) {
                         //에러처리(안 해주면 오류)
-                        if (snapshot.getString("Email") != null && snapshot.getString("UserName") != null)
-                            if (snapshot.getString("Email")!!.contains(searchWord) || snapshot.getString("UserName")!!.contains(searchWord)) {
+                        if (snapshot.getString("email") != null && snapshot.getString("userName") != null)
+                            if (snapshot.getString("email")!!.contains(searchWord) || snapshot.getString("userName")!!.contains(searchWord)) {
                                 val item = snapshot.toObject(Friend::class.java)
                                 friend_add.add(item!!)
                             }

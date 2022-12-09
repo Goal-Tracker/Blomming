@@ -48,7 +48,7 @@ class AddGoal : AppCompatActivity() {
     lateinit var document : String
 
     // ArrayList 생성
-    var FriendsList : ArrayList<Friends> = arrayListOf()
+    var FriendsList : ArrayList<Friend> = arrayListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,13 +138,13 @@ class AddGoal : AppCompatActivity() {
                 "day" to fewDay(),  //날짜 차이 계산
             )
             firestore!!.collection("Goal").document(goalID).set(goal)
-
+/*
             // Account에 저장
             val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString())
 
             firestore!!.collection("Account")?.document(accountUId)?.collection("Notification").document()
                 .set(notification_goal)
-
+*/
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
 
@@ -235,7 +235,7 @@ class AddGoal : AppCompatActivity() {
                 FriendsList.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                    val item = snapshot.toObject(Friends::class.java)
+                    val item = snapshot.toObject(Friend::class.java)
                     FriendsList.add(item!!)
                 }
                 notifyDataSetChanged()
@@ -244,6 +244,7 @@ class AddGoal : AppCompatActivity() {
 
         // xml파일을 inflate하여 ViewHolder를 생성
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            // var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
             val binding = ItemMemberBinding.inflate(layoutInflater,parent,false)
             return ViewHolder(binding)
         }
@@ -251,27 +252,33 @@ class AddGoal : AppCompatActivity() {
         inner class ViewHolder(private val binding: ItemMemberBinding) :
             RecyclerView.ViewHolder(binding.root){
 
-            fun setFriendsName(item: Friends){
+            fun setFriendsName(item: Friend){
                 binding.memberName.text = item.userName
             }
 
-            fun addFriendsBtnOnclick(item: Friends){
+            fun addFriendsBtnOnclick(item: Friend){
 
                 binding.checkBox.setOnClickListener {
+//                    val request : Boolean
+//                    val checked : Boolean
 
                     // 체크한 친구만 Goal에 추가
                     if ((it as CheckBox).isChecked) {
+//                        request = false
+//                        checked = true
 
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
+//                            "request" to request,
+//                            "checked" to checked,
                             "profileColor" to item.userColor.toString()
                         )
 
                         firestore!!.collection("Goal")
                             .document(goalID)
                             .collection("team")
-                            .document(item.uid.toString())
+                            .document()
                             .set(team)
                     }
                     // 체크 해제 시 삭제
@@ -311,7 +318,7 @@ class AddGoal : AppCompatActivity() {
                 for (snapshot in querySnapshot!!.documents) {
                     if (snapshot.getString("userName")?.contains(searchWord) == true
                         ||snapshot.getString("email")?.contains(searchWord) == true) {
-                        val item = snapshot.toObject(Friends::class.java)
+                        val item = snapshot.toObject(Friend::class.java)
                         FriendsList.add(item!!)
                     }
                 }
@@ -320,4 +327,3 @@ class AddGoal : AppCompatActivity() {
         }
     }
 }
-
