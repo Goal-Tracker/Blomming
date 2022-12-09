@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val nav_header = nav_view.getHeaderView(0)
         val navUserName = nav_header.findViewById<TextView>(R.id.nav_userName)
         val navUserEmail = nav_header.findViewById<TextView>(R.id.nav_userId)
+        var navUserProfile :GradientDrawable = nav_header.nav_profile_icon.background as GradientDrawable
+        val navUserNameShort = nav_header.findViewById<TextView>(R.id.nav_profile_name)
 
         db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
@@ -60,7 +62,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             navUserName.text = curUser?.UserName.toString()
             navUserEmail.text = curUser?.Email.toString()
             val color = curUser?.UserColor.toString()
-
+            if (color != null) {
+                navUserProfile.setColor(Color.parseColor(color))
+            }
+            navUserNameShort.text = curUser?.UserName.toString().substring(0 until 1)
         }
 
         val notReadNotices = arrayListOf<Notifications>()
@@ -166,12 +171,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.nav_goalAchieve-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
             R.id.nav_friendList-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
-
-            R.id.nav_notice-> {
-                startActivity(Intent(this, AppNotifyActivity::class.java))
+            R.id.nav_settings-> {
+                val dialog = ProfileSettingDialog(this)
+                dialog.showDialog()
                 onBackPressed()
+                dialog.setOnClickListener(object: ProfileSettingDialog.OnDialogClickListener {
+                    override fun onClicked(name: String) {
+                        Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
-
+            R.id.nav_changePW -> {
+                val dialog = ChangePWDialog(this)
+                dialog.showDialog()
+                onBackPressed()
+                dialog.setOnClickListener(object: ChangePWDialog.OnDialogClickListener {
+                    override fun onClicked(name: String) {
+                        Toast.makeText(this@MainActivity, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
             R.id.nav_logOut-> {
                 if (firebaseAuth?.currentUser != null) {
                     firebaseAuth?.signOut()

@@ -88,8 +88,8 @@
         <entry key="app/src/main/res/layout/activity_app_notify.xml" value="0.30625" />
         <entry key="app/src/main/res/layout/activity_goal_list.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/activity_goal_record.xml" value="0.297857666015625" />
-        <entry key="app/src/main/res/layout/activity_join.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.10902255639097744" />
+        <entry key="app/src/main/res/layout/activity_join.xml" value="0.22408905029296877" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.4931900368597275" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.375" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.21739130434782608" />
         <entry key="app/src/main/res/layout/activity_stamp_board.xml" value="0.273972602739726" />
@@ -97,9 +97,8 @@
         <entry key="app/src/main/res/layout/announce_layer.xml" value="0.29774774774774776" />
         <entry key="app/src/main/res/layout/announce_message.xml" value="0.21823204419889503" />
         <entry key="app/src/main/res/layout/announcement_item.xml" value="0.3978201634877384" />
-        <entry key="app/src/main/res/layout/change_pw_dialog.xml" value="0.28442028985507245" />
-        <entry key="app/src/main/res/layout/announcement_item.xml" value="0.3978201634877384" />
-        <entry key="app/src/main/res/layout/drawer_header.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/change_pw_dialog.xml" value="0.4126763064485283" />
+        <entry key="app/src/main/res/layout/drawer_header.xml" value="0.43575418994413406" />
         <entry key="app/src/main/res/layout/drawer_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_goal_record_activity2.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/fragment_goal_record_finished.xml" value="0.29281311035156254" />

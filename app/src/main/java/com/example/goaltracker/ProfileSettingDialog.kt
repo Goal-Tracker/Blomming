@@ -15,7 +15,7 @@ import com.google.firebase.firestore.ktx.toObject
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.profile_setting.*
 
-class CustomDialog(context: Context) {
+class ProfileSettingDialog(context: Context) {
     private val dialog = Dialog(context)
     var click : Boolean ?= false
     var firebaseAuth: FirebaseAuth?=null
@@ -51,7 +51,7 @@ class CustomDialog(context: Context) {
         fireStore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             var curUser = it.toObject(Account::class.java)
             edit_nick.hint = curUser?.UserName
-            if (curUser?.UserMessage=="") {
+            if (curUser?.UserMessage.isNullOrEmpty()) {
                 edit_message.hint = "상태메시지를 입력하세요."
             } else {
                 edit_message.hint = curUser?.UserMessage
