@@ -37,6 +37,21 @@
 
 
     <TextView
+        android:id="@+id/FriendProfileName"
+        android:layout_width="16dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="2dp"
+        android:text="신"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="@+id/FriendName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/FriendName"
+        app:layout_constraintVertical_bias="0.625" />
+
+    <TextView
         android:id="@+id/FriendEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

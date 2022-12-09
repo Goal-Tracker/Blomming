@@ -3,24 +3,21 @@ package com.example.goaltracker
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import android.view.MenuItem
-import android.widget.ImageButton
-import android.widget.ListAdapter
 import android.widget.TextView
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.drawer_header.view.*
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
 import java.text.SimpleDateFormat
@@ -39,15 +36,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var curUser = Account()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MySharedPreferences.setTheme(this, "#fcdcce")
-        MySharedPreferences.setUserColorInt(this, "#fcdcce")
-        setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.drawer_main)
 
         var accountUId : String?=""
-        accountUId = firebaseAuth?.currentUser?.uid.toString()
-
+        // accountUId = firebaseAuth?.currentUser?.uid.toString()
+        accountUId = "1k8mYTUpqKVAlHBMM6sxBckaeP13"
         val curUserName = findViewById<TextView>(R.id.user_name)
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
@@ -59,12 +53,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val nav_header = nav_view.getHeaderView(0)
         val navUserName = nav_header.findViewById<TextView>(R.id.nav_userName)
         val navUserEmail = nav_header.findViewById<TextView>(R.id.nav_userId)
+        var navUserProfile :GradientDrawable = nav_header.nav_profile_icon.background as GradientDrawable
+        val navUserNameShort = nav_header.findViewById<TextView>(R.id.nav_profile_name)
 
         db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
             curUserName.text = curUser?.UserName.toString()
             navUserName.text = curUser?.UserName.toString()
             navUserEmail.text = curUser?.Email.toString()
+            val color = curUser?.UserColor.toString()
+            if (color != null) {
+                navUserProfile.setColor(Color.parseColor(color))
+            }
+            navUserNameShort.text = curUser?.UserName.toString().substring(0 until 1)
         }
 
         val notReadNotices = arrayListOf<Notifications>()
@@ -84,6 +85,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     alarmButton.setBackgroundResource(R.drawable.alarm_close)
                 }
             }
+
+
+        // --------------------------------골 추가 버튼 연결--------------------------------------- //
+
+        goalAddButton.setOnClickListener{
+            startActivity(Intent(this, AddGoal::class.java))
+        }
+
+        // ------------------------------------------------------------------------------------- //
+
+
         //버튼 클릭시 동작
         alarmButton.setOnClickListener {
             alarmButton.setBackgroundResource(R.drawable.alarmbtn)
@@ -158,45 +170,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_goalAchieve-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
-            R.id.nav_friendList-> Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
-            R.id.nav_settings-> {
-        when (item.itemId) {
-            R.id.nav_goalAchieve -> {
-                val intent = Intent(this, GoalRecordActivity::class.java)
-                startActivity(intent)
-                Toast.makeText(this, "골 기록 추가", Toast.LENGTH_SHORT).show()
-            }
-            R.id.nav_friendList -> {
+            R.id.nav_friendList->{
                 val intent = Intent(this, FriendActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "친구목록 클릭됨", Toast.LENGTH_SHORT).show()
             }
-            R.id.nav_settings -> {
-                Toast.makeText(this, "설정 클릭됨", Toast.LENGTH_SHORT).show()
-                val dialog = CustomDialog(this)
+            R.id.nav_settings-> {
+                val dialog = ProfileSettingDialog(this)
                 dialog.showDialog()
                 onBackPressed()
-                dialog.setOnClickListener(object: CustomDialog.OnDialogClickListener {
+                dialog.setOnClickListener(object: ProfileSettingDialog.OnDialogClickListener {
                     override fun onClicked(name: String) {
                         Toast.makeText(this@MainActivity, "프로필 변경됨", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
-            R.id.nav_notice-> {
-                startActivity(Intent(this, AppNotifyActivity::class.java))
-                onBackPressed()
-            }
             R.id.nav_changePW -> {
-                val curUserEmail = firebaseAuth.currentUser?.email
-
-                if (curUserEmail!=null) {
-                    firebaseAuth.sendPasswordResetEmail(curUserEmail).addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(TAG, "Email sent.")
-                            Toast.makeText(this@MainActivity, "메일을 성공적으로 보냈습니다.", Toast.LENGTH_LONG).show()
-                        }
+                val dialog = ChangePWDialog(this)
+                dialog.showDialog()
+                onBackPressed()
+                dialog.setOnClickListener(object: ChangePWDialog.OnDialogClickListener {
+                    override fun onClicked(name: String) {
+                        Toast.makeText(this@MainActivity, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
                     }
-                }
+                })
             }
             R.id.nav_logOut-> {
                 if (firebaseAuth?.currentUser != null) {

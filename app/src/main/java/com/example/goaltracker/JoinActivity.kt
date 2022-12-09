@@ -81,19 +81,12 @@ class JoinActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             //account db 저장
                             var userAccount = Account()
-//                            var friends = Friends()
                             var accountName : String ?= ""
-//                            var friendsName : String = "asdfghjk"
 
                             accountName=firebaseAuth?.currentUser?.uid.toString()
                             userAccount.Email= firebaseAuth?.currentUser?.email.toString()
-//                            userAccount.password=signupPW
-//                            friends.Email="friendsCollectionTest"
 
                             fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
-                            //Friends, Notification 콜렉션 생성
-//                            fireStore?.collection("Account")?.document(accountName)?.collection("Friends")
-//                            fireStore?.collection("Account")?.document(accountName)?.collection("Notification")
                             Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
                         } else if(task.exception?.message.isNullOrEmpty()) {
                             // Show the error message

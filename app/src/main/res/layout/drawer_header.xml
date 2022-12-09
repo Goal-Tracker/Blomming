@@ -1,66 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_drawer_header"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:orientation="horizontal">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.4"
-        android:orientation="vertical">
+        android:layout_weight="0.4">
 
-        <ImageView
-            android:id="@+id/profile_icon"
-            android:layout_width="43dp"
-            android:layout_height="43dp"
-            android:layout_marginTop="77dp"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/button_round"
-            android:backgroundTint="#92b9e2">
-        </ImageView>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:gravity="center">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frameLayout3"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.7">
 
-            <TextView
+            <View
+                android:id="@+id/nav_profile_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="8sp"
+                android:background="@drawable/profile_view"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="0dp">
+
+            </View>
+
+            <TextView
+                android:id="@+id/nav_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ko_pub_world_dotum_bold"
+                android:text="효"
                 android:textColor="#ffffff"
-                android:text="유"/>
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/nav_profile_icon"
+                app:layout_constraintEnd_toEndOf="@+id/nav_profile_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/nav_profile_icon" />
 
-        </LinearLayout>
-    </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_gravity="center"
+        android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/nav_userName"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="76dp"
-            android:fontFamily="@font/ko_pub_world_dotum_bold"
-            android:text="abc"
-            android:textColor="#363639"
-            android:textSize="15sp"></TextView>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.7">
 
-        <TextView
-            android:id="@+id/nav_userId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ko_pub_world_dotum_bold"
-            android:text="abcde@gmail.com"
-            android:textColor="#363639"
-            android:textSize="12sp"></TextView>
+            <TextView
+                android:id="@+id/nav_userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ko_pub_world_dotum_bold"
+                android:text="abc"
+                android:textColor="#363639"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints"></TextView>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/nav_userId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ko_pub_world_dotum_bold"
+                android:text="abcde@gmail.com"
+                android:textColor="#363639"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nav_userName"
+                app:layout_constraintVertical_bias="0.05"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp"></TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

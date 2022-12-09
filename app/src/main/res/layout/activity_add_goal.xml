@@ -191,7 +191,8 @@
                         android:focusable="false"
                         android:textColor="#585858"
                         android:textSize="12sp"
-                        android:textStyle="normal"/>
+                        android:textStyle="normal"
+                        android:focusableInTouchMode="false"/>
 
                     <TextView
                         android:id="@+id/textView10"
@@ -212,7 +213,8 @@
                         android:focusable="false"
                         android:textColor="#585858"
                         android:textSize="12sp"
-                        android:textStyle="normal"/>
+                        android:textStyle="normal"
+                        android:focusableInTouchMode="false"/>
 
                     <TextView
                         android:id="@+id/textView11"
