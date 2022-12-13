@@ -38,6 +38,7 @@ class AddFriendActivity : AppCompatActivity() {
     var searchcount = 0  //사람 수
     private lateinit var dialog: ReportDialog  //다이얼로그
     lateinit var index: String
+    lateinit var msgindex: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -323,6 +324,7 @@ class AddFriendActivity : AppCompatActivity() {
                 userColor = item.userColor,
                 userName = item.userName,
                 uid = item.uid,
+                userMessage = item.userMessage,
                 email = item.email!!,
                 namebtnListener = reNameListener,
                 messagebtnListener = reMessageListener,
@@ -345,7 +347,6 @@ class AddFriendActivity : AppCompatActivity() {
                         "email" to dialog.email,
                         "index" to index,
                         "id" to dialog.uid,
-
                         )
                 )
 
@@ -360,6 +361,16 @@ class AddFriendActivity : AppCompatActivity() {
 
         //상태 메세지 신고 버튼 클릭 시
         private val reMessageListener = View.OnClickListener {
+            msgindex = UUID.randomUUID().toString()
+            firestore?.collection("Manager")?.document("$msgindex")
+                ?.set(
+                    hashMapOf(
+                        "userMessage" to dialog.userMessage,
+                        "email" to dialog.email,
+                        "msgindex" to msgindex,
+                        "id" to dialog.uid,
+                    )
+                )
             Toast.makeText(
                 this@AddFriendActivity,
                 "상태 메세지 신고가 되었습니다.",
