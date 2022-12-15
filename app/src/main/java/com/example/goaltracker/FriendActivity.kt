@@ -176,7 +176,7 @@ class FriendActivity : AppCompatActivity() {
                 AcceptBtn.setOnClickListener {
                     // 내 친구 목록
                     firestore?.collection("Account")?.document("$currentUser")
-                        ?.collection("Friend")
+                        ?.collection("Friends")
                         ?.document("${item.Uid}")
                         ?.update("status", "friend")
                         ?.addOnSuccessListener { }
@@ -184,7 +184,7 @@ class FriendActivity : AppCompatActivity() {
 
                     // 상대방 친구 목록
                     firestore?.collection("Account")?.document(item.Uid.toString())
-                        ?.collection("Friend")
+                        ?.collection("Friends")
                         ?.document("${currentUser}")
                         ?.update("status", "friend")
                         ?.addOnSuccessListener { }

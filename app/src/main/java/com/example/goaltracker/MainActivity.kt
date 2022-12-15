@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.drawer_main)
 
         var accountUId : String?=""
-        // accountUId = firebaseAuth?.currentUser?.uid.toString()
-        accountUId = "1k8mYTUpqKVAlHBMM6sxBckaeP13"
+        accountUId = firebaseAuth?.currentUser?.uid.toString()
+//        accountUId = "1k8mYTUpqKVAlHBMM6sxBckaeP13"
         val curUserName = findViewById<TextView>(R.id.user_name)
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
@@ -58,14 +58,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
-            curUserName.text = curUser?.UserName.toString()
-            navUserName.text = curUser?.UserName.toString()
-            navUserEmail.text = curUser?.Email.toString()
-            val color = curUser?.UserColor.toString()
+            curUserName.text = curUser?.userName.toString()
+            navUserName.text = curUser?.userName.toString()
+            navUserEmail.text = curUser?.email.toString()
+            val color = curUser?.userColor.toString()
             if (color != null) {
                 navUserProfile.setColor(Color.parseColor(color))
             }
-            navUserNameShort.text = curUser?.UserName.toString().substring(0 until 1)
+            navUserNameShort.text = curUser?.userName.toString().substring(0 until 1)
         }
 
         val notReadNotices = arrayListOf<Notifications>()

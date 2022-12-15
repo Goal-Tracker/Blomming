@@ -60,7 +60,7 @@ class ChangePWDialog(context: Context) {
 
         fireStore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             var curUser = it.toObject(Account::class.java)
-            var userNickname = curUser?.UserName.toString()
+            var userNickname = curUser?.userName.toString()
             profileName.text = userNickname[0].toString()
         }
 

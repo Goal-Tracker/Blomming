@@ -84,7 +84,7 @@ class JoinActivity : AppCompatActivity() {
                             var accountName : String ?= ""
 
                             accountName=firebaseAuth?.currentUser?.uid.toString()
-                            userAccount.Email= firebaseAuth?.currentUser?.email.toString()
+                            userAccount.email= firebaseAuth?.currentUser?.email.toString()
 
                             fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
                             Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()

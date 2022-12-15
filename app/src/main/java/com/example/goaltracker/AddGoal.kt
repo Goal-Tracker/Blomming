@@ -124,6 +124,14 @@ class AddGoal : AppCompatActivity() {
             endDay.setText(sdf.format(endDay_calendar.time))
         }
 
+        // 22.12.15 장효선 추가 - 현재 유저 정보 Account 객체로 가져오기
+        var curUser = Account()
+        firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+            curUser = it.toObject(Account::class.java)!!
+//            curUser.userName = user?.userName.toString()
+//            curUser.userColor = curUser?.userColor.toString()
+        }
+
         // 데이터 저장
         save_btn.setOnClickListener {
 
@@ -140,7 +148,15 @@ class AddGoal : AppCompatActivity() {
             firestore!!.collection("Goal").document(goalID).set(goal)
 
             // Account에 저장
-            val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString())
+            val notification_goal = hashMapOf(
+                "goalName" to title.text.toString(),
+                "message" to memo.text.toString(),
+                "type" to 1,
+                "userColor" to curUser.userColor,
+                "userName" to curUser.userName,
+                "requestUserId" to accountUId,
+                "requestGoalId" to goalID
+            )
 
             firestore!!.collection("Account")?.document(accountUId)?.collection("Notification").document()
                 .set(notification_goal)
