@@ -140,7 +140,7 @@ class AddGoal : AppCompatActivity() {
             firestore!!.collection("Goal").document(goalID).set(goal)
 
             // Account에 저장
-            val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString())
+            val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString(), 2)
 
             firestore!!.collection("Account")?.document(accountUId)?.collection("Notification").document()
                 .set(notification_goal)
@@ -259,19 +259,12 @@ class AddGoal : AppCompatActivity() {
             fun addFriendsBtnOnclick(item: Friend){
 
                 binding.checkBox.setOnClickListener {
-//                    val request : Boolean
-//                    val checked : Boolean
 
                     // 체크한 친구만 Goal에 추가
                     if ((it as CheckBox).isChecked) {
-//                        request = false
-//                        checked = true
-
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
-//                            "request" to request,
-//                            "checked" to checked,
                             "profileColor" to item.userColor.toString()
                         )
 
