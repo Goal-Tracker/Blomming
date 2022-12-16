@@ -74,11 +74,13 @@ class PokeDialog(context: Context) : Dialog(context) {
                 Toast.makeText(it.context, profile.name + " 님을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
 
                 val notifyData = hashMapOf(
-                    "Timestamp" to FieldValue.serverTimestamp(),
-                    "UserName" to MySharedPreferences.getUserNickname(context),
-                    "UserColor" to MySharedPreferences.getUserColor(context),
-                    "Type" to 3,
-                    "GoalName" to goalTitle
+                    "goalName" to goalTitle,
+                    "message" to profile.name + " 님을 콕 찔렀습니다.",
+                    "read" to false,
+                    "type" to 3,
+                    "requestUserId" to MySharedPreferences.getUserId(context),
+                    "userColor" to MySharedPreferences.getUserColor(context),
+                    "userName" to MySharedPreferences.getUserNickname(context)
                 )
 
                 Log.d(TAG, "poke message : $notifyData")
