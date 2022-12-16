@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.main_toolbar.*
@@ -112,7 +113,21 @@ class NoticeActivity : AppCompatActivity() {
             var accountUId: String? = ""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
             viewHolder.notice_button.setOnClickListener {
-//                firestore?.collection("Account")?.document(accountUId)?.collection("Friends")?.
+                // 내 친구 목록
+                firestore?.collection("Account")?.document(accountUId!!)
+                    ?.collection("Friend")
+                    ?.document(item.requestUserId.toString())
+                    ?.update("status", "friend")
+                    ?.addOnSuccessListener { }
+                    ?.addOnFailureListener { }
+
+                // 상대방 친구 목록
+                firestore?.collection("Account")?.document(item.requestUserId.toString())
+                    ?.collection("Friend")
+                    ?.document(accountUId!!)
+                    ?.update("status", "friend")
+                    ?.addOnSuccessListener { }
+                    ?.addOnFailureListener { }
             }
 
         } else if (item.type == 2) {  // 골 초대
@@ -127,6 +142,31 @@ class NoticeActivity : AppCompatActivity() {
             val color : String? = item.userColor
             if (color != null) {
                 profileColor.setColor(Color.parseColor(color))
+            }
+
+            var accountUId: String?=""
+            accountUId = firebaseAuth?.currentUser?.uid.toString()
+            viewHolder.notice_button.setOnClickListener {
+
+                var userName = "";
+                var userColor = "";
+                var userMessage = "";
+
+                firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+                    var curUser = it.toObject(Account::class.java)!!
+                    userName = curUser?.userName.toString()
+                    userColor = curUser?.userColor.toString()
+                    userMessage = curUser?.userMessage.toString()
+                }
+
+                var userInfo = GoalTeamData(accountUId, userName, userColor, userMessage)
+
+                firestore?.collection("Goal")?.document(item.requestGoalId.toString())
+                    ?.collection("team")
+                    ?.document(accountUId!!)
+                    ?.set(userInfo)
+
+                Log.d("firebase", "저장됨")
             }
 
         } else if (item.type == 3) {  // 콕 찌르기

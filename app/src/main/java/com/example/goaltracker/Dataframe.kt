@@ -5,12 +5,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Account (
-    var Email: String = "",
-    var UserName: String ?= null,
-    var UserColor:String ?= null,
-    var MyGoalList:List<String>?=null,
-    var NotificationList:List<String>?=null,
-    var UserMessage:String?=null
+    var email: String = "",
+    var userName: String ?= null,
+    var userColor:String ?= null,
+    var myGoalList:List<String>?=null,
+    var notificationList:List<String>?=null,
+    var userMessage:String?=null
 ) : Parcelable
 
 //public val curUser = Account()

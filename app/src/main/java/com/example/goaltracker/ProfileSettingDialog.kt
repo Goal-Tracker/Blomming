@@ -50,11 +50,11 @@ class ProfileSettingDialog(context: Context) {
 
         fireStore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             var curUser = it.toObject(Account::class.java)
-            edit_nick.hint = curUser?.UserName
-            if (curUser?.UserMessage.isNullOrEmpty()) {
+            edit_nick.hint = curUser?.userName
+            if (curUser?.userMessage.isNullOrEmpty()) {
                 edit_message.hint = "상태메시지를 입력하세요."
             } else {
-                edit_message.hint = curUser?.UserMessage
+                edit_message.hint = curUser?.userMessage
             }
         }
 
