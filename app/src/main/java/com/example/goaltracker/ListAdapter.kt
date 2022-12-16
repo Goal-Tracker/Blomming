@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 // 리사이클러 뷰 어댑터
-class ListAdapter(val itemList: ArrayList<Friends>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
+class ListAdapter(val itemList: ArrayList<Friend>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
         return ViewHolder(view)

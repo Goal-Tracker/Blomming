@@ -40,7 +40,7 @@ class EditGoalActivity : AppCompatActivity() {
     lateinit var document : String
 
     // ArrayList 생성
-    var FriendsList : ArrayList<Friends> = arrayListOf()
+    var FriendsList : ArrayList<Friend> = arrayListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,13 +163,12 @@ class EditGoalActivity : AppCompatActivity() {
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         init {
-
             firestore?.collection("Account")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 // ArrayList 비워줌
                 FriendsList.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(Friends::class.java)
+                    var item = snapshot.toObject(Friend::class.java)
                     FriendsList.add(item!!)
                 }
                 notifyDataSetChanged()
@@ -186,11 +185,11 @@ class EditGoalActivity : AppCompatActivity() {
         inner class ViewHolder(private val binding: ItemMemberBinding) :
             RecyclerView.ViewHolder(binding.root){
 
-            fun setFriendsName(item: Friends){
+            fun setFriendsName(item: Friend){
                 binding.memberName.text = item.userName
             }
 
-            fun addFriendsBtnOnclick(item: Friends){
+            fun addFriendsBtnOnclick(item: Friend){
                 binding.checkBox.setOnClickListener {
 
                     // 값 받아오기
@@ -245,7 +244,7 @@ class EditGoalActivity : AppCompatActivity() {
                 for (snapshot in querySnapshot!!.documents) {
                     if (snapshot.getString("userName")?.contains(searchWord) == true
                         ||snapshot.getString("email")?.contains(searchWord) == true) {
-                        var item = snapshot.toObject(Friends::class.java)
+                        var item = snapshot.toObject(Friend::class.java)
                         FriendsList.add(item!!)
                     }
                 }
