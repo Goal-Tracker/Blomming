@@ -142,14 +142,18 @@ class AddGoal : AppCompatActivity() {
             firestore!!.collection("Goal").document(goalID).set(goal)
 
             // Account에 저장
-            val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString(), 2)
+            val notification_goal = hashMapOf(
+                "goalName" to title.text.toString(),
+                "goalUid" to goalID,
+                "message" to memo.text.toString(),
+                "type" to 2
+            )
 
             firestore?.collection("Account")?.document("$accountUId")
                 ?.collection("Notification")?.document()?.set(notification_goal)
 
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
-
             val goal_ID = hashMapOf(
                 "Goal_id" to goalID,
                 "dayRecord" to hashMap
