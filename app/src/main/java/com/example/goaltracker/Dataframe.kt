@@ -24,6 +24,5 @@ data class Notifications (
     var read: Boolean = false,
     var userColor:String ?= "",
     var userName:String ?= null,
-    var requestUserId:String ?= "",
-    var requestGoalId:String ?= ""
+    var requestUserId:String ?= ""
 ) : Parcelable
