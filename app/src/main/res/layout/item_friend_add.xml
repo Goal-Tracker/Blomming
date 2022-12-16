@@ -42,7 +42,6 @@
         android:text="신"
         android:textColor="@color/white"
         android:textSize="18dp"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/AddName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.052"

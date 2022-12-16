@@ -14,6 +14,7 @@ class ReportDialog(
     val userName: String?,
     val email: String,
     val uid: String?,
+    val userMessage: String?,
     val namebtnListener: View.OnClickListener,
     val messagebtnListener: View.OnClickListener,
     val blockbtnListener: View.OnClickListener,
@@ -69,6 +70,9 @@ class ReportDialog(
 
         //이메일 설정
         Profile_email_dialog.text = email
+
+
+        Profile_msg_dialog.text = userMessage
 
         //닉네임 신고 버튼 누를시 이벤트가 해당 페이지로 이동함.
         Report_name_button.setOnClickListener(namebtnListener)

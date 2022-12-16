@@ -144,13 +144,13 @@ class FriendActivity : AppCompatActivity() {
 
             //친구 이름
             fun setFriendAcceptName(item: Friend) {
-                AcceptName.text = item.UserName?.get(0).toString()
+                AcceptName.text = item.userName?.get(0).toString()
             }
 
             //친구 프로필
             fun SetFriendAcceptColor(item: Friend) {
                 var circleResource = 0
-                when (item.UserColor) {
+                when (item.userColor) {
                     "f69b94" -> circleResource = R.drawable.b_f69b94
                     "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
                     "fcdcce" -> circleResource = R.drawable.b_fcdcce
@@ -176,15 +176,15 @@ class FriendActivity : AppCompatActivity() {
                 AcceptBtn.setOnClickListener {
                     // 내 친구 목록
                     firestore?.collection("Account")?.document("$currentUser")
-                        ?.collection("Friends")
-                        ?.document("${item.Uid}")
+                        ?.collection("Friend")
+                        ?.document("${item.uid}")
                         ?.update("status", "friend")
                         ?.addOnSuccessListener { }
                         ?.addOnFailureListener { }
 
                     // 상대방 친구 목록
-                    firestore?.collection("Account")?.document(item.Uid.toString())
-                        ?.collection("Friends")
+                    firestore?.collection("Account")?.document(item.uid.toString())
+                        ?.collection("Friend")
                         ?.document("${currentUser}")
                         ?.update("status", "friend")
                         ?.addOnSuccessListener { }
@@ -215,6 +215,7 @@ class FriendActivity : AppCompatActivity() {
                 ?.collection("Friend")
                 ?.whereEqualTo("status", "request")
                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+
                     // ArrayList 비워줌
                     friend_request.clear()
 
@@ -255,13 +256,13 @@ class FriendActivity : AppCompatActivity() {
 
             //친구 이름
             fun setFriendRequestName(item: Friend) {
-                RequestName.text = item.UserName?.get(0).toString()
+                RequestName.text = item.userName?.get(0).toString()
             }
 
             //친구 프로필
             fun SetFriendRequestColor(item: Friend) {
                 var circleResource = 0
-                when (item.UserColor) {
+                when (item.userColor) {
                     "f69b94" -> circleResource = R.drawable.b_f69b94
                     "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
                     "fcdcce" -> circleResource = R.drawable.b_fcdcce
@@ -288,11 +289,11 @@ class FriendActivity : AppCompatActivity() {
                     // 내 친구 목록
                     firestore?.collection("Account")?.document("$currentUser")
                         ?.collection("Friend")
-                        ?.document("${item.Uid}")
+                        ?.document("${item.uid}")
                         ?.delete()
 
                     // 상대방 친구 목록
-                    firestore?.collection("Account")?.document(item.Uid.toString())
+                    firestore?.collection("Account")?.document(item.uid.toString())
                         ?.collection("Friend")
                         ?.document("${currentUser}")
                         ?.delete()
@@ -317,7 +318,7 @@ class FriendActivity : AppCompatActivity() {
         private var friend = mutableListOf<Friend>()
 
         //status가 friend인 것만 불러오기
-        init {  
+        init {
             firestore?.collection("Account")?.document("$currentUser")
                 ?.collection("Friend")
                 ?.whereEqualTo("status", "friend")
@@ -364,18 +365,18 @@ class FriendActivity : AppCompatActivity() {
 
             //친구 이름
             fun setFriendName(item: Friend){
-                FriendName.text = item.UserName
+                FriendName.text = item.userName
             }
 
             //친구 프로필 이름
             fun setProfileName(item: Friend){
-                FriendProfileName.text = item.UserName?.get(0).toString()
+                FriendProfileName.text = item.userName?.get(0).toString()
             }
 
             //친구 프로필
             fun SetFriendColor(item:Friend){
                 var circleResource = 0
-                when (item.UserColor) {
+                when (item.userColor) {
                     "f69b94" -> circleResource = R.drawable.b_f69b94
                     "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
                     "fcdcce" -> circleResource = R.drawable.b_fcdcce
@@ -398,20 +399,15 @@ class FriendActivity : AppCompatActivity() {
 
             //친구 이메일
             fun SetFriendEmail(item:Friend){
-                FriendEmail.text = item.Email
+                FriendEmail.text = item.email
             }
-
         }
 
         // 리사이클러뷰의 아이템 총 개수 반환
         override fun getItemCount() = friend.size
 
     }
-
-
 }
-
-
 
 
 
