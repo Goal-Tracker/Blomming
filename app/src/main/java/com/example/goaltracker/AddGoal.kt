@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
 import kotlinx.android.synthetic.main.item_member.view.*
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
@@ -27,7 +29,7 @@ class AddGoal : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
     var firebaseAuth : FirebaseAuth?= null
-    var accountUId = firebaseAuth?.currentUser?.uid.toString()
+    private val accountUId = Firebase.auth.currentUser?.uid
 
     lateinit var title: EditText            // 이름
     lateinit var startDay: EditText         // 시작일
@@ -142,8 +144,8 @@ class AddGoal : AppCompatActivity() {
             // Account에 저장
             val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString(), 2)
 
-            firestore!!.collection("Account")?.document(accountUId)?.collection("Notification").document()
-                .set(notification_goal)
+            firestore?.collection("Account")?.document("$accountUId")
+                ?.collection("Notification")?.document()?.set(notification_goal)
 
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
