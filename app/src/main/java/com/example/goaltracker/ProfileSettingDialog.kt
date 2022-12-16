@@ -15,12 +15,12 @@ import com.google.firebase.firestore.ktx.toObject
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.profile_setting.*
 
-class ProfileSettingDialog(context: Context) {
+class ProfileSettingDialog(context: Context) : Dialog(context){
     private val dialog = Dialog(context)
     var click : Boolean ?= false
     var firebaseAuth: FirebaseAuth?=null
     var fireStore : FirebaseFirestore?=null
-    lateinit var edit_profile_color : String
+    var edit_profile_color : String ?= null
     private lateinit var onClickListener: OnDialogClickListener
     var userNick : String = ""
     var userMessage : String = ""
@@ -211,17 +211,18 @@ class ProfileSettingDialog(context: Context) {
         dialog.pfChangeButton.setOnClickListener {
             // 프로필 색상 및 닉네임 수정 코드 추가 필요
             if (edit_nick == null) {
-                throw Exception("닉네임을 입력하세요.")
+                Toast.makeText(it.context, "닉네임을 입력하세요", Toast.LENGTH_LONG)
+                Log.d("test", "닉네임 입력안함")
             } else {
-
                 val curUser = hashMapOf<String, Any?>(
                     "userName" to edit_nick.text.toString(),
                     "userColor" to edit_profile_color,
                     "userMessage" to edit_message.text.toString()
                 )
-
                 fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
             }
+            Toast.makeText(it.context, "프로필 설정 완료", Toast.LENGTH_LONG)
+            Log.d("test", "프로필 설정 완료")
             dialog.dismiss()
         }
     }

@@ -81,8 +81,8 @@ class StampBoardActivity() : AppCompatActivity() {
         stampBoardAdapter = StampBoardAdapter(this)
         rv_stampBoard.adapter = stampBoardAdapter
 
-        var goal_id = "1c1e364c-b9b6-4c4e-b016-50a5909eb6b4"
-        // val goal_id = intent.getStringExtra("goalId") as String
+        // var goal_id = "1c1e364c-b9b6-4c4e-b016-50a5909eb6b4"
+        val goal_id = intent.getStringExtra("goalId") as String
 
         // 읽고 스탬프 추가 (테스트용)
         val goal_db = db.collection("Goal").document(goal_id)
@@ -90,7 +90,7 @@ class StampBoardActivity() : AppCompatActivity() {
         // ------------------------------------------------------------------------
         // 골 수정 화면으로 이동
         edit_goal.setOnClickListener {
-            //val intent = Intent(this, EditGoalActivity::class.java)
+            val intent = Intent(this, EditGoalActivity::class.java)
             intent.putExtra("goalID", goal_id) // 데이터 보내기
             startActivity(intent)
         }
