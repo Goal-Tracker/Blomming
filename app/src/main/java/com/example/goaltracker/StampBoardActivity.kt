@@ -238,7 +238,8 @@ class StampBoardActivity() : AppCompatActivity() {
                             GoalTeamData(
                                 uid = uid,
                                 name = nickname,
-                                profileColor = theme
+                                profileColor = theme,
+                                message = message
                             )
                         )
 
