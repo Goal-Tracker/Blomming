@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.goaltracker">
+    package="com.example.goaltracker" >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -17,18 +17,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GoalTracker">
+        android:theme="@style/Theme.GoalTracker" >
         <activity
-            android:name=".AnnouncementActivity"
-            android:exported="true" >
+            android:name=".EditGoalActivity"
+            android:exported="true">
         </activity>
         <activity
+            android:name=".AnnouncementActivity"
+            android:exported="true" />
+        <activity
             android:name=".GoalRecordActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".StampUploadDialogActivity"
-            android:exported="false"
-            android:theme="@style/Theme.StampUploadDialog" />
+            android:exported="true"
+            android:theme="@style/Theme.StampUploadDialog">
+        </activity>
         <activity
             android:name=".JoinActivity"
             android:exported="true" />
@@ -39,29 +43,33 @@
             android:name=".FriendActivity"
             android:exported="true">
         </activity>
-
         <activity
             android:name=".AddFriendActivity"
-            android:exported="true" >
-        </activity>
-        <activity
-            android:name=".AddGoal"
             android:exported="true" />
         <activity
+            android:name=".AddGoal"
+            android:exported="true">
+
+        </activity>
+        <activity
             android:name=".StampBoardActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".GoogleLogin"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".FacebookLogin"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".ProfileActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -73,10 +81,10 @@
         </activity>
         <activity
             android:name=".NoticeActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".AppNotifyActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -90,7 +98,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.goaltracker.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />

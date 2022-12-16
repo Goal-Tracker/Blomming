@@ -401,17 +401,13 @@ class FriendActivity : AppCompatActivity() {
             fun SetFriendEmail(item:Friend){
                 FriendEmail.text = item.email
             }
-
         }
 
         // 리사이클러뷰의 아이템 총 개수 반환
         override fun getItemCount() = friend.size
 
     }
-
-
 }
-
 
 
 
