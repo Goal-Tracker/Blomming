@@ -138,13 +138,13 @@ class AddGoal : AppCompatActivity() {
                 "day" to fewDay(),  //날짜 차이 계산
             )
             firestore!!.collection("Goal").document(goalID).set(goal)
-/*
+
             // Account에 저장
             val notification_goal = Notifications(title.text.toString(),goalID, memo.text.toString())
 
             firestore!!.collection("Account")?.document(accountUId)?.collection("Notification").document()
                 .set(notification_goal)
-*/
+
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
 
