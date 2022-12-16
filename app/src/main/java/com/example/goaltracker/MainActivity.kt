@@ -111,10 +111,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         goalRecordOngoingAdapter = GoalRecordAdapter(this)
         rv_goal.adapter = goalRecordOngoingAdapter
 
-        /********************************************************************/
-
         // 추후엔 Dataframe에서 가져다 사용하기
-        val temp_goal_lsit = arrayOf("a6jyD0k2MSJliDJq1wHb")
+        val temp_goal_lsit = arrayOf("a6jyD0k2MSJliDJq1wHb", "IyJXNQPcIx2a5EzLUoeN")
 
         temp_goal_lsit.forEach { goal_id ->
             Log.d(ContentValues.TAG, "goal id : $goal_id")
