@@ -161,7 +161,7 @@ class NoticeActivity : AppCompatActivity() {
 
                 var userInfo = GoalTeamData(accountUId, userName, userColor, userMessage)
 
-                firestore?.collection("Goal")?.document(item.requestGoalId.toString())
+                firestore?.collection("Goal")?.document(item.goalUid.toString())
                     ?.collection("team")
                     ?.document(accountUId!!)
                     ?.set(userInfo)
