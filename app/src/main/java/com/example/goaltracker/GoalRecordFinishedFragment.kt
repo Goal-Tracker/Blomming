@@ -38,7 +38,7 @@ class GoalRecordFinishedFragment : Fragment() {
         rv_goal.adapter = goalRecordOngoingAdapter
 
         // 추후엔 Dataframe에서 가져다 사용하기
-        val temp_goal_lsit = arrayOf("a6jyD0k2MSJliDJq1wHb", "IyJXNQPcIx2a5EzLUoeN")
+        val temp_goal_lsit = emptyArray<String>()
 
         temp_goal_lsit.forEach { goal_id ->
             Log.d(ContentValues.TAG, "goal id : $goal_id")
