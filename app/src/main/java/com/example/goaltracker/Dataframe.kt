@@ -19,7 +19,7 @@ data class Account (
 data class Notifications (
     var goalName:String ?="",
     var goalUid:String ?="",
-    var message: String = "",
+    var message: String ?= "",
     var type: Int = 0,
     var read: Boolean = false,
     var userColor:String ?= "",
