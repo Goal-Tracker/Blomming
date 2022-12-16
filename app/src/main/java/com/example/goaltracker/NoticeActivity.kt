@@ -145,17 +145,17 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_button.setOnClickListener {
 
                 var userName = "";
-                var userId = "";
+                var userColor = "";
                 var userMessage = "";
 
                 firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
                     var curUser = it.toObject(Account::class.java)!!
                     userName = curUser?.userName.toString()
-                    userId = curUser?.userColor.toString()
+                    userColor = curUser?.userColor.toString()
                     userMessage = curUser?.userMessage.toString()
                 }
 
-                var userInfo = GoalTeamData(accountUId, userName, userId, userMessage)
+                var userInfo = GoalTeamData(accountUId, userName, userColor, userMessage)
 
                 firestore?.collection("Goal")?.document(item.requestGoalId.toString())
                     ?.collection("team")
