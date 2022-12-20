@@ -264,50 +264,70 @@ class AddFriendActivity : AppCompatActivity() {
 
                                         // 친구 리스트가 있는 경우
                                         else {
-
-                                            // 내 친구 목록
+                                            var notFriend = true
+                                            // 이미 친구임
                                             firestore?.collection("Account")
                                                 ?.document("$currentUser")
                                                 ?.collection("Friend")
-                                                ?.document("${item.uid}")
-                                                ?.set(
-                                                    hashMapOf(
-                                                        "uid" to item.uid,
-                                                        "status" to "request",
-                                                        "userName" to item.userName,
-                                                        "email" to item.email,
-                                                        "userColor" to item.userColor
+                                                ?.document("${item.uid}")?.get()
+                                                ?.addOnSuccessListener { document ->
+                                                    if (document != null) {
+                                                        Toast.makeText(
+                                                            this@AddFriendActivity,
+                                                            "이미 친구입니다.",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        notFriend = false
 
-                                                    )
-                                                )
-                                                ?.addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        this@AddFriendActivity,
-                                                        "친구 신청을 보냈습니다.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    }
 
-                                                }
-                                                ?.addOnFailureListener {}
+                                                    if (notFriend) {
+                                                        // 내 친구 목록
+                                                        firestore?.collection("Account")
+                                                            ?.document("$currentUser")
+                                                            ?.collection("Friend")
+                                                            ?.document("${item.uid}")
+                                                            ?.set(
+                                                                hashMapOf(
+                                                                    "uid" to item.uid,
+                                                                    "status" to "request",
+                                                                    "userName" to item.userName,
+                                                                    "email" to item.email,
+                                                                    "userColor" to item.userColor
 
-                                            // 상대방 친구 목록
-                                            firestore?.collection("Account")
-                                                ?.document(item.uid.toString())
-                                                ?.collection("Friend")
-                                                ?.document("${currentUser}")
-                                                ?.set(
-                                                    hashMapOf(
-                                                        "uid" to currentUser,
-                                                        "status" to "accept",
-                                                        "userName" to indexname,
-                                                        "email" to indexemail,
-                                                        "userColor" to indexcolor
+                                                                )
+                                                            )
+                                                            ?.addOnSuccessListener {
+                                                                Toast.makeText(
+                                                                    this@AddFriendActivity,
+                                                                    "친구 신청을 보냈습니다.",
+                                                                    Toast.LENGTH_SHORT
+                                                                ).show()
 
-                                                    )
-                                                )
-                                                ?.addOnSuccessListener {
-                                                }
-                                                ?.addOnFailureListener {
+                                                            }
+                                                            ?.addOnFailureListener {}
+
+                                                        // 상대방 친구 목록
+                                                        firestore?.collection("Account")
+                                                            ?.document(item.uid.toString())
+                                                            ?.collection("Friend")
+                                                            ?.document("${currentUser}")
+                                                            ?.set(
+                                                                hashMapOf(
+                                                                    "uid" to currentUser,
+                                                                    "status" to "accept",
+                                                                    "userName" to indexname,
+                                                                    "email" to indexemail,
+                                                                    "userColor" to indexcolor
+
+                                                                )
+                                                            )
+                                                            ?.addOnSuccessListener {
+                                                            }
+                                                            ?.addOnFailureListener {
+                                                            }
+
+                                                    }
                                                 }
 
                                         }
