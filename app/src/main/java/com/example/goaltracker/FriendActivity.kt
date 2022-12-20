@@ -73,6 +73,11 @@ class FriendActivity : AppCompatActivity() {
             startActivity(Intent(this, AddFriendActivity::class.java))
         }
 
+        //입력칸 누르면 친구추가 화면으로 이동
+        searchWord.setOnClickListener {
+            startActivity(Intent(this, AddFriendActivity::class.java))
+        }
+
 
     }
 
@@ -151,21 +156,21 @@ class FriendActivity : AppCompatActivity() {
             fun SetFriendAcceptColor(item: Friend) {
                 var circleResource = 0
                 when (item.userColor) {
-                    "f69b94" -> circleResource = R.drawable.b_f69b94
-                    "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
-                    "fcdcce" -> circleResource = R.drawable.b_fcdcce
-                    "96b0e5" -> circleResource = R.drawable.b_96b0e5
-                    "92b9e2" -> circleResource = R.drawable.b_92b9e2
-                    "ebc0c7" -> circleResource = R.drawable.b_ebc0c7
-                    "7bb6c8" -> circleResource = R.drawable.b_7bb6c8
-                    "aad3d7" -> circleResource = R.drawable.b_aad3d7
-                    "f5f1f0" -> circleResource = R.drawable.b_f5f1f0
-                    "d5e3e6" -> circleResource = R.drawable.b_d5e3e6
-                    "f2a4b1" -> circleResource = R.drawable.b_f2a4b1
-                    "7175a5" -> circleResource = R.drawable.b_7175a5
-                    "a1b3d7" -> circleResource = R.drawable.b_a1b3d7
-                    "bd83cf" -> circleResource = R.drawable.b_bd83cf
-                    "e5afe9" -> circleResource = R.drawable.b_e5afe9
+                    "#f69b94" -> circleResource = R.drawable.b_f69b94
+                    "#f8c8c4" -> circleResource = R.drawable.b_f8c8c4
+                    "#fcdcce" -> circleResource = R.drawable.b_fcdcce
+                    "#96b0e5" -> circleResource = R.drawable.b_96b0e5
+                    "#92b9e2" -> circleResource = R.drawable.b_92b9e2
+                    "#ebc0c7" -> circleResource = R.drawable.b_ebc0c7
+                    "#7bb6c8" -> circleResource = R.drawable.b_7bb6c8
+                    "#aad3d7" -> circleResource = R.drawable.b_aad3d7
+                    "#f5f1f0" -> circleResource = R.drawable.b_f5f1f0
+                    "#d5e3e6" -> circleResource = R.drawable.b_d5e3e6
+                    "#f2a4b1" -> circleResource = R.drawable.b_f2a4b1
+                    "#7175a5" -> circleResource = R.drawable.b_7175a5
+                    "#a1b3d7" -> circleResource = R.drawable.b_a1b3d7
+                    "#bd83cf" -> circleResource = R.drawable.b_bd83cf
+                    "#e5afe9" -> circleResource = R.drawable.b_e5afe9
 
                 }
                 AcceptColor.setImageResource(circleResource)
@@ -263,21 +268,21 @@ class FriendActivity : AppCompatActivity() {
             fun SetFriendRequestColor(item: Friend) {
                 var circleResource = 0
                 when (item.userColor) {
-                    "f69b94" -> circleResource = R.drawable.b_f69b94
-                    "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
-                    "fcdcce" -> circleResource = R.drawable.b_fcdcce
-                    "96b0e5" -> circleResource = R.drawable.b_96b0e5
-                    "92b9e2" -> circleResource = R.drawable.b_92b9e2
-                    "ebc0c7" -> circleResource = R.drawable.b_ebc0c7
-                    "7bb6c8" -> circleResource = R.drawable.b_7bb6c8
-                    "aad3d7" -> circleResource = R.drawable.b_aad3d7
-                    "f5f1f0" -> circleResource = R.drawable.b_f5f1f0
-                    "d5e3e6" -> circleResource = R.drawable.b_d5e3e6
-                    "f2a4b1" -> circleResource = R.drawable.b_f2a4b1
-                    "7175a5" -> circleResource = R.drawable.b_7175a5
-                    "a1b3d7" -> circleResource = R.drawable.b_a1b3d7
-                    "bd83cf" -> circleResource = R.drawable.b_bd83cf
-                    "e5afe9" -> circleResource = R.drawable.b_e5afe9
+                    "#f69b94" -> circleResource = R.drawable.b_f69b94
+                    "#f8c8c4" -> circleResource = R.drawable.b_f8c8c4
+                    "#fcdcce" -> circleResource = R.drawable.b_fcdcce
+                    "#96b0e5" -> circleResource = R.drawable.b_96b0e5
+                    "#92b9e2" -> circleResource = R.drawable.b_92b9e2
+                    "#ebc0c7" -> circleResource = R.drawable.b_ebc0c7
+                    "#7bb6c8" -> circleResource = R.drawable.b_7bb6c8
+                    "#aad3d7" -> circleResource = R.drawable.b_aad3d7
+                    "#f5f1f0" -> circleResource = R.drawable.b_f5f1f0
+                    "#d5e3e6" -> circleResource = R.drawable.b_d5e3e6
+                    "#f2a4b1" -> circleResource = R.drawable.b_f2a4b1
+                    "#7175a5" -> circleResource = R.drawable.b_7175a5
+                    "#a1b3d7" -> circleResource = R.drawable.b_a1b3d7
+                    "#bd83cf" -> circleResource = R.drawable.b_bd83cf
+                    "#e5afe9" -> circleResource = R.drawable.b_e5afe9
 
                 }
                 RequestColor.setImageResource(circleResource)
@@ -377,21 +382,21 @@ class FriendActivity : AppCompatActivity() {
             fun SetFriendColor(item:Friend){
                 var circleResource = 0
                 when (item.userColor) {
-                    "f69b94" -> circleResource = R.drawable.b_f69b94
-                    "f8c8c4" -> circleResource = R.drawable.b_f8c8c4
-                    "fcdcce" -> circleResource = R.drawable.b_fcdcce
-                    "96b0e5" -> circleResource = R.drawable.b_96b0e5
-                    "92b9e2" -> circleResource = R.drawable.b_92b9e2
-                    "ebc0c7" -> circleResource = R.drawable.b_ebc0c7
-                    "7bb6c8" -> circleResource = R.drawable.b_7bb6c8
-                    "aad3d7" -> circleResource = R.drawable.b_aad3d7
-                    "f5f1f0" -> circleResource = R.drawable.b_f5f1f0
-                    "d5e3e6" -> circleResource = R.drawable.b_d5e3e6
-                    "f2a4b1" -> circleResource = R.drawable.b_f2a4b1
-                    "7175a5" -> circleResource = R.drawable.b_7175a5
-                    "a1b3d7" -> circleResource = R.drawable.b_a1b3d7
-                    "bd83cf" -> circleResource = R.drawable.b_bd83cf
-                    "e5afe9" -> circleResource = R.drawable.b_e5afe9
+                    "#f69b94" -> circleResource = R.drawable.b_f69b94
+                    "#f8c8c4" -> circleResource = R.drawable.b_f8c8c4
+                    "#fcdcce" -> circleResource = R.drawable.b_fcdcce
+                    "#96b0e5" -> circleResource = R.drawable.b_96b0e5
+                    "#92b9e2" -> circleResource = R.drawable.b_92b9e2
+                    "#ebc0c7" -> circleResource = R.drawable.b_ebc0c7
+                    "#7bb6c8" -> circleResource = R.drawable.b_7bb6c8
+                    "#aad3d7" -> circleResource = R.drawable.b_aad3d7
+                    "#f5f1f0" -> circleResource = R.drawable.b_f5f1f0
+                    "#d5e3e6" -> circleResource = R.drawable.b_d5e3e6
+                    "#f2a4b1" -> circleResource = R.drawable.b_f2a4b1
+                    "#7175a5" -> circleResource = R.drawable.b_7175a5
+                    "#a1b3d7" -> circleResource = R.drawable.b_a1b3d7
+                    "#bd83cf" -> circleResource = R.drawable.b_bd83cf
+                    "#e5afe9" -> circleResource = R.drawable.b_e5afe9
 
                 }
                 FriendColor.setImageResource(circleResource)
