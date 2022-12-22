@@ -132,6 +132,7 @@ class NoticeActivity : AppCompatActivity() {
                                 ?.update("status", "friend")
                                 ?.addOnSuccessListener {
                                     viewHolder.notice_button.text = "수락 완료"
+                                    viewHolder.notice_button.isEnabled = false
                                 }
                                 ?.addOnFailureListener {
                                     throw IllegalArgumentException()
@@ -154,9 +155,6 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_button.text = "Goal 수락"
 
-
-
-
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color : String? = item.userColor
             Log.d(item.userColor, "유저 컬러")
@@ -168,25 +166,19 @@ class NoticeActivity : AppCompatActivity() {
             accountUId = firebaseAuth?.currentUser?.uid.toString()
             viewHolder.notice_button.setOnClickListener {
 
-                var userName = "";
-                var userColor = "";
-                var userMessage = "";
-
                 firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
                     var curUser = it.toObject(Account::class.java)!!
-                    userName = curUser?.userName.toString()
-                    userColor = curUser?.userColor.toString()
-                    userMessage = curUser?.userMessage.toString()
+                    val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString())
+
+                    firestore?.collection("Goal")?.document(item.goalUid.toString())
+                        ?.collection("team")
+                        ?.document(accountUId!!)
+                        ?.set(userInfo)
+                        ?.addOnSuccessListener {
+                            viewHolder.notice_button.text = "수락 완료"
+                            viewHolder.notice_button.isEnabled = false
+                        }
                 }
-
-                var userInfo = GoalTeamData(accountUId, userName, userColor, userMessage)
-
-                firestore?.collection("Goal")?.document(item.goalUid.toString())
-                    ?.collection("team")
-                    ?.document(accountUId!!)
-                    ?.set(userInfo)
-
-                Log.d("firebase", "저장됨")
             }
 
         } else if (item.type == 3) {  // 콕 찌르기
