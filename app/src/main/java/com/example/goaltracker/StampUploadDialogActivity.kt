@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -14,7 +15,6 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View.*
@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -34,7 +33,6 @@ import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.zip.Inflater
 
 class StampUploadDialogActivity : AppCompatActivity() {
     private lateinit var close_dialog_button : ImageButton
@@ -54,7 +52,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
     private var stampNum : Int = -1
     private var type : Boolean = false
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -70,7 +68,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
         comment_editText = findViewById(R.id.comment_editText)
         commentUpload_button = findViewById(R.id.commentUpload_button)
         var bgButton: GradientDrawable = commentUpload_button.background as GradientDrawable
-        bgButton.setColor(ContextCompat.getColor(this, MySharedPreferences.getUserColorInt(this)))
+        bgButton.setColor(ContextCompat.getColor(this, Color.parseColor(MySharedPreferences.getUserColor(this))))
         infoText2 = findViewById(R.id.infoText2)
 
         if (type) {

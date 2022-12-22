@@ -1,11 +1,13 @@
 package com.example.goaltracker
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -49,6 +51,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         }
     }
 
+    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -202,7 +205,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                             today_stamp_button.isEnabled = true
 
                             today_stamp_button.text = "오늘의 도장 찍기"
-                            bgButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
+                            bgButton.setColor(ContextCompat.getColor(requireContext(), Color.parseColor(MySharedPreferences.getUserColor(requireContext()))))
                         }
                     }
                 } catch (e: Exception){
@@ -249,7 +252,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         today_stamp_button.isEnabled = false
 
                         today_stamp_noneStamp_button.text = "오늘의 도장 찍기"
-                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
+                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), Color.parseColor(MySharedPreferences.getUserColor(requireContext()))))
 
                     }
                 }
