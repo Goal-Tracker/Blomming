@@ -2,7 +2,7 @@ package com.example.goaltracker
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Resources
+import android.graphics.Color
 
 object MySharedPreferences {
     private val MY_ACCOUNT : String = "account"
@@ -11,7 +11,7 @@ object MySharedPreferences {
         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
         editor.putString("UID", input)
-        editor.commit()
+        editor.apply()
     }
 
     fun getUserId(context: Context): String {
@@ -23,7 +23,7 @@ object MySharedPreferences {
         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
         editor.putString("nickname", input)
-        editor.commit()
+        editor.apply()
     }
 
     fun getUserNickname(context: Context): String {
@@ -35,7 +35,7 @@ object MySharedPreferences {
         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
         editor.putString("userColor", input)
-        editor.commit()
+        editor.apply()
     }
 
     fun getUserColor(context: Context): String {
@@ -61,7 +61,7 @@ object MySharedPreferences {
             themeName = R.color.profile_color_mint
         }
         editor.putInt("userColorInt", themeName)
-        editor.commit()
+        editor.apply()
     }
 
     fun getUserColorInt(context: Context): Int {
@@ -86,10 +86,12 @@ object MySharedPreferences {
             themeName = R.style.Theme_LightBlue
         } else if (theme == "#aad3d7") {
             themeName = R.style.Theme_Mint
+        } else if (theme == "#a1b3d7") {
+            themeName = R.style.Theme_BabyBlue
         }
 
         editor.putInt("theme", themeName)
-        editor.commit()
+        editor.apply()
     }
 
     fun getTheme(context: Context): Int {

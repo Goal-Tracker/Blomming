@@ -30,11 +30,6 @@ class GoalRecordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goal_record)
 
-        // uid 저장
-//        MySharedPreferences.setUserId(this, "QL5QEcUUl5QKxKWOKQ2J")
-//        MySharedPreferences.setUserNickname(this, "임정수")
-//        MySharedPreferences.setUserColor(this, "#fcdcce")
-
         tab_layout = findViewById(R.id.tab_layout)
         tab_viewPager = findViewById(R.id.tab_viewPager)
         goal_back_imageButton = findViewById(R.id.goal_back_imageButton)
@@ -43,29 +38,31 @@ class GoalRecordActivity : AppCompatActivity() {
         tab_viewPager.adapter = ViewPagerAdapter(this)
 
         // 추후엔 Dataframe에서 가져다 사용하기"
-        val temp_goal_lsit = arrayOf("a6jyD0k2MSJliDJq1wHb", "IyJXNQPcIx2a5EzLUoeN", "62476cb2-33a7-4acb-af3f-17a37a9071ae")
+        db.collection("Account").document(MySharedPreferences.getUserId(this)).get().addOnSuccessListener {
+            val curUser = it.toObject(Account::class.java)!!
+            var pastNum = 0
+            var tabName = arrayOf<String>("진행중  ", "완료된  ")
+            curUser.myGoalList?.forEach { goal_id ->
+                Log.d(ContentValues.TAG, "goal id : $goal_id")
+                val goal_db = db.collection("Goal").document(goal_id)
 
-        var pastNum = 0
-        var tabName = arrayOf<String>("진행중  ", "완료된  ")
-        temp_goal_lsit.forEach { goal_id ->
-            Log.d(ContentValues.TAG, "goal id : $goal_id")
-            val goal_db = db.collection("Goal").document(goal_id)
+                goal_db.addSnapshotListener { snapshot, e ->
+                    val goal_day = snapshot?.get("day").toString().toInt()
+                    val start_day = snapshot?.get("startDay").toString()
+                    val past_date = pastCalc(start_day);
+                    Log.d(ContentValues.TAG, "pastNum : $pastNum")
 
-            goal_db.addSnapshotListener { snapshot, e ->
-                val goal_day = snapshot?.get("day").toString().toInt()
-                val start_day = snapshot?.get("startDay").toString()
-                val past_date = pastCalc(start_day);
-                Log.d(ContentValues.TAG, "pastNum : $pastNum")
+                    if (past_date <= goal_day) {
+                        pastNum += 1
+                    }
 
-                if (past_date <= goal_day) {
-                    pastNum += 1
+                    tabName = arrayOf<String>("진행중  ${pastNum}",
+                        "완료된  ${curUser.myGoalList?.size?.minus(pastNum)}")
+                    TabLayoutMediator(tab_layout, tab_viewPager) { tab, position ->
+                        tab.text = tabName[position]
+                    }.attach()
+
                 }
-
-                tabName = arrayOf<String>("진행중  ${pastNum}", "완료된  ${temp_goal_lsit.size - pastNum}")
-                TabLayoutMediator(tab_layout, tab_viewPager) { tab, position ->
-                    tab.text = tabName[position]
-                }.attach()
-
             }
         }
 

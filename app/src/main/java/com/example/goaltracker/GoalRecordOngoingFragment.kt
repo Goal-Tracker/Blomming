@@ -37,55 +37,56 @@ class GoalRecordOngoingFragment : Fragment() {
         rv_goal.adapter = goalRecordOngoingAdapter
 
         // 추후엔 Dataframe에서 가져다 사용하기
-        val temp_goal_lsit = arrayOf("a6jyD0k2MSJliDJq1wHb", "IyJXNQPcIx2a5EzLUoeN", "62476cb2-33a7-4acb-af3f-17a37a9071ae")
+        db.collection("Account").document(MySharedPreferences.getUserId(requireContext())).get().addOnSuccessListener {
+            val curUser = it.toObject(Account::class.java)!!
+            curUser.myGoalList?.forEach { goal_id ->
+                Log.d(TAG, "goal id : $goal_id")
+                val goal_db = db.collection("Goal").document(goal_id)
 
-        temp_goal_lsit.forEach { goal_id ->
-            Log.d(TAG, "goal id : $goal_id")
-            val goal_db = db.collection("Goal").document(goal_id)
+                goal_db.addSnapshotListener { snapshot, e ->
+                    var teamNameList = arrayListOf<String>()
+                    var teamThemeList = arrayListOf<String>()
+                    val goal_day = snapshot?.get("day").toString().toInt()
+                    val start_day = snapshot?.get("startDay").toString()
+                    val start_day_str = start_day.replace("-", ".")
+                    val end_day = snapshot?.get("endDay").toString()
+                    val end_day_str = end_day.replace("-", ".")
+                    val past_date = pastCalc(start_day);
 
-            goal_db.addSnapshotListener { snapshot, e ->
-                var teamNameList = arrayListOf<String>()
-                var teamThemeList = arrayListOf<String>()
-                val goal_day = snapshot?.get("day").toString().toInt()
-                val start_day = snapshot?.get("startDay").toString()
-                val start_day_str = start_day.replace("-", ".")
-                val end_day = snapshot?.get("endDay").toString()
-                val end_day_str = end_day.replace("-", ".")
-                val past_date = pastCalc(start_day);
+                    val title = snapshot?.get("title") as String
 
-                val title = snapshot?.get("title") as String
+                    if (past_date <= goal_day) {
+                        // 데이터 한 번만 가져오기
+                        db.collection("Goal").document(goal_id).collection("team")
+                            .whereEqualTo("request", true)
+                            .get()
+                            .addOnSuccessListener { result ->
+                                for (document in result) {
+                                    teamNameList.add(document["userName"].toString())
+                                    teamThemeList.add(document["profileColor"].toString())
+                                }
 
-                if (past_date <= goal_day) {
-                    // 데이터 한 번만 가져오기
-                    db.collection("Goal").document(goal_id).collection("team")
-                        .whereEqualTo("request", true)
-                        .get()
-                        .addOnSuccessListener { result ->
-                            for (document in result) {
-                                teamNameList.add(document["userName"].toString())
-                                teamThemeList.add(document["profileColor"].toString())
-                            }
-
-                            onGoingGoalDatas.add(
-                                GoalRecordData(
-                                    goalId =  goal_id,
-                                    title =  title,
-                                    participateNum = result.size(),
-                                    startDate = start_day_str,
-                                    endDate = end_day_str,
-                                    todayNum = past_date,
-                                    stampNum = goal_day,
-                                    teamNameList = teamNameList,
-                                    teamThemeList = teamThemeList
+                                onGoingGoalDatas.add(
+                                    GoalRecordData(
+                                        goalId =  goal_id,
+                                        title =  title,
+                                        participateNum = result.size(),
+                                        startDate = start_day_str,
+                                        endDate = end_day_str,
+                                        todayNum = past_date,
+                                        stampNum = goal_day,
+                                        teamNameList = teamNameList,
+                                        teamThemeList = teamThemeList
+                                    )
                                 )
-                            )
 
-                            goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
-                            goalRecordOngoingAdapter.notifyDataSetChanged()
-                        }
-                        .addOnFailureListener { exception ->
-                            Log.d(TAG, "Error getting documents: ", exception)
-                        }
+                                goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
+                                goalRecordOngoingAdapter.notifyDataSetChanged()
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.d(TAG, "Error getting documents: ", exception)
+                            }
+                    }
                 }
             }
         }

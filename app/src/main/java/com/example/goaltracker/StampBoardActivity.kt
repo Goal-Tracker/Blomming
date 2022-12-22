@@ -56,9 +56,9 @@ class StampBoardActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_stamp_board)
 
         // uid 저장
-        MySharedPreferences.setUserId(this, "QL5QEcUUl5QKxKWOKQ2J")
-        MySharedPreferences.setUserNickname(this, "임정수")
-        MySharedPreferences.setUserColor(this, "#fcdcce")
+//        MySharedPreferences.setUserId(this, "QL5QEcUUl5QKxKWOKQ2J")
+//        MySharedPreferences.setUserNickname(this, "임정수")
+//        MySharedPreferences.setUserColor(this, "#fcdcce")
 
         edit_goal = findViewById(R.id.edit_goal)
         goal_back_imageButton = findViewById(R.id.goal_back_imageButton)
