@@ -32,14 +32,6 @@
         <item name="colorButtonNormal">@color/white</item>
     </style>
 
-    <style name="Theme.Blue" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimaryDark">@color/profile_color_blue</item>
-        <item name="colorPrimary">@color/profile_color_blue</item>
-        <item name="colorAccent">@color/profile_color_blue</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="colorButtonNormal">@color/white</item>
-    </style>
-
     <style name="Theme.BabyPink" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/profile_color_babyPink</item>
         <item name="colorPrimary">@color/profile_color_babyPink</item>
@@ -56,10 +48,34 @@
         <item name="colorButtonNormal">@color/black</item>
     </style>
 
+    <style name="Theme.Blue" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_blue</item>
+        <item name="colorPrimary">@color/profile_color_blue</item>
+        <item name="colorAccent">@color/profile_color_blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="colorButtonNormal">@color/white</item>
+    </style>
+
     <style name="Theme.LightBlue" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/profile_color_lightBlue</item>
         <item name="colorPrimary">@color/profile_color_lightBlue</item>
         <item name="colorAccent">@color/profile_color_lightBlue</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="colorButtonNormal">@color/black</item>
+    </style>
+
+    <style name="Theme.LightPink" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_lightPink</item>
+        <item name="colorPrimary">@color/profile_color_lightPink</item>
+        <item name="colorAccent">@color/profile_color_lightPink</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="colorButtonNormal">@color/black</item>
+    </style>
+
+    <style name="Theme.Turquoise" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_turquoise</item>
+        <item name="colorPrimary">@color/profile_color_turquoise</item>
+        <item name="colorAccent">@color/profile_color_turquoise</item>
         <item name="android:textColor">@color/black</item>
         <item name="colorButtonNormal">@color/black</item>
     </style>
@@ -72,10 +88,58 @@
         <item name="colorButtonNormal">@color/black</item>
     </style>
 
+    <style name="Theme.Beige" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_beige</item>
+        <item name="colorPrimary">@color/profile_color_beige</item>
+        <item name="colorAccent">@color/profile_color_beige</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="colorButtonNormal">@color/black</item>
+    </style>
+
+    <style name="Theme.LightGreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_lightGreen</item>
+        <item name="colorPrimary">@color/profile_color_lightGreen</item>
+        <item name="colorAccent">@color/profile_color_lightGreen</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="colorButtonNormal">@color/black</item>
+    </style>
+
+    <style name="Theme.LightCoral" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_lightCoral</item>
+        <item name="colorPrimary">@color/profile_color_lightCoral</item>
+        <item name="colorAccent">@color/profile_color_lightCoral</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="colorButtonNormal">@color/black</item>
+    </style>
+
+    <style name="Theme.Indigo" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_indigo</item>
+        <item name="colorPrimary">@color/profile_color_indigo</item>
+        <item name="colorAccent">@color/profile_color_indigo</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="colorButtonNormal">@color/white</item>
+    </style>
+
     <style name="Theme.BabyBlue" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/profile_color_babyBlue</item>
         <item name="colorPrimary">@color/profile_color_babyBlue</item>
         <item name="colorAccent">@color/profile_color_babyBlue</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="colorButtonNormal">@color/black</item>
+    </style>
+
+    <style name="Theme.Purple" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_purple</item>
+        <item name="colorPrimary">@color/profile_color_purple</item>
+        <item name="colorAccent">@color/profile_color_purple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="colorButtonNormal">@color/white</item>
+    </style>
+
+    <style name="Theme.LightPurple" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/profile_color_lightPurple</item>
+        <item name="colorPrimary">@color/profile_color_lightPurple</item>
+        <item name="colorAccent">@color/profile_color_lightPurple</item>
         <item name="android:textColor">@color/black</item>
         <item name="colorButtonNormal">@color/black</item>
     </style>
