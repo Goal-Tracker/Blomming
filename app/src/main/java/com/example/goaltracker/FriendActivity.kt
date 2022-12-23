@@ -1,14 +1,19 @@
 package com.example.goaltracker
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +29,7 @@ class FriendActivity : AppCompatActivity() {
     var firestore: FirebaseFirestore? = null
     private val currentUser = Firebase.auth.currentUser?.uid
 
+    private lateinit var dialog: DeleteDialog  //다이얼로그
     var searchcount = 0 //사람 수
     private lateinit var adapter: FriendAdapter
     private lateinit var accept_adapter: FriendAcceptAdapter
@@ -358,7 +364,12 @@ class FriendActivity : AppCompatActivity() {
             holder.SetFriendColor(friend[position])
             holder.SetFriendEmail(friend[position])
 
+            var account = friend[position]
 
+            //아이템을 클릭하면 다이얼로그 생성
+            holder.itemView.setOnClickListener {
+                delDialog(it.context, account)
+            }
         }
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -370,17 +381,17 @@ class FriendActivity : AppCompatActivity() {
 
 
             //친구 이름
-            fun setFriendName(item: Friend){
+            fun setFriendName(item: Friend) {
                 FriendName.text = item.userName
             }
 
             //친구 프로필 이름
-            fun setProfileName(item: Friend){
+            fun setProfileName(item: Friend) {
                 FriendProfileName.text = item.userName?.get(0).toString()
             }
 
             //친구 프로필
-            fun SetFriendColor(item:Friend){
+            fun SetFriendColor(item: Friend) {
                 var circleResource = 0
                 when (item.userColor) {
                     "#f69b94" -> circleResource = R.drawable.b_f69b94
@@ -404,13 +415,59 @@ class FriendActivity : AppCompatActivity() {
             }
 
             //친구 이메일
-            fun SetFriendEmail(item:Friend){
+            fun SetFriendEmail(item: Friend) {
                 FriendEmail.text = item.email
             }
         }
 
         // 리사이클러뷰의 아이템 총 개수 반환
         override fun getItemCount() = friend.size
+
+        fun delDialog(context: Context, item: Friend) {
+
+            dialog = DeleteDialog(
+                context = context,
+                userName = item.userName,
+                uid = item.uid,
+                email = item.email!!,
+                deletebtnListener = deletebtnListener,
+                cancelbtnListener = cancelbtnListener
+            )
+
+            //다이얼로그 타이틀 및 테두리 없애기
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
+
+        //삭제 버튼 클릭 시
+        private val deletebtnListener = View.OnClickListener {
+            firestore?.collection("Account")
+                ?.document("$currentUser")
+                ?.collection("Friend")
+                ?.document("${dialog.uid}")
+                ?.delete()
+                ?.addOnSuccessListener {
+                    Toast.makeText(this@FriendActivity, "친구를 삭제했습니다.", Toast.LENGTH_SHORT).show()
+                    dialog?.dismiss()
+                }
+                ?.addOnFailureListener { }
+
+            firestore?.collection("Account")
+                ?.document(dialog.uid.toString())
+                ?.collection("Friend")
+                ?.document("${currentUser}")
+                ?.delete()
+                ?.addOnSuccessListener { }
+                ?.addOnFailureListener { }
+
+
+        }
+
+        private val cancelbtnListener = View.OnClickListener {
+            dialog?.dismiss()
+        }
+
 
     }
 }
