@@ -142,12 +142,44 @@ class AddGoal : AppCompatActivity() {
             )
             firestore!!.collection("Goal").document(goalID).set(goal)
 
+            // 사용자 정보 저장
+            val userUID = firestore!!.collection("Account").document(accountUId.toString())
+
+            userUID.addSnapshotListener { snapshot, e ->
+                val userName = snapshot?.get("userName").toString()
+                val userUid = snapshot?.get("uid").toString()
+                val profle = snapshot?.get("userColor").toString()
+                val user = hashMapOf(
+                    "userName" to userName,
+                    "uid" to userUid,
+                    "profileColor" to profle
+                )
+                firestore!!.collection("Goal")
+                    .document(goalID)
+                    .collection("team")
+                    .document()
+                    .set(user)
+            }
+
             // Account에 저장
+            var goalList = arrayListOf("")
+            firestore?.collection("Account")!!.document(accountUId.toString()).collection("Notification")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                // ArrayList 비워줌
+                goalList.clear()
+
+                for (snapshot in querySnapshot!!.documents) {
+
+                    val userGoal = snapshot.getString("goalUid")
+                    goalList.add(userGoal.toString())
+                }
+            }
+
             val notification_goal = hashMapOf(
                 "goalName" to title.text.toString(),
                 "goalUid" to goalID,
                 "message" to memo.text.toString(),
-                "type" to 2
+                "type" to 2,
+                "myGoalList" to goalList
             )
 
             firestore?.collection("Account")?.document("$accountUId")
@@ -156,7 +188,7 @@ class AddGoal : AppCompatActivity() {
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
             val goal_ID = hashMapOf(
-                "Goal_id" to goalID,
+                "goalID" to goalID,
                 "dayRecord" to hashMap
             )
             firestore!!.collection("Stamp").document(stampID).set(goal_ID)
@@ -264,9 +296,7 @@ class AddGoal : AppCompatActivity() {
             }
 
             fun addFriendsBtnOnclick(item: Friend){
-
                 binding.checkBox.setOnClickListener {
-
                     // 체크한 친구만 Goal에 추가
                     if ((it as CheckBox).isChecked) {
                         val team = hashMapOf(

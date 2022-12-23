@@ -34,8 +34,7 @@ class PokeDialog(context: Context) : Dialog(context) {
     fun start(profile: GoalTeamData, goalTitle: String) {
         setContentView(R.layout.poke_dialog)
 
-//        dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)   //타이틀바 제거
-        dlg.setContentView(com.example.goaltracker.R.layout.poke_dialog)     //다이얼로그에 사용할 xml 파일을 불러옴
+        dlg.setContentView(R.layout.poke_dialog)     //다이얼로그에 사용할 xml 파일을 불러옴
         dlg.setCancelable(false)    //다이얼로그의 바깥 화면을 눌렀을 때 다이얼로그가 닫히지 않도록 함
 
         close_dialog_button = dlg.findViewById(R.id.close_dialog_button)
@@ -80,7 +79,8 @@ class PokeDialog(context: Context) : Dialog(context) {
                     "type" to 3,
                     "requestUserId" to MySharedPreferences.getUserId(context),
                     "userColor" to MySharedPreferences.getUserColor(context),
-                    "userName" to MySharedPreferences.getUserNickname(context)
+                    "userName" to MySharedPreferences.getUserNickname(context),
+                    "timestamp" to FieldValue.serverTimestamp()
                 )
 
                 Log.d(TAG, "poke message : $notifyData")
