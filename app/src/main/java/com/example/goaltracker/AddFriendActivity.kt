@@ -44,6 +44,7 @@ class AddFriendActivity : AppCompatActivity() {
     var indexcolor : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_friend)
 
@@ -134,10 +135,10 @@ class AddFriendActivity : AppCompatActivity() {
             //아이템을 클릭하면 다이얼로그 생성
             holder.itemView.setOnClickListener {
                 callDialog(it.context, account)
-
             }
 
         }
+
 
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -388,7 +389,6 @@ class AddFriendActivity : AppCompatActivity() {
                 "닉네임 신고가 되었습니다.",
                 Toast.LENGTH_SHORT
             ).show()
-
         }
 
 

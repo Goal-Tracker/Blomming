@@ -21,7 +21,6 @@
             android:layout_marginBottom="28dp"
             android:fontFamily="@font/ko_pub_world_dotum_bold"
             android:text="공지사항"
-            android:textColor="#ffffff"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -32,11 +31,12 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:src="@drawable/alarm_close"
+            android:tint="?attr/colorButtonNormal"
             android:layout_marginRight="22.8dp"
             android:layout_marginBottom="32.4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck,UseAppTint" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

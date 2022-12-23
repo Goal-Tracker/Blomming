@@ -34,6 +34,7 @@ class FriendActivity : AppCompatActivity() {
     private val friend_request = mutableListOf<Friend>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friend)
 

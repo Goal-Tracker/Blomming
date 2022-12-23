@@ -18,7 +18,7 @@
         android:background="@drawable/profile_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/AddName"
@@ -87,10 +87,10 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/color_circle_btn_shape"
+        android:backgroundTint="?attr/colorPrimary"
         android:fontFamily="@font/fontstyle"
         android:text="친구 요청"
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

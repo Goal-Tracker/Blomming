@@ -18,6 +18,7 @@ class AnnouncementActivity : AppCompatActivity() {
     lateinit var backtomain: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_announcement)
 

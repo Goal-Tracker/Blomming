@@ -12,8 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.gamingservices.GameRequestDialog.show
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.make
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -113,21 +118,36 @@ class NoticeActivity : AppCompatActivity() {
             var accountUId: String? = ""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
             viewHolder.notice_button.setOnClickListener {
-                // 내 친구 목록
-                firestore?.collection("Account")?.document(accountUId!!)
-                    ?.collection("Friend")
-                    ?.document(item.requestUserId.toString())
-                    ?.update("status", "friend")
-                    ?.addOnSuccessListener { }
-                    ?.addOnFailureListener { }
+                try {
+                    Log.d(item.requestUserId.toString(), "요청한 유저 아이디")
+                    firestore?.collection("Account")?.document(accountUId!!)
+                        ?.collection("Friend")
+                        ?.document(item.requestUserId.toString())
+                        ?.update("status", "friend")
+                        ?.addOnSuccessListener {
+                            // 내 account db에서 status friend로 바꾸기가 성공적으로 완료되면 상대방 account db에서 status friend로 바꾸기
+                            firestore?.collection("Account")?.document(item.requestUserId.toString())
+                                ?.collection("Friend")
+                                ?.document(accountUId!!)
+                                ?.update("status", "friend")
+                                ?.addOnSuccessListener {
+                                    viewHolder.notice_button.text = "수락 완료"
+                                    viewHolder.notice_button.isEnabled = false
+                                }
+                                ?.addOnFailureListener {
+                                    throw IllegalArgumentException()
+                                }
+                        }
+                        ?.addOnFailureListener {
+                            throw IllegalArgumentException()
+                        }
 
-                // 상대방 친구 목록
-                firestore?.collection("Account")?.document(item.requestUserId.toString())
-                    ?.collection("Friend")
-                    ?.document(accountUId!!)
-                    ?.update("status", "friend")
-                    ?.addOnSuccessListener { }
-                    ?.addOnFailureListener { }
+                } catch(e: IllegalArgumentException) {
+                    val currentLayout = findViewById<View>(R.id.notice_view)
+                    val snackbar = Snackbar.make(currentLayout, "친구 수락에 실패했습니다.", Snackbar.LENGTH_LONG)
+                    snackbar.show()
+                }
+                // 내 친구 목록
             }
 
         } else if (item.type == 2) {  // 골 초대
@@ -135,11 +155,9 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_button.text = "Goal 수락"
 
-
-
-
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color : String? = item.userColor
+            Log.d(item.userColor, "유저 컬러")
             if (color != null) {
                 profileColor.setColor(Color.parseColor(color))
             }
@@ -148,25 +166,19 @@ class NoticeActivity : AppCompatActivity() {
             accountUId = firebaseAuth?.currentUser?.uid.toString()
             viewHolder.notice_button.setOnClickListener {
 
-                var userName = "";
-                var userColor = "";
-                var userMessage = "";
-
                 firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
                     var curUser = it.toObject(Account::class.java)!!
-                    userName = curUser?.userName.toString()
-                    userColor = curUser?.userColor.toString()
-                    userMessage = curUser?.userMessage.toString()
+                    val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString())
+
+                    firestore?.collection("Goal")?.document(item.goalUid.toString())
+                        ?.collection("team")
+                        ?.document(accountUId!!)
+                        ?.set(userInfo)
+                        ?.addOnSuccessListener {
+                            viewHolder.notice_button.text = "수락 완료"
+                            viewHolder.notice_button.isEnabled = false
+                        }
                 }
-
-                var userInfo = GoalTeamData(accountUId, userName, userColor, userMessage)
-
-                firestore?.collection("Goal")?.document(item.goalUid.toString())
-                    ?.collection("team")
-                    ?.document(accountUId!!)
-                    ?.set(userInfo)
-
-                Log.d("firebase", "저장됨")
             }
 
         } else if (item.type == 3) {  // 콕 찌르기

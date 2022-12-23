@@ -57,7 +57,6 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/stamp_upload_button"
         android:text="도장 찍기 완료"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comment_editText" />
@@ -69,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="39dp"
-        android:text="인증샷과 코멘트 없이도 도장을 찍을 수 있습니다."
+        android:text="인증샷 없이도 도장을 찍을 수 있습니다."
         android:textColor="@color/greyish_brown"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
