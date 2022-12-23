@@ -36,6 +36,8 @@ class NoticeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setTheme(MySharedPreferences.getTheme(this))
         setContentView(R.layout.notice_view)
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -55,7 +57,7 @@ class NoticeActivity : AppCompatActivity() {
             var accountUId: String? = ""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
             firestore?.collection("Account")?.document(accountUId)?.collection("Notification")?.
-            orderBy("timeStamp", Query.Direction.DESCENDING)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            orderBy("timestamp", Query.Direction.DESCENDING)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 noticeDto.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
