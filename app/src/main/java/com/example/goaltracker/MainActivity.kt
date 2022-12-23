@@ -73,19 +73,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navUserProfile.setColor(Color.parseColor(MySharedPreferences.getUserColor(this)))
         navUserNameShort.text = MySharedPreferences.getUserNickname(this).substring(0 until 1)
 
-//        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
-//            curUser = it.toObject(Account::class.java)!!
-//            Log.d("userName", curUser?.userName.toString())
-//            curUserName.text = curUser?.userName.toString()
-//            navUserName.text = curUser?.userName.toString()
-//            navUserEmail.text = curUser?.email.toString()
-//            val color = curUser?.userColor.toString()
-//            if (color != null) {
-//                navUserProfile.setColor(Color.parseColor(color))
-//            }
-//            navUserNameShort.text = curUser?.userName.toString().substring(0 until 1)
-//        }
-
         val notReadNotices = arrayListOf<Notifications>()
         db?.collection("Account")
             ?.document(accountUId)
