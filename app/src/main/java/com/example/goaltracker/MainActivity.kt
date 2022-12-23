@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             MySharedPreferences.setUserId(this, accountUId)
             MySharedPreferences.setUserNickname(this, curUser?.userName.toString())
             MySharedPreferences.setUserColor(this, color)
+            MySharedPreferences.setUserColorInt(this, color)
             MySharedPreferences.setTheme(this, color)
             setTheme(MySharedPreferences.getTheme(this))
         }
