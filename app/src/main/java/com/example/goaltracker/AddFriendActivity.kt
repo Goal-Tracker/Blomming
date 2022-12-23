@@ -20,14 +20,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_friend.searchWord
 import kotlinx.android.synthetic.main.activity_add_friend.*
 import kotlinx.android.synthetic.main.item_friend_add.*
 import kotlinx.android.synthetic.main.report_dialog.*
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
 
 
 class AddFriendActivity : AppCompatActivity() {
@@ -198,6 +201,9 @@ class AddFriendActivity : AppCompatActivity() {
             @SuppressLint("SuspiciousIndentation")
             fun AddFriendBtnOnclick(item: Friend) {
                 AddBtn.setOnClickListener {
+                    val nowTime = System.currentTimeMillis()
+                    val timeformatter = SimpleDateFormat("yyyy.MM.dd.hh.mm")
+                    val dateTime = timeformatter.format(nowTime)
                     if (item.uid != currentUser) {
                         firestore?.collection("Account")?.document("$currentUser")?.get()
                             ?.addOnSuccessListener { document ->
@@ -253,6 +259,46 @@ class AddFriendActivity : AppCompatActivity() {
                                                         "userName" to indexname,
                                                         "email" to indexemail,
                                                         "userColor" to indexcolor
+
+                                                    )
+                                                )
+                                                ?.addOnSuccessListener {
+                                                }
+                                                ?.addOnFailureListener {
+                                                }
+
+                                            //내 노티피케이션
+                                            firestore?.collection("Account")
+                                                ?.document("$currentUser")
+                                                ?.collection("Notification")
+                                                ?.document("${item.uid}")
+                                                ?.set(
+                                                    hashMapOf(
+                                                        "requestUserId" to item.uid,
+                                                        "userName" to item.userName,
+                                                        "userColor" to item.userColor,
+                                                        "type" to 1,
+                                                        "read" to false,
+                                                        "timestamp" to FieldValue.serverTimestamp()
+
+                                                    )
+                                                )
+                                                ?.addOnSuccessListener {}
+                                                ?.addOnFailureListener {}
+
+                                            // 상대방 노티피케이션
+                                            firestore?.collection("Account")
+                                                ?.document(item.uid.toString())
+                                                ?.collection("Notification")
+                                                ?.document("${currentUser}")
+                                                ?.set(
+                                                    hashMapOf(
+                                                        "requestUserId" to currentUser,
+                                                        "userName" to indexname,
+                                                        "userColor" to indexcolor,
+                                                        "type" to 1,
+                                                        "read" to false,
+                                                        "timestamp" to FieldValue.serverTimestamp()
 
                                                     )
                                                 )
@@ -328,6 +374,47 @@ class AddFriendActivity : AppCompatActivity() {
                                                             ?.addOnFailureListener {
                                                             }
 
+
+                                                        //내 노티피케이션
+                                                        firestore?.collection("Account")
+                                                            ?.document("$currentUser")
+                                                            ?.collection("Notification")
+                                                            ?.document("${item.uid}")
+                                                            ?.set(
+                                                                hashMapOf(
+                                                                    "requestUserId" to item.uid,
+                                                                    "userName" to item.userName,
+                                                                    "userColor" to item.userColor,
+                                                                    "type" to 1,
+                                                                    "read" to false,
+                                                                    "timestamp" to FieldValue.serverTimestamp()
+
+                                                                )
+                                                            )
+                                                            ?.addOnSuccessListener {}
+                                                            ?.addOnFailureListener {}
+
+                                                        // 상대방 노티피케이션
+                                                        firestore?.collection("Account")
+                                                            ?.document(item.uid.toString())
+                                                            ?.collection("Notification")
+                                                            ?.document("${currentUser}")
+                                                            ?.set(
+                                                                hashMapOf(
+                                                                    "requestUserId" to currentUser,
+                                                                    "userName" to indexname,
+                                                                    "userColor" to indexcolor,
+                                                                    "type" to 1,
+                                                                    "read" to false,
+                                                                    "timestamp" to FieldValue.serverTimestamp()
+
+                                                                )
+                                                            )
+                                                            ?.addOnSuccessListener {
+                                                            }
+                                                            ?.addOnFailureListener {
+                                                            }
+
                                                     }
                                                 }
 
@@ -381,7 +468,7 @@ class AddFriendActivity : AppCompatActivity() {
                         "email" to dialog.email,
                         "index" to index,
                         "id" to dialog.uid,
-                        )
+                    )
                 )
 
             Toast.makeText(

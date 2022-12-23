@@ -75,7 +75,7 @@ class FriendActivity : AppCompatActivity() {
         }
 
         //입력칸 누르면 친구추가 화면으로 이동
-        searchWord.setOnClickListener {
+        search.setOnClickListener {
             startActivity(Intent(this, AddFriendActivity::class.java))
         }
 
