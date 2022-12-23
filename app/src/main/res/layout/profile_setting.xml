@@ -248,9 +248,9 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <ImageButton
+            <Button
                 android:id="@+id/pfChangeButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -258,7 +258,7 @@
                 android:text="프로필 변경 완료"
                 android:textColor="#ffffff"
                 android:fontFamily="@font/ko_pub_world_dotum_bold"
-                android:background="@drawable/pfsettingbtn"></ImageButton>
+                android:background="@drawable/add_button"></Button>
 
         </LinearLayout>
 

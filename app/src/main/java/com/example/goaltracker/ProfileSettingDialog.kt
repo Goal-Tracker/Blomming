@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
@@ -41,6 +42,7 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
 
         val edit_nick = dialog.findViewById<EditText>(R.id.pfChangeName)
         val edit_message = dialog.findViewById<EditText>(R.id.pfChangeMessage)
+        val edit_profile = dialog.findViewById<Button>(R.id.pfChangeButton)
 
         var accountUId: String? = ""
         accountUId = firebaseAuth?.currentUser?.uid.toString()
@@ -56,6 +58,7 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
             } else {
                 edit_message.hint = curUser?.userMessage
             }
+            edit_profile_color = curUser?.userColor
         }
 
         dialog.s_f69b94.setOnClickListener {
@@ -208,18 +211,27 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
             edit_profile_color="#e5afe9"
         }
 
-        dialog.pfChangeButton.setOnClickListener {
+        edit_profile.setOnClickListener {
             // 프로필 색상 및 닉네임 수정 코드 추가 필요
             if (edit_nick == null) {
                 Toast.makeText(it.context, "닉네임을 입력하세요", Toast.LENGTH_LONG)
                 Log.d("test", "닉네임 입력안함")
             } else {
-                val curUser = hashMapOf<String, Any?>(
-                    "userName" to edit_nick.text.toString(),
-                    "userColor" to edit_profile_color,
-                    "userMessage" to edit_message.text.toString()
-                )
-                fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
+                if (edit_message!=null){
+                    val curUser = hashMapOf<String, Any?>(
+                        "userName" to edit_nick.text.toString(),
+                        "userColor" to edit_profile_color,
+                        "userMessage" to edit_message.text.toString()
+                    )
+                    fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
+                }
+                if (edit_message==null) {
+                    val curUser = hashMapOf<String, Any?>(
+                        "userName" to edit_nick.text.toString(),
+                        "userColor" to edit_profile_color,
+                    )
+                    fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
+                }
             }
             Toast.makeText(it.context, "프로필 설정 완료", Toast.LENGTH_LONG)
             Log.d("test", "프로필 설정 완료")
