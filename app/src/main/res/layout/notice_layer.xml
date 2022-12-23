@@ -80,7 +80,7 @@
                 android:textColor="#ffffff"
                 android:textSize="10sp"
                 android:fontFamily="@font/ko_pub_world_dotum_medium"
-                android:background="@drawable/notice_button"/>
+                android:background="@drawable/add_button"/>
 
             <Button
                 android:id="@+id/notice_cancel_button"

@@ -205,7 +205,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                             today_stamp_button.isEnabled = true
 
                             today_stamp_button.text = "오늘의 도장 찍기"
-                            bgButton.setColor(ContextCompat.getColor(requireContext(), Color.parseColor(MySharedPreferences.getUserColor(requireContext()))))
+                            bgButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
                         }
                     }
                 } catch (e: Exception){
@@ -252,7 +252,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         today_stamp_button.isEnabled = false
 
                         today_stamp_noneStamp_button.text = "오늘의 도장 찍기"
-                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), Color.parseColor(MySharedPreferences.getUserColor(requireContext()))))
+                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
 
                     }
                 }

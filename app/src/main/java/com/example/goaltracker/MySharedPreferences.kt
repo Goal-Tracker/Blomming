@@ -19,6 +19,18 @@ object MySharedPreferences {
         return prefs.getString("UID", "").toString()
     }
 
+    fun setUserEmail(context: Context, input: String) {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = prefs.edit()
+        editor.putString("email", input)
+        editor.apply()
+    }
+
+    fun getUserEmail(context: Context): String {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        return prefs.getString("email", "").toString()
+    }
+
     fun setUserNickname(context: Context, input: String) {
         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = prefs.edit()
@@ -41,6 +53,52 @@ object MySharedPreferences {
     fun getUserColor(context: Context): String {
         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
         return prefs.getString("userColor", "").toString()
+    }
+
+    fun setUserColorInt(context: Context, input: String) {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = prefs.edit()
+
+        var themeName = R.color.profile_color_coral
+        if (input == "#f69b94") {
+            themeName = R.color.profile_color_coral
+        } else if (input == "#f8c8c4") {
+            themeName =R.color.profile_color_babyPink
+        } else if (input == "#fcdcce") {
+            themeName = R.color.profile_color_lightOrange
+        } else if (input == "#96b0e5") {
+            themeName = R.color.profile_color_blue
+        } else if (input == "#92b9e2") {
+            themeName = R.color.profile_color_lightBlue
+        } else if (input == "#ebc0c7") {
+            themeName = R.color.profile_color_lightPink
+        } else if (input == "#7bb6c8") {
+            themeName = R.color.profile_color_turquoise
+        } else if (input == "#aad3d7") {
+            themeName = R.color.profile_color_mint
+        } else if (input == "#f5f1f0") {
+            themeName = R.color.profile_color_beige
+        } else if (input == "#d5e3e6") {
+            themeName = R.color.profile_color_lightGreen
+        } else if (input == "#f2a4b1") {
+            themeName = R.color.profile_color_lightCoral
+        } else if (input == "#7175a5") {
+            themeName = R.color.profile_color_indigo
+        } else if (input == "#a1b3d7") {
+            themeName = R.color.profile_color_babyBlue
+        } else if (input == "#bd83cf") {
+            themeName = R.color.profile_color_purple
+        } else if (input == "#e5afe9") {
+            themeName = R.color.profile_color_lightPurple
+        }
+
+        editor.putInt("userColorInt", themeName)
+        editor.commit()
+    }
+
+    fun getUserColorInt(context: Context): Int {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        return prefs.getInt("userColorInt", R.color.profile_color_coral)
     }
 
     fun setTheme(context: Context, theme: String){

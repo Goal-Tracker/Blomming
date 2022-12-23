@@ -37,11 +37,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.drawer_main)
 
         var accountUId : String?=""
         accountUId = firebaseAuth?.currentUser?.uid.toString()
-        val curUserName = findViewById<TextView>(R.id.user_name)
+
+        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+            curUser = it.toObject(Account::class.java)!!
+            val color = curUser.userColor.toString()
+            MySharedPreferences.setUserId(this, accountUId)
+            MySharedPreferences.setUserEmail(this, curUser.email)
+            MySharedPreferences.setUserNickname(this, curUser.userName.toString())
+            MySharedPreferences.setUserColor(this, color)
+            MySharedPreferences.setTheme(this, color)
+        }
+
+        setTheme(MySharedPreferences.getTheme(this))
+        setContentView(R.layout.drawer_main)
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
         supportActionBar?.setDisplayShowTitleEnabled(false)  //툴바에 타이틀 안보이게
@@ -49,29 +60,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //네비게이션 드로어 내에 있는 화면의 이벤트를 처리하기 위해 생성
         nav_view.setNavigationItemSelectedListener(this) //Navigation 리스너
 
+        val curUserName = findViewById<TextView>(R.id.user_name)
         val nav_header = nav_view.getHeaderView(0)
         val navUserName = nav_header.findViewById<TextView>(R.id.nav_userName)
         val navUserEmail = nav_header.findViewById<TextView>(R.id.nav_userId)
         var navUserProfile :GradientDrawable = nav_header.nav_profile_icon.background as GradientDrawable
         val navUserNameShort = nav_header.findViewById<TextView>(R.id.nav_profile_name)
 
-        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
-            curUser = it.toObject(Account::class.java)!!
-            curUserName.text = curUser?.userName.toString()
-            navUserName.text = curUser?.userName.toString()
-            navUserEmail.text = curUser?.email.toString()
-            val color = curUser?.userColor.toString()
-            if (color != null) {
-                navUserProfile.setColor(Color.parseColor(color))
-            }
-            navUserNameShort.text = curUser?.userName.toString().substring(0 until 1)
-
-            MySharedPreferences.setUserId(this, accountUId)
-            MySharedPreferences.setUserNickname(this, curUser?.userName.toString())
-            MySharedPreferences.setUserColor(this, color)
-            MySharedPreferences.setTheme(this, color)
-            setTheme(MySharedPreferences.getTheme(this))
-        }
+        curUserName.text = MySharedPreferences.getUserNickname(this)
+        navUserName.text = MySharedPreferences.getUserNickname(this)
+        navUserEmail.text = MySharedPreferences.getUserEmail(this)
+        navUserProfile.setColor(Color.parseColor(MySharedPreferences.getUserColor(this)))
+        navUserNameShort.text = MySharedPreferences.getUserNickname(this).substring(0 until 1)
 
         val notReadNotices = arrayListOf<Notifications>()
         db?.collection("Account")
@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     alarmButton.setBackgroundResource(R.drawable.alarm_close)
                 }
             }
-
 
         // --------------------------------골 추가 버튼 연결--------------------------------------- //
 
