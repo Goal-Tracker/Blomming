@@ -8,8 +8,8 @@ data class Account (
     var email: String = "",
     var userName: String ?= null,
     var userColor:String ?= null,
-    var myGoalList:List<String>?=null,
-    var notificationList:List<String>?=null,
+    var myGoalList:ArrayList<String> = arrayListOf(),
+    var notificationList:ArrayList<String>?=null,
     var userMessage:String?=null
 ) : Parcelable
 

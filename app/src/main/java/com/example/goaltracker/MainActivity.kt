@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             MySharedPreferences.setUserColor(this, color)
             MySharedPreferences.setUserColorInt(this, color)
             MySharedPreferences.setTheme(this, color)
+            MySharedPreferences.setGoalList(this, curUser.myGoalList)
         }
 
         db?.collection("Account")

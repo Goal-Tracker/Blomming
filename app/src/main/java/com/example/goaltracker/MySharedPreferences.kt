@@ -181,4 +181,37 @@ object MySharedPreferences {
         }
         return urls
     }
+
+    fun setGoalList(context: Context, values: ArrayList<String>) {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = prefs.edit()
+        var a = JSONArray()
+        for (value in values) {
+            a.put(value)
+        }
+        if (values.isNotEmpty()) {
+            editor.putString("goalList", a.toString())
+        } else {
+            editor.putString("goalList", null)
+        }
+        editor.apply()
+    }
+
+    fun getGoalList(context: Context) : ArrayList<String> {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        val json = prefs.getString("goalList", null)
+        val urls = ArrayList<String>()
+        if (json != null) {
+            try {
+                val a = JSONArray(json)
+                for (i in 0 until a.length()) {
+                    val url = a.optString(i)
+                    urls.add(url)
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
+        return urls
+    }
 }

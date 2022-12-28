@@ -167,7 +167,6 @@ class NoticeActivity : AppCompatActivity() {
         } else if (item.type == 2) {  // 골 초대
             viewHolder.notice_text.text = item.userName+"\n새로운 골에 초대받았습니다."
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
-            viewHolder.notice_button.text = "Goal 수락"
 
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color : String? = item.userColor
@@ -178,23 +177,37 @@ class NoticeActivity : AppCompatActivity() {
 
             var accountUId: String?=""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
-            viewHolder.notice_button.setOnClickListener {
-                firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
-                    var curUser = it.toObject(Account::class.java)!!
-                    val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString())
+            val goalList : ArrayList<String> = MySharedPreferences.getGoalList(this)
 
-                    firestore?.collection("Goal")?.document(item.goalUid.toString())
-                        ?.collection("team")
-                        ?.document(accountUId!!)
-                        ?.set(userInfo)
-                        ?.addOnSuccessListener {
-                            viewHolder.notice_button.text = "수락 완료"
-                            viewHolder.notice_button.isEnabled = false
-                        }
+            if (goalList.contains(item.goalUid)) {
+                viewHolder.notice_button.text = "수락 완료"
+                viewHolder.notice_button.isEnabled = false
+            }
+            if (!goalList.contains(item.goalUid)) {
+                viewHolder.notice_button.text = "Goal 수락"
+                viewHolder.notice_button.setOnClickListener {
+                    firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+                        var curUser = it.toObject(Account::class.java)!!
+                        val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString())
 
-                    val myGoalList : List<String>? = curUser.myGoalList
+                        firestore?.collection("Goal")?.document(item.goalUid.toString())
+                            ?.collection("team")
+                            ?.document(accountUId!!)
+                            ?.set(userInfo)
+                            ?.addOnSuccessListener {
+                                goalList.add(item.goalUid.toString())
+                                val goalUpdate = hashMapOf<String, Any?>(
+                                    "myGoalList" to goalList,
+                                )
+                                firestore?.collection("Account")?.document(accountUId)?.update(goalUpdate)
+                                viewHolder.notice_button.text = "수락 완료"
+                                viewHolder.notice_button.isEnabled = false
+                            }
 
-                    firestore?.collection("Account")?.document()
+                        val myGoalList : List<String>? = curUser.myGoalList
+
+                        firestore?.collection("Account")?.document()
+                    }
                 }
             }
 
