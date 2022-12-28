@@ -2,7 +2,9 @@ package com.example.goaltracker
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
+import org.json.JSONArray
+import org.json.JSONException
+
 
 object MySharedPreferences {
     private val MY_ACCOUNT : String = "account"
@@ -145,5 +147,38 @@ object MySharedPreferences {
     fun getTheme(context: Context): Int {
         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
         return prefs.getInt("theme", R.style.Theme_Mint)
+    }
+
+    fun setFriendList(context: Context, values: ArrayList<String>) {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        val editor : SharedPreferences.Editor = prefs.edit()
+        var a = JSONArray()
+        for (value in values) {
+            a.put(value)
+        }
+        if (values.isNotEmpty()) {
+            editor.putString("friendList", a.toString())
+        } else {
+            editor.putString("friendList", null)
+        }
+        editor.apply()
+    }
+
+    fun getFriendList(context: Context) : ArrayList<String> {
+        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+        val json = prefs.getString("friendList", null)
+        val urls = ArrayList<String>()
+        if (json != null) {
+            try {
+                val a = JSONArray(json)
+                for (i in 0 until a.length()) {
+                    val url = a.optString(i)
+                    urls.add(url)
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
+        return urls
     }
 }

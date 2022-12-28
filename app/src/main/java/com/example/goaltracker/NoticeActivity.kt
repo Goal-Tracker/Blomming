@@ -96,6 +96,8 @@ class NoticeActivity : AppCompatActivity() {
     private fun setNoticeList(holder: NoticesAdapter.ViewHolder, item: Notifications) {
         var viewHolder = (holder as NoticesAdapter.ViewHolder).itemView
 
+
+
         if (item.type == 0) { // 관리자 공지
             viewHolder.notice_text.text = item.message
             viewHolder.notice_profile_name.text = item.userName?.substring(0, 1)
@@ -110,7 +112,6 @@ class NoticeActivity : AppCompatActivity() {
         } else if (item.type == 1) {  // 친구 요청
             viewHolder.notice_text.text = item.userName+"님이 친구 요청을 보냈습니다."
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
-            viewHolder.notice_button.text = "친구 수락"
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color = item.userColor
             if (color != null) {
@@ -119,38 +120,49 @@ class NoticeActivity : AppCompatActivity() {
 
             var accountUId: String? = ""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
-            viewHolder.notice_button.setOnClickListener {
-                try {
-                    Log.d(item.requestUserId.toString(), "요청한 유저 아이디")
-                    firestore?.collection("Account")?.document(accountUId!!)
-                        ?.collection("Friend")
-                        ?.document(item.requestUserId.toString())
-                        ?.update("status", "friend")
-                        ?.addOnSuccessListener {
-                            // 내 account db에서 status friend로 바꾸기가 성공적으로 완료되면 상대방 account db에서 status friend로 바꾸기
-                            firestore?.collection("Account")?.document(item.requestUserId.toString())
-                                ?.collection("Friend")
-                                ?.document(accountUId!!)
-                                ?.update("status", "friend")
-                                ?.addOnSuccessListener {
-                                    viewHolder.notice_button.text = "수락 완료"
-                                    viewHolder.notice_button.isEnabled = false
-                                }
-                                ?.addOnFailureListener {
-                                    throw IllegalArgumentException()
-                                }
-                        }
-                        ?.addOnFailureListener {
-                            throw IllegalArgumentException()
-                        }
+            val friendList : ArrayList<String> = MySharedPreferences.getFriendList(this)
 
-                } catch(e: IllegalArgumentException) {
-                    val currentLayout = findViewById<View>(R.id.notice_view)
-                    val snackbar = Snackbar.make(currentLayout, "친구 수락에 실패했습니다.", Snackbar.LENGTH_LONG)
-                    snackbar.show()
-                }
-                // 내 친구 목록
+            if (friendList.contains(item.requestUserId.toString())){
+                viewHolder.notice_button.text = "수락 완료"
+                viewHolder.notice_button.isEnabled = false
             }
+
+            if (!friendList.contains(item.requestUserId.toString())) {
+                viewHolder.notice_button.text = "친구 수락"
+                viewHolder.notice_button.setOnClickListener {
+                    try {
+                        Log.d(item.requestUserId.toString(), "요청한 유저 아이디")
+                        firestore?.collection("Account")?.document(accountUId!!)
+                            ?.collection("Friend")
+                            ?.document(item.requestUserId.toString())
+                            ?.update("status", "friend")
+                            ?.addOnSuccessListener {
+                                // 내 account db에서 status friend로 바꾸기가 성공적으로 완료되면 상대방 account db에서 status friend로 바꾸기
+                                firestore?.collection("Account")?.document(item.requestUserId.toString())
+                                    ?.collection("Friend")
+                                    ?.document(accountUId!!)
+                                    ?.update("status", "friend")
+                                    ?.addOnSuccessListener {
+                                        viewHolder.notice_button.text = "수락 완료"
+                                        viewHolder.notice_button.isEnabled = false
+                                    }
+                                    ?.addOnFailureListener {
+                                        throw IllegalArgumentException()
+                                    }
+                            }
+                            ?.addOnFailureListener {
+                                throw IllegalArgumentException()
+                            }
+
+                    } catch(e: IllegalArgumentException) {
+                        val currentLayout = findViewById<View>(R.id.notice_view)
+                        val snackbar = Snackbar.make(currentLayout, "친구 수락에 실패했습니다.", Snackbar.LENGTH_LONG)
+                        snackbar.show()
+                    }
+                    // 내 친구 목록
+                }
+            }
+
 
         } else if (item.type == 2) {  // 골 초대
             viewHolder.notice_text.text = item.userName+"\n새로운 골에 초대받았습니다."
@@ -167,7 +179,6 @@ class NoticeActivity : AppCompatActivity() {
             var accountUId: String?=""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
             viewHolder.notice_button.setOnClickListener {
-
                 firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
                     var curUser = it.toObject(Account::class.java)!!
                     val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString())
@@ -180,6 +191,10 @@ class NoticeActivity : AppCompatActivity() {
                             viewHolder.notice_button.text = "수락 완료"
                             viewHolder.notice_button.isEnabled = false
                         }
+
+                    val myGoalList : List<String>? = curUser.myGoalList
+
+                    firestore?.collection("Account")?.document()
                 }
             }
 
