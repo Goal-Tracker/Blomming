@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/changePW_Btn"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout2"
         app:passwordToggleEnabled="false"
         tools:layout_editor_absoluteX="0dp">
@@ -75,74 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:textColor="#FF0000"
-            android:textSize="11sp"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
-        app:passwordToggleEnabled="true"
-        tools:layout_editor_absoluteX="16dp">
-
-        <EditText
-            android:id="@+id/change_PW"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginHorizontal="30dp"
-            android:background="@drawable/gray_edittext"
-            android:fontFamily="@font/ko_pub_world_dotum_medium"
-            android:hint="변경할 비밀번호를 입력하세요."
-            android:paddingLeft="15dp"
-            android:textColor="#363639"
-            android:textSize="13sp"
-            app:layout_constraintBottom_toTopOf="@+id/change_PW_confirm"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"></EditText>
-
-        <TextView
-            android:id="@+id/pwChange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:textColor="#FF0000"
-            android:textSize="11sp"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/changePW_Btn"
-        app:passwordToggleEnabled="true"
-        tools:layout_editor_absoluteX="0dp">
-
-        <EditText
-            android:id="@+id/change_PW_confirm"
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginHorizontal="30dp"
-            android:background="@drawable/gray_edittext"
-            android:fontFamily="@font/ko_pub_world_dotum_medium"
-            android:hint="변경할 비밀번호를 한번 더 입력하세요."
-            android:paddingLeft="15dp"
-            android:textColor="#363639"
-            android:textSize="13sp"
-            app:layout_constraintBottom_toTopOf="@+id/changePW_Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"></EditText>
-
-        <TextView
-            android:id="@+id/pwChange_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:textColor="#FF0000"
-            android:textSize="11sp"/>
+            android:textSize="11sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -156,7 +89,7 @@
         android:layout_marginBottom="35dp"
         android:background="@drawable/add_button"
         android:fontFamily="@font/ko_pub_world_dotum_medium"
-        android:text="비밀번호 변경하기"
+        android:text="비밀번호 변경 이메일 보내기"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
