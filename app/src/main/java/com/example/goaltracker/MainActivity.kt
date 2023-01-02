@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var rv_goal : RecyclerView
 
-    var curUser = Account()
+    private var curUser = Account()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
-            val color = curUser.userColor.toString()
+            var color = curUser.userColor.toString()
             MySharedPreferences.setUserId(this, accountUId)
             MySharedPreferences.setUserEmail(this, curUser.email)
             MySharedPreferences.setUserNickname(this, curUser.userName.toString())
@@ -54,6 +54,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             MySharedPreferences.setTheme(this, color)
             MySharedPreferences.setGoalList(this, curUser.myGoalList)
         }
+
+        Log.d("mysharedpreferences에 저장된 userColor", MySharedPreferences.getUserId(this)+MySharedPreferences.getUserColor(this))
 
         db?.collection("Account")
             ?.document(accountUId)
