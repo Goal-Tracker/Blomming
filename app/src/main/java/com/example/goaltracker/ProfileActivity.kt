@@ -181,7 +181,7 @@ class ProfileActivity : AppCompatActivity() {
                 val curUser = hashMapOf<String, Any?>(
                     "userName" to name.text.toString(),
                     "userColor" to backgroundColor,
-                    "uid" to firebaseAuth?.currentUser?.uid.toString()
+                    "uid" to accountUId
                 )
 
 //                curUser.Email = firebaseAuth?.currentUser?.email.toString()
@@ -191,6 +191,10 @@ class ProfileActivity : AppCompatActivity() {
                 Log.d("현재유저", curUser.toString())
 
                 fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
+
+                MySharedPreferences.setUserNickname(this, name.text.toString())
+                MySharedPreferences.setUserColor(this, backgroundColor)
+                MySharedPreferences.setUserId(this, accountUId)
 
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
