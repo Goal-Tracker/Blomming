@@ -163,32 +163,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         // 데이터 한 번만 가져오기
                         db.collection("Goal").document(goal_id).collection("team")
                             .whereEqualTo("request", true)
-                            .get()
-                            .addOnSuccessListener { result ->
-                                for (document in result) {
-                                    teamNameList.add(document["userName"].toString())
-                                    teamThemeList.add(document["profileColor"].toString())
+                            .addSnapshotListener { goalSnapshot, teampException ->
+                                if (teampException != null) {
+                                    Log.d(TAG, "Error getting documents: ", teampException)
+                                    return@addSnapshotListener
                                 }
 
-                                onGoingGoalDatas.add(
-                                    GoalRecordData(
-                                        goalId = goal_id,
-                                        title = title,
-                                        participateNum = result.size(),
-                                        startDate = start_day_str,
-                                        endDate = end_day_str,
-                                        todayNum = past_date,
-                                        stampNum = goal_day,
-                                        teamNameList = teamNameList,
-                                        teamThemeList = teamThemeList
-                                    )
-                                )
+                                if (goalSnapshot != null) {
+                                    for (document in goalSnapshot) {
+                                        teamNameList.add(document["userName"].toString())
+                                        teamThemeList.add(document["profileColor"].toString())
+                                    }
 
-                                goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
-                                goalRecordOngoingAdapter.notifyDataSetChanged()
-                            }
-                            .addOnFailureListener { exception ->
-                                Log.d(ContentValues.TAG, "Error getting documents: ", exception)
+                                    onGoingGoalDatas.add(
+                                        GoalRecordData(
+                                            goalId = goal_id,
+                                            title = title,
+                                            participateNum = goalSnapshot.size(),
+                                            startDate = start_day_str,
+                                            endDate = end_day_str,
+                                            todayNum = past_date,
+                                            stampNum = goal_day,
+                                            teamNameList = teamNameList,
+                                            teamThemeList = teamThemeList
+                                        )
+                                    )
+
+                                    goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
+                                    goalRecordOngoingAdapter.notifyDataSetChanged()
+                                }
                             }
                     }
                 }
