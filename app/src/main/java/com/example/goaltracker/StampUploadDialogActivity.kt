@@ -5,9 +5,9 @@ import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -43,7 +43,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var currentPhotoPath : String
-    private lateinit var imageResultURL : Uri
+    private var imageResultURL : Uri = Uri.EMPTY
 
     var fbStorage = FirebaseStorage.getInstance()
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
@@ -68,7 +68,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
         comment_editText = findViewById(R.id.comment_editText)
         commentUpload_button = findViewById(R.id.commentUpload_button)
         var bgButton: GradientDrawable = commentUpload_button.background as GradientDrawable
-        bgButton.setColor(ContextCompat.getColor(this, Color.parseColor(MySharedPreferences.getUserColor(this))))
+        bgButton.setColor(ContextCompat.getColor(this, MySharedPreferences.getUserColorInt(this)))
         infoText2 = findViewById(R.id.infoText2)
 
         if (type) {
@@ -95,20 +95,25 @@ class StampUploadDialogActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(it.context, "You Click Comment Upload Button", Toast.LENGTH_SHORT).show()
 
+                Log.d(TAG, "goal id : " + stampInfo.goal_id)
                 val goal_db = db.collection("Goal").document(stampInfo.goal_id)
 
                 goal_db.addSnapshotListener { goal_snapshot, e ->
                     try {
-                        val stamp_id = goal_snapshot?.get("Stamp_id") as String
+                        val stamp_id = goal_snapshot?.get("stampId") as String
+                        Log.d(TAG, "stamp_id : " + stamp_id)
 
                         if (stampNum != -1){
                             var imgFileName = ""
-                            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-                            imgFileName = stamp_id + "_" + timeStamp + ".png"
-                            val storageRef = fbStorage.reference.child("stamp").child(imgFileName)
 
-                            storageRef.putFile(imageResultURL).addOnSuccessListener {
-                                Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                            if (imageResultURL != Uri.EMPTY) {
+                                val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                                imgFileName = stamp_id + "_" + timeStamp + ".png"
+                                val storageRef = fbStorage.reference.child("stamp").child(imgFileName)
+
+                                storageRef.putFile(imageResultURL).addOnSuccessListener {
+                                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+                                }
                             }
 
                             val stampData = hashMapOf(
@@ -120,8 +125,9 @@ class StampUploadDialogActivity : AppCompatActivity() {
                                 "type" to type
                             )
 
-                            db.collection("Stamp").document(stamp_id)
-                                .update(
+                            Log.d(TAG, "stampData : $stampData")
+
+                            db.collection("Stamp").document(stamp_id).update(
                                     mapOf("dayRecord.day${stampNum}" to FieldValue.arrayUnion(stampData))
                                 )
                         } else {
