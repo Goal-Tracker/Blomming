@@ -96,8 +96,6 @@ class NoticeActivity : AppCompatActivity() {
     private fun setNoticeList(holder: NoticesAdapter.ViewHolder, item: Notifications) {
         var viewHolder = (holder as NoticesAdapter.ViewHolder).itemView
 
-
-
         if (item.type == 0) { // 관리자 공지
             viewHolder.notice_text.text = item.message
             viewHolder.notice_profile_name.text = item.userName?.substring(0, 1)
