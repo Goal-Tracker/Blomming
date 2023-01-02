@@ -40,8 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var accountUId : String?=""
-        accountUId = firebaseAuth?.currentUser?.uid.toString()
+        var accountUId = firebaseAuth?.currentUser?.uid.toString()
 
         db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!

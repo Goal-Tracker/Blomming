@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 import java.security.MessageDigest
@@ -27,7 +29,9 @@ class LoginActivity : AppCompatActivity() {
     lateinit var pwEt: EditText
     private val RC_SIGN_IN=9001
     //firebase auth
-    private var firebaseAuth: FirebaseAuth ?=null
+    val firebaseAuth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
+    private var curUser = Account()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +39,6 @@ class LoginActivity : AppCompatActivity() {
 
         emailEt=findViewById(R.id.loginEmail)
         pwEt=findViewById(R.id.loginPW)
-
-        firebaseAuth = Firebase.auth
 
         loginButton.setOnClickListener {
             signIn(loginEmail.text.toString(), loginPW.text.toString())
@@ -73,6 +75,23 @@ class LoginActivity : AppCompatActivity() {
                             baseContext, "로그인에 성공 하였습니다.",
                             Toast.LENGTH_SHORT
                         ).show()
+                        var accountUId = firebaseAuth?.currentUser?.uid.toString()
+                        Log.d("accountUId", accountUId)
+
+                        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+                            curUser = it.toObject(Account::class.java)!!
+                            var color = curUser.userColor.toString()
+                            MySharedPreferences.setUserId(this, accountUId)
+                            MySharedPreferences.setUserEmail(this, curUser.email)
+                            MySharedPreferences.setUserNickname(this, curUser.userName.toString())
+                            MySharedPreferences.setUserColor(this, color)
+                            MySharedPreferences.setUserColorInt(this, color)
+                            MySharedPreferences.setTheme(this, color)
+                            MySharedPreferences.setGoalList(this, curUser.myGoalList)
+                        }
+
+                        Log.d("MyShredPreferences", MySharedPreferences.getUserColor(this)+MySharedPreferences.getUserNickname(this)+MySharedPreferences.getUserId(this))
+
                         moveMainPage(firebaseAuth?.currentUser)
                     } else {
                         Toast.makeText(
