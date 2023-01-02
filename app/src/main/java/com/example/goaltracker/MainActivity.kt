@@ -269,4 +269,3 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return (calcDate+1).toInt()
     }
 }
-

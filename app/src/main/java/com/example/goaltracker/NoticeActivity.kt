@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.notice_view.*
 class NoticeActivity : AppCompatActivity() {
 
     lateinit var noticeAdapter: NoticesAdapter
-//    val notices = mutableListOf<Notification>()
+    //    val notices = mutableListOf<Notification>()
     var firebaseAuth : FirebaseAuth ?= null
     var firestore : FirebaseFirestore ?= null
 

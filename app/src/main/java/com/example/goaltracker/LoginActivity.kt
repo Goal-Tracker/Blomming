@@ -111,6 +111,3 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 }
-
-
-
