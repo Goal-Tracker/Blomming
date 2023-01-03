@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -121,6 +122,7 @@ class AddFriendActivity : AppCompatActivity() {
                 }
 
 
+
         }
 
 
@@ -134,6 +136,7 @@ class AddFriendActivity : AppCompatActivity() {
         // onCreateViewHolder에서 만든 view와 실제 데이터를 연결
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewHolder = (holder as ViewHolder).itemView
+
             holder.SetFriendAddName(friend_add[position])
             holder.SetFriendUid(friend_add[position])
             holder.SetProfileAddName(friend_add[position])
@@ -153,6 +156,9 @@ class AddFriendActivity : AppCompatActivity() {
 
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val friendList: ArrayList<String> =
+                MySharedPreferences.getFriendList(this@AddFriendActivity)
+
 
             private val AddName: TextView = itemView.findViewById(R.id.AddName)
             private val Adduid: TextView = itemView.findViewById(R.id.Adduid)
@@ -208,17 +214,16 @@ class AddFriendActivity : AppCompatActivity() {
             //친구 추가 버튼
             @SuppressLint("SuspiciousIndentation")
             fun AddFriendBtnOnclick(item: Friend) {
-                val friendList: ArrayList<String> =
-                    MySharedPreferences.getFriendList(this@AddFriendActivity)
-
                 if (friendList.contains(item.uid.toString())) {
                     AddBtn.text = "신청 보냄"
                     AddBtn.isEnabled = false
                 }
+
                 if (!friendList.contains(item.uid.toString())) {
                     AddBtn.text = "친구 요청"
                     AddBtn.setOnClickListener {
                         try {
+                            Log.d(item.uid.toString(), "요청한 유저 아이디")
                             val nowTime = System.currentTimeMillis()
                             val timeformatter = SimpleDateFormat("yyyy.MM.dd.hh.mm")
                             val dateTime = timeformatter.format(nowTime)
@@ -261,10 +266,10 @@ class AddFriendActivity : AppCompatActivity() {
                                                                 "친구 신청을 보냈습니다.",
                                                                 Toast.LENGTH_SHORT
                                                             ).show()
-
+                                                            friendList.add(item.uid.toString())
                                                             AddBtn.text = "신청 보냄"
                                                             AddBtn.isEnabled = false
-
+                                                            Log.d(friendList.toString(), "저장")
                                                         }
                                                         ?.addOnFailureListener {}
 
@@ -371,7 +376,7 @@ class AddFriendActivity : AppCompatActivity() {
                                                                             "친구 신청을 보냈습니다.",
                                                                             Toast.LENGTH_SHORT
                                                                         ).show()
-
+                                                                        friendList.add(item.uid.toString())
                                                                         AddBtn.text = "신청 보냄"
                                                                         AddBtn.isEnabled = false
 
