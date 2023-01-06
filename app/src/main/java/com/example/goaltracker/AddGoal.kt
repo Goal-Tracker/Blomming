@@ -49,9 +49,8 @@ class AddGoal : AppCompatActivity() {
     // ArrayList 생성
     var FriendsList : ArrayList<Friend> = arrayListOf()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(MySharedPreferences.getTheme(this))
+        setTheme(MySharedPreferences.getTheme(this)) // 테마적용
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_goal)
 
@@ -134,6 +133,7 @@ class AddGoal : AppCompatActivity() {
                 "endDay" to endDay.text.toString(),
                 "memo" to memo.text.toString(),
                 "action" to true,
+                "request" to true,
                 "stampId" to stampID,
                 "day" to fewDay(),  //날짜 차이 계산
             )
@@ -159,6 +159,7 @@ class AddGoal : AppCompatActivity() {
 
             // Account에 goalList 저장
             firestore!!.collection("Account").document(accountUId).collection("Notification")
+                ?.whereEqualTo("request", true)
                 .addSnapshotListener { value, e ->
                     val goalList = ArrayList<String>()
                     goalList.clear()
@@ -176,6 +177,7 @@ class AddGoal : AppCompatActivity() {
                 "goalUid" to goalID,
                 "message" to memo.text.toString(),
                 "type" to 2,
+                "request" to true
             )
             firestore?.collection("Account")?.document("$accountUId")
                 ?.collection("Notification")?.document()?.set(notification_goal)

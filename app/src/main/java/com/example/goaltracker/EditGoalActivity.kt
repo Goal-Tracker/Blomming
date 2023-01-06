@@ -44,9 +44,9 @@ class EditGoalActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(MySharedPreferences.getTheme(this)) // 테마적용
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_goal)
-
 
         searchWord.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
