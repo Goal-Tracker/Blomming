@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import org.json.JSONArray
 import org.json.JSONException
 
-
 object MySharedPreferences {
     private val MY_ACCOUNT : String = "account"
 
@@ -62,40 +61,56 @@ object MySharedPreferences {
         val editor : SharedPreferences.Editor = prefs.edit()
 
         var themeName = R.color.profile_color_coral
-        if (input == "#f69b94") {
-            themeName = R.color.profile_color_coral
-        } else if (input == "#f8c8c4") {
-            themeName =R.color.profile_color_babyPink
-        } else if (input == "#fcdcce") {
-            themeName = R.color.profile_color_lightOrange
-        } else if (input == "#96b0e5") {
-            themeName = R.color.profile_color_blue
-        } else if (input == "#92b9e2") {
-            themeName = R.color.profile_color_lightBlue
-        } else if (input == "#ebc0c7") {
-            themeName = R.color.profile_color_lightPink
-        } else if (input == "#7bb6c8") {
-            themeName = R.color.profile_color_turquoise
-        } else if (input == "#aad3d7") {
-            themeName = R.color.profile_color_mint
-        } else if (input == "#f5f1f0") {
-            themeName = R.color.profile_color_beige
-        } else if (input == "#d5e3e6") {
-            themeName = R.color.profile_color_lightGreen
-        } else if (input == "#f2a4b1") {
-            themeName = R.color.profile_color_lightCoral
-        } else if (input == "#7175a5") {
-            themeName = R.color.profile_color_indigo
-        } else if (input == "#a1b3d7") {
-            themeName = R.color.profile_color_babyBlue
-        } else if (input == "#bd83cf") {
-            themeName = R.color.profile_color_purple
-        } else if (input == "#e5afe9") {
-            themeName = R.color.profile_color_lightPurple
+        when (input) {
+            "#f69b94" -> {
+                themeName = R.color.profile_color_coral
+            }
+            "#f8c8c4" -> {
+                themeName =R.color.profile_color_babyPink
+            }
+            "#fcdcce" -> {
+                themeName = R.color.profile_color_lightOrange
+            }
+            "#96b0e5" -> {
+                themeName = R.color.profile_color_blue
+            }
+            "#92b9e2" -> {
+                themeName = R.color.profile_color_lightBlue
+            }
+            "#ebc0c7" -> {
+                themeName = R.color.profile_color_lightPink
+            }
+            "#7bb6c8" -> {
+                themeName = R.color.profile_color_turquoise
+            }
+            "#aad3d7" -> {
+                themeName = R.color.profile_color_mint
+            }
+            "#f5f1f0" -> {
+                themeName = R.color.profile_color_beige
+            }
+            "#d5e3e6" -> {
+                themeName = R.color.profile_color_lightGreen
+            }
+            "#f2a4b1" -> {
+                themeName = R.color.profile_color_lightCoral
+            }
+            "#7175a5" -> {
+                themeName = R.color.profile_color_indigo
+            }
+            "#a1b3d7" -> {
+                themeName = R.color.profile_color_babyBlue
+            }
+            "#bd83cf" -> {
+                themeName = R.color.profile_color_purple
+            }
+            "#e5afe9" -> {
+                themeName = R.color.profile_color_lightPurple
+            }
         }
 
         editor.putInt("userColorInt", themeName)
-        editor.commit()
+        editor.apply()
     }
 
     fun getUserColorInt(context: Context): Int {
@@ -108,36 +123,52 @@ object MySharedPreferences {
         val editor : SharedPreferences.Editor = prefs.edit()
 
         var themeName = R.style.Theme_Coral
-        if (theme == "#f69b94") {
-            themeName = R.style.Theme_Coral
-        } else if (theme == "#f8c8c4") {
-            themeName = R.style.Theme_BabyPink
-        } else if (theme == "#fcdcce") {
-            themeName = R.style.Theme_LightOrange
-        } else if (theme == "#96b0e5") {
-            themeName = R.style.Theme_Blue
-        } else if (theme == "#92b9e2") {
-            themeName = R.style.Theme_LightBlue
-        } else if (theme == "#ebc0c7") {
-            themeName = R.style.Theme_LightPink
-        } else if (theme == "#7bb6c8") {
-            themeName = R.style.Theme_Turquoise
-        } else if (theme == "#aad3d7") {
-            themeName = R.style.Theme_Mint
-        } else if (theme == "#f5f1f0") {
-            themeName = R.style.Theme_Beige
-        } else if (theme == "#d5e3e6") {
-            themeName = R.style.Theme_LightGreen
-        } else if (theme == "#f2a4b1") {
-            themeName = R.style.Theme_LightCoral
-        } else if (theme == "#7175a5") {
-            themeName = R.style.Theme_Indigo
-        } else if (theme == "#a1b3d7") {
-            themeName = R.style.Theme_BabyBlue
-        } else if (theme == "#bd83cf") {
-            themeName = R.style.Theme_Purple
-        } else if (theme == "#e5afe9") {
-            themeName = R.style.Theme_LightPurple
+        when (theme) {
+            "#f69b94" -> {
+                themeName = R.style.Theme_Coral
+            }
+            "#f8c8c4" -> {
+                themeName = R.style.Theme_BabyPink
+            }
+            "#fcdcce" -> {
+                themeName = R.style.Theme_LightOrange
+            }
+            "#96b0e5" -> {
+                themeName = R.style.Theme_Blue
+            }
+            "#92b9e2" -> {
+                themeName = R.style.Theme_LightBlue
+            }
+            "#ebc0c7" -> {
+                themeName = R.style.Theme_LightPink
+            }
+            "#7bb6c8" -> {
+                themeName = R.style.Theme_Turquoise
+            }
+            "#aad3d7" -> {
+                themeName = R.style.Theme_Mint
+            }
+            "#f5f1f0" -> {
+                themeName = R.style.Theme_Beige
+            }
+            "#d5e3e6" -> {
+                themeName = R.style.Theme_LightGreen
+            }
+            "#f2a4b1" -> {
+                themeName = R.style.Theme_LightCoral
+            }
+            "#7175a5" -> {
+                themeName = R.style.Theme_Indigo
+            }
+            "#a1b3d7" -> {
+                themeName = R.style.Theme_BabyBlue
+            }
+            "#bd83cf" -> {
+                themeName = R.style.Theme_Purple
+            }
+            "#e5afe9" -> {
+                themeName = R.style.Theme_LightPurple
+            }
         }
 
         editor.putInt("theme", themeName)

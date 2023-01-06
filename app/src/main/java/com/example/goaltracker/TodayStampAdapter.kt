@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -44,7 +43,6 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
 
         private var view: View = view
 
-        private val certification_default_layout: ConstraintLayout = itemView.findViewById(R.id.certification_default_layout)
         private val certification_default_view: View = itemView.findViewById(R.id.certification_default_view)
         private val certification_default_textView: TextView = itemView.findViewById(R.id.certification_default_textView)
         var bgCertDefault : GradientDrawable = certification_default_view.background as GradientDrawable
@@ -81,7 +79,6 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
                         certification_default_textView.visibility = View.VISIBLE
                     }
                 }
-
 
             } else {
                 bgCertDefault.setColor(Color.parseColor(Data.theme))

@@ -1,9 +1,7 @@
 package com.example.goaltracker
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,7 +15,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
 import kotlinx.android.synthetic.main.drawer_main.*
@@ -31,7 +28,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val firebaseAuth =FirebaseAuth.getInstance()
 
     lateinit var goalRecordOngoingAdapter: GoalRecordAdapter
-    val onGoingGoalDatas = ArrayList<GoalRecordData>()
 
     private lateinit var rv_goal : RecyclerView
 
@@ -42,7 +38,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         var accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+        db.collection("Account").document(accountUId).get().addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
             var color = curUser.userColor.toString()
             MySharedPreferences.setUserId(this, accountUId)
@@ -56,12 +52,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         Log.d("mysharedpreferences에 저장된 userColor", MySharedPreferences.getUserId(this)+MySharedPreferences.getUserColor(this))
 
-        db?.collection("Account")
-            ?.document(accountUId)
-            ?.collection("Friend")
-            ?.whereEqualTo("status", "friend")
-            ?.get()
-            ?.addOnSuccessListener { friendList ->
+        db.collection("Account")
+            .document(accountUId)
+            .collection("Friend")
+            .whereEqualTo("status", "friend")
+            .get()
+            .addOnSuccessListener { friendList ->
                 Log.d("status가 friend인 문서 개수", friendList.size().toString())
                 val friendDocuments: MutableList<DocumentSnapshot> = friendList.documents
                 var friendsUId : ArrayList<String> ?= arrayListOf()
@@ -98,14 +94,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         curUserName.text = MySharedPreferences.getUserNickname(this)
         navUserName.text = MySharedPreferences.getUserNickname(this)
         navUserEmail.text = MySharedPreferences.getUserEmail(this)
-        navUserProfile.setColor(Color.parseColor(MySharedPreferences.getUserColor(this)))
+        navUserProfile.setColor(MySharedPreferences.getUserColorInt(this))
         navUserNameShort.text = MySharedPreferences.getUserNickname(this).substring(0 until 1)
 
         val notReadNotices = arrayListOf<Notifications>()
-        db?.collection("Account")
-            ?.document(accountUId)
-            ?.collection("Notification")
-            ?.whereArrayContains("read", false)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+        db.collection("Account")
+            .document(accountUId)
+            .collection("Notification")
+            .whereArrayContains("read", false).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 notReadNotices.clear()
 
                 for (snapshot in querySnapshot!!.documents) {
@@ -144,15 +140,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         rv_goal.adapter = goalRecordOngoingAdapter
 
         // 추후엔 Dataframe에서 가져다 사용하기
-//        val temp_goal_list = arrayOf("b9ae2c85-c200-43a8-8840-1670896f93b6")
-
-        db.collection("Account").document(accountUId).get().addOnSuccessListener {
-            curUser = it.toObject(Account::class.java)!!
-            curUser.myGoalList?.forEach { goal_id ->
+        db.collection("Account").document(accountUId).addSnapshotListener { it, accountException ->
+            val onGoingGoalDatas = ArrayList<GoalRecordData>()
+            curUser = it?.toObject(Account::class.java)!!
+            curUser.myGoalList.forEach { goal_id ->
                 Log.d(TAG, "goal id : $goal_id")
                 val goal_db = db.collection("Goal").document(goal_id)
 
-                goal_db.addSnapshotListener { snapshot, e ->
+                goal_db.addSnapshotListener { snapshot, goalException ->
                     var teamNameList = arrayListOf<String>()
                     var teamThemeList = arrayListOf<String>()
                     val goal_day = snapshot?.get("day").toString().toInt()
@@ -168,32 +163,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         // 데이터 한 번만 가져오기
                         db.collection("Goal").document(goal_id).collection("team")
                             .whereEqualTo("request", true)
-                            .get()
-                            .addOnSuccessListener { result ->
-                                for (document in result) {
-                                    teamNameList.add(document["userName"].toString())
-                                    teamThemeList.add(document["profileColor"].toString())
+                            .addSnapshotListener { goalSnapshot, teampException ->
+                                if (teampException != null) {
+                                    Log.d(TAG, "Error getting documents: ", teampException)
+                                    return@addSnapshotListener
                                 }
 
-                                onGoingGoalDatas.add(
-                                    GoalRecordData(
-                                        goalId = goal_id,
-                                        title = title,
-                                        participateNum = result.size(),
-                                        startDate = start_day_str,
-                                        endDate = end_day_str,
-                                        todayNum = past_date,
-                                        stampNum = goal_day,
-                                        teamNameList = teamNameList,
-                                        teamThemeList = teamThemeList
-                                    )
-                                )
+                                if (goalSnapshot != null) {
+                                    for (document in goalSnapshot) {
+                                        teamNameList.add(document["userName"].toString())
+                                        teamThemeList.add(document["profileColor"].toString())
+                                    }
 
-                                goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
-                                goalRecordOngoingAdapter.notifyDataSetChanged()
-                            }
-                            .addOnFailureListener { exception ->
-                                Log.d(ContentValues.TAG, "Error getting documents: ", exception)
+                                    onGoingGoalDatas.add(
+                                        GoalRecordData(
+                                            goalId = goal_id,
+                                            title = title,
+                                            participateNum = goalSnapshot.size(),
+                                            startDate = start_day_str,
+                                            endDate = end_day_str,
+                                            todayNum = past_date,
+                                            stampNum = goal_day,
+                                            teamNameList = teamNameList,
+                                            teamThemeList = teamThemeList
+                                        )
+                                    )
+
+                                    goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
+                                    goalRecordOngoingAdapter.notifyDataSetChanged()
+                                }
                             }
                     }
                 }
@@ -233,8 +231,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 })
             }
             R.id.nav_logOut-> {
-                if (firebaseAuth?.currentUser != null) {
-                    firebaseAuth?.signOut()
+                if (firebaseAuth.currentUser != null) {
+                    firebaseAuth.signOut()
                     onBackPressed()
                     startActivity(Intent(this, LoginActivity::class.java))
                 } else {

@@ -35,9 +35,9 @@ class AnnouncementActivity : AppCompatActivity() {
 
         db.collection("Announcement")
             .get()
-            .addOnSuccessListener { annoucements ->
+            .addOnSuccessListener { announcements ->
                 val announcementData = ArrayList<AnnouncementData>()
-                for (announcement in annoucements) {
+                for (announcement in announcements) {
                     Log.d(TAG, "${announcement.id} => ${announcement.data}")
 
                     val subject = announcement.data["subject"].toString()
