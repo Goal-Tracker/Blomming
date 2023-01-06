@@ -38,42 +38,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         var accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-        db.collection("Account").document(accountUId).get().addOnSuccessListener {
-            curUser = it.toObject(Account::class.java)!!
-            var color = curUser.userColor.toString()
-            MySharedPreferences.setUserId(this, accountUId)
-            MySharedPreferences.setUserEmail(this, curUser.email)
-            MySharedPreferences.setUserNickname(this, curUser.userName.toString())
-            MySharedPreferences.setUserColor(this, color)
-            MySharedPreferences.setUserColorInt(this, color)
-            MySharedPreferences.setTheme(this, color)
-            MySharedPreferences.setGoalList(this, curUser.myGoalList)
-        }
-
-        Log.d("mysharedpreferences에 저장된 userColor", MySharedPreferences.getUserId(this)+MySharedPreferences.getUserColor(this))
-
-        db.collection("Account")
-            .document(accountUId)
-            .collection("Friend")
-            .whereEqualTo("status", "friend")
-            .get()
-            .addOnSuccessListener { friendList ->
-                Log.d("status가 friend인 문서 개수", friendList.size().toString())
-                val friendDocuments: MutableList<DocumentSnapshot> = friendList.documents
-                var friendsUId : ArrayList<String> ?= arrayListOf()
-                for (document in friendDocuments) {
-                    friendsUId?.add(document.id)
-                }
-                if (friendsUId != null) {
-                    MySharedPreferences.setFriendList(this, friendsUId)
-                }
-                val list : ArrayList<String> = MySharedPreferences.getFriendList(this)
-                if (list!=null) {
-                    for (value in list) {
-                        Log.d("mysharedpreferences에 저장된 friend", value)
-                    }
-                }
-            }
+        Log.d("friendsList", MySharedPreferences.getFriendList(this).toString())
+        Log.d("userColor", MySharedPreferences.getUserColor(this))
 
         setTheme(MySharedPreferences.getTheme(this))
         setContentView(R.layout.drawer_main)
@@ -95,7 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navUserName.text = MySharedPreferences.getUserNickname(this)
         navUserEmail.text = MySharedPreferences.getUserEmail(this)
         navUserProfile.setColor(MySharedPreferences.getUserColorInt(this))
-        navUserNameShort.text = MySharedPreferences.getUserNickname(this).substring(0 until 1)
+        navUserNameShort.text = (MySharedPreferences.getUserNickname(this)).substring(0 until 1)
 
         val notReadNotices = arrayListOf<Notifications>()
         db.collection("Account")
