@@ -147,7 +147,8 @@ class AddGoal : AppCompatActivity() {
                 val user = hashMapOf(
                     "userName" to userName,
                     "uid" to userUid,
-                    "profileColor" to profle
+                    "profileColor" to profle,
+                    "request" to true
                 )
                 firestore!!.collection("Goal")
                     .document(goalID)
@@ -300,7 +301,7 @@ class AddGoal : AppCompatActivity() {
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
                             "profileColor" to item.userColor.toString(),
-                            "request" to false,
+                            "request" to false
                             )
 
                         firestore!!.collection("Goal")
