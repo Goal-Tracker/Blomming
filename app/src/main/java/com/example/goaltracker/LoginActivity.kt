@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -29,9 +30,10 @@ class LoginActivity : AppCompatActivity() {
     lateinit var pwEt: EditText
     private val RC_SIGN_IN=9001
     //firebase auth
-    val firebaseAuth = FirebaseAuth.getInstance()
+    val auth = FirebaseAuth.getInstance()
     val db = FirebaseFirestore.getInstance()
     private var curUser = Account()
+    private var accountUId:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,24 +62,18 @@ class LoginActivity : AppCompatActivity() {
     // 로그아웃하지 않을 시 자동 로그인 , 회원가입시 바로 로그인 됨
     public override fun onStart() {
         super.onStart()
-        toMainActivity(firebaseAuth?.currentUser)
+        toMainActivity(auth?.currentUser)
     }
 
     // 로그인
     private fun signIn(email: String, password: String) {
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
-            firebaseAuth?.signInWithEmailAndPassword(email, password)
+            auth?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-
-                        Toast.makeText(
-                            baseContext, "로그인에 성공 하였습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        var accountUId = firebaseAuth?.currentUser?.uid.toString()
+                        accountUId = auth?.currentUser?.uid.toString()
                         Log.d("accountUId", accountUId)
-
                         db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
                             curUser = it.toObject(Account::class.java)!!
                             var color = curUser.userColor.toString()
@@ -88,11 +84,35 @@ class LoginActivity : AppCompatActivity() {
                             MySharedPreferences.setUserColorInt(this, color)
                             MySharedPreferences.setTheme(this, color)
                             MySharedPreferences.setGoalList(this, curUser.myGoalList)
+
+                            db.collection("Account")
+                                .document(accountUId)
+                                .collection("Friend")
+                                .whereEqualTo("status", "friend")
+                                .get()
+                                .addOnSuccessListener { friendList ->
+                                    Log.d("status가 friend인 문서 개수", friendList.size().toString())
+                                    val friendDocuments: MutableList<DocumentSnapshot> = friendList.documents
+                                    var friendsUId : ArrayList<String> ?= arrayListOf()
+                                    for (document in friendDocuments) {
+                                        friendsUId?.add(document.id)
+                                    }
+                                    if (friendsUId != null) {
+                                        MySharedPreferences.setFriendList(this, friendsUId)
+                                    }
+                                    val list : ArrayList<String> = MySharedPreferences.getFriendList(this)
+                                    if (list!=null) {
+                                        for (value in list) {
+                                            Log.d("mysharedpreferences에 저장된 friend", value)
+                                        }
+                                    }
+                                }
+                            moveMainPage(auth?.currentUser)
                         }
-
-                        Log.d("MyShredPreferences", MySharedPreferences.getUserColor(this)+MySharedPreferences.getUserNickname(this)+MySharedPreferences.getUserId(this))
-
-                        moveMainPage(firebaseAuth?.currentUser)
+                        Toast.makeText(
+                            baseContext, "로그인에 성공 하였습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         Toast.makeText(
                             baseContext, "로그인에 실패 하였습니다.",
@@ -106,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
 
     // 유저정보 넘겨주고 프로필 설정 액티비티 호출
     fun moveMainPage(user: FirebaseUser?){
-        if( user!= null){
+        if(user!= null){
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
