@@ -41,6 +41,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d("friendsList", MySharedPreferences.getFriendList(this).toString())
         Log.d("userColor", MySharedPreferences.getUserColor(this))
 
+        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+            curUser = it.toObject(Account::class.java)!!
+            var color = curUser.userColor.toString()
+            MySharedPreferences.setUserNickname(this, curUser.userName.toString())
+            MySharedPreferences.setUserColor(this, color)
+            MySharedPreferences.setUserColorInt(this, color)
+            MySharedPreferences.setTheme(this, color)
+            MySharedPreferences.setUserMessage(this, curUser.userMessage.toString())
+        }
+
         setTheme(MySharedPreferences.getTheme(this))
         setContentView(R.layout.drawer_main)
 
@@ -54,13 +64,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val nav_header = nav_view.getHeaderView(0)
         val navUserName = nav_header.findViewById<TextView>(R.id.nav_userName)
         val navUserEmail = nav_header.findViewById<TextView>(R.id.nav_userId)
-        var navUserProfile :GradientDrawable = nav_header.nav_profile_icon.background as GradientDrawable
+        //var navUserProfile :GradientDrawable = nav_header.nav_profile_icon.background as GradientDrawable
         val navUserNameShort = nav_header.findViewById<TextView>(R.id.nav_profile_name)
 
         curUserName.text = MySharedPreferences.getUserNickname(this)
         navUserName.text = MySharedPreferences.getUserNickname(this)
         navUserEmail.text = MySharedPreferences.getUserEmail(this)
-        navUserProfile.setColor(MySharedPreferences.getUserColorInt(this))
+        //navUserProfile.setColor(MySharedPreferences.getUserColorInt(this))
         navUserNameShort.text = (MySharedPreferences.getUserNickname(this)).substring(0 until 1)
 
         val notReadNotices = arrayListOf<Notifications>()

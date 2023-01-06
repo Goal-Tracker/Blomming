@@ -168,7 +168,6 @@ class NoticeActivity : AppCompatActivity() {
 
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color : String? = item.userColor
-            Log.d(item.userColor, "유저 컬러")
             if (color != null) {
                 profileColor.setColor(Color.parseColor(color))
             }

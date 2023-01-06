@@ -2,18 +2,13 @@ package com.example.goaltracker
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.profile_setting.*
 
 class ProfileSettingDialog(context: Context) : Dialog(context){
@@ -213,11 +208,13 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
 
         edit_profile.setOnClickListener {
             // 프로필 색상 및 닉네임 수정 코드 추가 필요
-            if (edit_nick == null) {
+            var nick = edit_nick.text.toString()
+            var message = edit_message.text.toString()
+            if (nick == "") {
                 Toast.makeText(it.context, "닉네임을 입력하세요", Toast.LENGTH_LONG)
                 Log.d("test", "닉네임 입력안함")
             } else {
-                if (edit_message!=null){
+                if (message!=""){
                     val curUser = hashMapOf<String, Any?>(
                         "userName" to edit_nick.text.toString(),
                         "userColor" to edit_profile_color,
@@ -225,17 +222,16 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
                     )
                     fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
                 }
-                if (edit_message==null) {
+                if (message=="") {
                     val curUser = hashMapOf<String, Any?>(
                         "userName" to edit_nick.text.toString(),
                         "userColor" to edit_profile_color,
                     )
                     fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
                 }
+                Toast.makeText(it.context, "프로필 설정 완료", Toast.LENGTH_LONG)
+                dialog.dismiss()
             }
-            Toast.makeText(it.context, "프로필 설정 완료", Toast.LENGTH_LONG)
-            Log.d("test", "프로필 설정 완료")
-            dialog.dismiss()
         }
     }
 
