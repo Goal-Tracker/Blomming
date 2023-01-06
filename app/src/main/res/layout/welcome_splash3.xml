@@ -27,7 +27,7 @@
         android:text="나만의 목표를 설정해보아요!"
         android:textSize="18sp"
         android:textStyle="bold|normal"
-        tools:textColor="#33334f" />
+        android:textColor="#33334f" />
 
     <TextView
         android:layout_width="265dp"
@@ -38,6 +38,6 @@
         android:text="목표 기간을 설정할 수 있고 목표 달성을 함께할 친구를 초대할 수 있어요 "
         android:textSize="14sp"
         android:textStyle="normal"
-        tools:textColor="#33334f" />
+        android:textColor="#33334f" />
 
 </LinearLayout>

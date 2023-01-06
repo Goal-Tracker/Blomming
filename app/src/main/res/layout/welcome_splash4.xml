@@ -27,7 +27,7 @@
         android:text="색상 설정으로 다양한 테마를 설정해보아요!"
         android:textSize="18sp"
         android:textStyle="bold|normal"
-        tools:textColor="#33334f" />
+        android:textColor="#33334f" />
 
     <TextView
         android:layout_width="317dp"
@@ -38,6 +38,6 @@
         android:text="프로필 색상을 설정하여 원하는 도장 색을 정할 수 있고 테마 색상을 변경할 수 있어요"
         android:textSize="14sp"
         android:textStyle="normal"
-        tools:textColor="#33334f" />
+        android:textColor="#33334f" />
 
 </LinearLayout>
