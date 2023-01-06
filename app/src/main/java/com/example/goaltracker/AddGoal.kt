@@ -133,7 +133,6 @@ class AddGoal : AppCompatActivity() {
                 "endDay" to endDay.text.toString(),
                 "memo" to memo.text.toString(),
                 "action" to true,
-                "request" to true,
                 "stampId" to stampID,
                 "day" to fewDay(),  //날짜 차이 계산
             )
@@ -300,8 +299,9 @@ class AddGoal : AppCompatActivity() {
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
-                            "profileColor" to item.userColor.toString()
-                        )
+                            "profileColor" to item.userColor.toString(),
+                            "request" to false,
+                            )
 
                         firestore!!.collection("Goal")
                             .document(goalID)
