@@ -1,0 +1,601 @@
+Index: app/src/main/java/com/example/goaltracker/AddFriendActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.goaltracker\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.graphics.Color\r\nimport android.graphics.drawable.ColorDrawable\r\nimport android.os.Bundle\r\nimport android.text.Editable\r\nimport android.text.TextWatcher\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.view.Window\r\nimport android.widget.Button\r\nimport android.widget.ImageView\r\nimport android.widget.TextView\r\nimport android.widget.Toast\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.google.firebase.auth.ktx.auth\r\nimport com.google.firebase.firestore.FieldValue\r\nimport com.google.firebase.firestore.FirebaseFirestore\r\nimport com.google.firebase.ktx.Firebase\r\nimport kotlinx.android.synthetic.main.activity_add_friend.searchWord\r\nimport kotlinx.android.synthetic.main.activity_add_friend.*\r\nimport kotlinx.android.synthetic.main.item_friend_add.*\r\nimport kotlinx.android.synthetic.main.report_dialog.*\r\nimport java.text.SimpleDateFormat\r\nimport java.util.*\r\nimport kotlin.collections.ArrayList\r\n\r\n\r\n\r\nclass AddFriendActivity : AppCompatActivity() {\r\n    //파이어스토어\r\n    var firestore: FirebaseFirestore? = null\r\n    private val currentUser = Firebase.auth.currentUser?.uid\r\n\r\n    var searchcount = 0  //사람 수\r\n    private lateinit var dialog: ReportDialog  //다이얼로그\r\n    lateinit var index: String\r\n    lateinit var msgindex: String\r\n    var indexname : String? = null\r\n    var indexemail : String? = null\r\n    var indexcolor : String? = null\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        setTheme(MySharedPreferences.getTheme(this))\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(R.layout.activity_add_friend)\r\n\r\n        searchWord.addTextChangedListener(object : TextWatcher {\r\n\r\n            //텍스트가 변경되기 바로 이전에 동작\r\n            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}\r\n\r\n            //텍스트가 변경되는 동시에 동작\r\n            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}\r\n\r\n            // 텍스트가 변경된 이후에 동작\r\n            override fun afterTextChanged(editable: Editable) {\r\n                // input창에 문자를 입력할때마다 호출된다.\r\n                // search 메소드를 호출한다.\r\n                (FriendAddRecyclerView.adapter as RecyclerViewAdapter).search(searchWord.text.toString())\r\n            }\r\n        })\r\n\r\n        // 파이어스토어 인스턴스 초기화\r\n        firestore = FirebaseFirestore.getInstance()\r\n\r\n        FriendAddRecyclerView.adapter = RecyclerViewAdapter()\r\n        FriendAddRecyclerView.layoutManager = LinearLayoutManager(this)\r\n\r\n\r\n        //x버튼 누르면 main 화면으로 이동\r\n        backBtn.setOnClickListener {\r\n            startActivity(Intent(this, FriendActivity::class.java))\r\n        }\r\n\r\n\r\n        // 검색 옵션에 따라 검색\r\n        searchBtn.setOnClickListener {\r\n            (FriendAddRecyclerView.adapter as RecyclerViewAdapter).search(searchWord.text.toString())\r\n        }\r\n\r\n\r\n    }\r\n\r\n    //인원 카운트\r\n    fun getCount() {\r\n        var text_count = findViewById<TextView>(R.id.search_count)\r\n        text_count.text = \"\" + searchcount + \"명\"\r\n    }\r\n\r\n\r\n    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {\r\n        // Friend 클래스 ArrayList 생성성\r\n        var friend_add: ArrayList<Friend> = arrayListOf()\r\n\r\n        init {  // Account의 문서를 불러온 뒤 Friend으로 변환해 ArrayList에 담음\r\n            firestore?.collection(\"Account\")\r\n                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->\r\n                    // ArrayList 비워줌\r\n                    friend_add.clear()\r\n\r\n                    for (snapshot in querySnapshot!!.documents) {\r\n                        var item = snapshot.toObject(Friend::class.java)\r\n                        friend_add.add(item!!)\r\n                    }\r\n\r\n\r\n                    notifyDataSetChanged()\r\n                }\r\n\r\n        }\r\n\r\n        // xml파일을 inflate하여 ViewHolder를 생성\r\n        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {\r\n            var view =\r\n                LayoutInflater.from(parent.context).inflate(R.layout.item_friend_add, parent, false)\r\n            return ViewHolder(view)\r\n        }\r\n\r\n        // onCreateViewHolder에서 만든 view와 실제 데이터를 연결\r\n        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {\r\n            var viewHolder = (holder as ViewHolder).itemView\r\n            holder.SetFriendAddName(friend_add[position])\r\n            holder.SetFriendUid(friend_add[position])\r\n            holder.SetProfileAddName(friend_add[position])\r\n            holder.AddFriendBtnOnclick(friend_add[position])\r\n            holder.SetFriendAddColor(friend_add[position])\r\n            holder.SetFriendAddEmail(friend_add[position])\r\n\r\n            var account = friend_add[position]\r\n\r\n            //아이템을 클릭하면 다이얼로그 생성\r\n            holder.itemView.setOnClickListener {\r\n                callDialog(it.context, account)\r\n            }\r\n\r\n        }\r\n\r\n\r\n\r\n        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {\r\n\r\n            private val AddName: TextView = itemView.findViewById(R.id.AddName)\r\n            private val Adduid: TextView = itemView.findViewById(R.id.Adduid)\r\n            private val ProfileName: TextView = itemView.findViewById(R.id.AddProfileName)\r\n            private val AddEmail: TextView = itemView.findViewById(R.id.AddEmail)\r\n            private val AddColor: ImageView = itemView.findViewById(R.id.AddColor)\r\n            private val AddBtn: Button = itemView.findViewById(R.id.AddBtn)\r\n\r\n            //친구 추가 이름\r\n            fun SetFriendAddName(item: Friend) {\r\n                AddName.text = item.userName\r\n            }\r\n\r\n            //친구 uid\r\n            fun SetFriendUid(item: Friend) {\r\n                Adduid.text = item.uid\r\n            }\r\n\r\n            //친구 프로필 이름\r\n            fun SetProfileAddName(item: Friend) {\r\n                ProfileName.text = item.userName?.get(0).toString()\r\n            }\r\n\r\n            //친구 추가 프로필\r\n            fun SetFriendAddColor(item: Friend) {\r\n                var circleResource = 0\r\n                when (item.userColor) {\r\n                    \"#f69b94\" -> circleResource = R.drawable.b_f69b94\r\n                    \"#f8c8c4\" -> circleResource = R.drawable.b_f8c8c4\r\n                    \"#fcdcce\" -> circleResource = R.drawable.b_fcdcce\r\n                    \"#96b0e5\" -> circleResource = R.drawable.b_96b0e5\r\n                    \"#92b9e2\" -> circleResource = R.drawable.b_92b9e2\r\n                    \"#ebc0c7\" -> circleResource = R.drawable.b_ebc0c7\r\n                    \"#7bb6c8\" -> circleResource = R.drawable.b_7bb6c8\r\n                    \"#aad3d7\" -> circleResource = R.drawable.b_aad3d7\r\n                    \"#f5f1f0\" -> circleResource = R.drawable.b_f5f1f0\r\n                    \"#d5e3e6\" -> circleResource = R.drawable.b_d5e3e6\r\n                    \"#f2a4b1\" -> circleResource = R.drawable.b_f2a4b1\r\n                    \"#7175a5\" -> circleResource = R.drawable.b_7175a5\r\n                    \"#a1b3d7\" -> circleResource = R.drawable.b_a1b3d7\r\n                    \"#bd83cf\" -> circleResource = R.drawable.b_bd83cf\r\n                    \"#e5afe9\" -> circleResource = R.drawable.b_e5afe9\r\n\r\n                }\r\n                AddColor.setImageResource(circleResource)\r\n            }\r\n\r\n            //친구 추가 이메일\r\n            fun SetFriendAddEmail(item: Friend) {\r\n                AddEmail.text = item.email\r\n            }\r\n\r\n            //친구 추가 버튼\r\n            @SuppressLint(\"SuspiciousIndentation\")\r\n            fun AddFriendBtnOnclick(item: Friend) {\r\n                AddBtn.setOnClickListener {\r\n                    val nowTime = System.currentTimeMillis()\r\n                    val timeformatter = SimpleDateFormat(\"yyyy.MM.dd.hh.mm\")\r\n                    val dateTime = timeformatter.format(nowTime)\r\n                    if (item.uid != currentUser) {\r\n                        firestore?.collection(\"Account\")?.document(\"$currentUser\")?.get()\r\n                            ?.addOnSuccessListener { document ->\r\n                                if (document != null) {\r\n                                    // 현재 사용자 이름이랑 이메일, 색상 받아오기\r\n                                    indexname = document.data?.get(\"userName\").toString()\r\n                                    indexemail = document.data?.get(\"email\").toString()\r\n                                    indexcolor = document.data?.get(\"userColor\").toString()\r\n                                }\r\n\r\n                                firestore?.collection(\"Account\")?.document(\"$currentUser\")\r\n                                    ?.collection(\"Friend\")\r\n                                    ?.whereEqualTo(\"uid\", item.uid.toString())?.get()\r\n                                    ?.addOnCompleteListener { task ->\r\n\r\n\r\n                                        // 친구 리스트가 없는 경우\r\n                                        if (task.result?.size() == 0) {\r\n                                            // 내 친구 목록\r\n                                            firestore?.collection(\"Account\")\r\n                                                ?.document(\"$currentUser\")\r\n                                                ?.collection(\"Friend\")\r\n                                                ?.document(\"${item.uid}\")\r\n                                                ?.set(\r\n                                                    hashMapOf(\r\n                                                        \"uid\" to item.uid,\r\n                                                        \"status\" to \"request\",\r\n                                                        \"userName\" to item.userName,\r\n                                                        \"email\" to item.email,\r\n                                                        \"userColor\" to item.userColor\r\n\r\n                                                    )\r\n                                                )\r\n                                                ?.addOnSuccessListener {\r\n                                                    Toast.makeText(\r\n                                                        this@AddFriendActivity,\r\n                                                        \"친구 신청을 보냈습니다.\",\r\n                                                        Toast.LENGTH_SHORT\r\n                                                    ).show()\r\n\r\n                                                }\r\n                                                ?.addOnFailureListener {}\r\n\r\n                                            // 상대방 친구 목록\r\n                                            firestore?.collection(\"Account\")\r\n                                                ?.document(item.uid.toString())\r\n                                                ?.collection(\"Friend\")\r\n                                                ?.document(\"${currentUser}\")\r\n                                                ?.set(\r\n                                                    hashMapOf(\r\n                                                        \"uid\" to currentUser,\r\n                                                        \"status\" to \"accept\",\r\n                                                        \"userName\" to indexname,\r\n                                                        \"email\" to indexemail,\r\n                                                        \"userColor\" to indexcolor\r\n\r\n                                                    )\r\n                                                )\r\n                                                ?.addOnSuccessListener {\r\n                                                }\r\n                                                ?.addOnFailureListener {\r\n                                                }\r\n\r\n                                            //내 노티피케이션\r\n                                            firestore?.collection(\"Account\")\r\n                                                ?.document(\"$currentUser\")\r\n                                                ?.collection(\"Notification\")\r\n                                                ?.document(\"${item.uid}\")\r\n                                                ?.set(\r\n                                                    hashMapOf(\r\n                                                        \"requestUserId\" to item.uid,\r\n                                                        \"userName\" to item.userName,\r\n                                                        \"userColor\" to item.userColor,\r\n                                                        \"type\" to 1,\r\n                                                        \"read\" to false,\r\n                                                        \"timestamp\" to FieldValue.serverTimestamp()\r\n\r\n                                                    )\r\n                                                )\r\n                                                ?.addOnSuccessListener {}\r\n                                                ?.addOnFailureListener {}\r\n\r\n                                            // 상대방 노티피케이션\r\n                                            firestore?.collection(\"Account\")\r\n                                                ?.document(item.uid.toString())\r\n                                                ?.collection(\"Notification\")\r\n                                                ?.document(\"${currentUser}\")\r\n                                                ?.set(\r\n                                                    hashMapOf(\r\n                                                        \"requestUserId\" to currentUser,\r\n                                                        \"userName\" to indexname,\r\n                                                        \"userColor\" to indexcolor,\r\n                                                        \"type\" to 1,\r\n                                                        \"read\" to false,\r\n                                                        \"timestamp\" to FieldValue.serverTimestamp()\r\n\r\n                                                    )\r\n                                                )\r\n                                                ?.addOnSuccessListener {\r\n                                                }\r\n                                                ?.addOnFailureListener {\r\n                                                }\r\n\r\n                                        }\r\n\r\n                                        // 친구 리스트가 있는 경우\r\n                                        else {\r\n                                            var notFriend = true\r\n                                            // 이미 친구임\r\n                                            firestore?.collection(\"Account\")\r\n                                                ?.document(\"$currentUser\")\r\n                                                ?.collection(\"Friend\")\r\n                                                ?.document(\"${item.uid}\")?.get()\r\n                                                ?.addOnSuccessListener { document ->\r\n                                                    if (document != null) {\r\n                                                        Toast.makeText(\r\n                                                            this@AddFriendActivity,\r\n                                                            \"이미 친구입니다.\",\r\n                                                            Toast.LENGTH_SHORT\r\n                                                        ).show()\r\n                                                        notFriend = false\r\n\r\n                                                    }\r\n\r\n                                                    if (notFriend) {\r\n                                                        // 내 친구 목록\r\n                                                        firestore?.collection(\"Account\")\r\n                                                            ?.document(\"$currentUser\")\r\n                                                            ?.collection(\"Friend\")\r\n                                                            ?.document(\"${item.uid}\")\r\n                                                            ?.set(\r\n                                                                hashMapOf(\r\n                                                                    \"uid\" to item.uid,\r\n                                                                    \"status\" to \"request\",\r\n                                                                    \"userName\" to item.userName,\r\n                                                                    \"email\" to item.email,\r\n                                                                    \"userColor\" to item.userColor\r\n\r\n                                                                )\r\n                                                            )\r\n                                                            ?.addOnSuccessListener {\r\n                                                                Toast.makeText(\r\n                                                                    this@AddFriendActivity,\r\n                                                                    \"친구 신청을 보냈습니다.\",\r\n                                                                    Toast.LENGTH_SHORT\r\n                                                                ).show()\r\n\r\n                                                            }\r\n                                                            ?.addOnFailureListener {}\r\n\r\n                                                        // 상대방 친구 목록\r\n                                                        firestore?.collection(\"Account\")\r\n                                                            ?.document(item.uid.toString())\r\n                                                            ?.collection(\"Friend\")\r\n                                                            ?.document(\"${currentUser}\")\r\n                                                            ?.set(\r\n                                                                hashMapOf(\r\n                                                                    \"uid\" to currentUser,\r\n                                                                    \"status\" to \"accept\",\r\n                                                                    \"userName\" to indexname,\r\n                                                                    \"email\" to indexemail,\r\n                                                                    \"userColor\" to indexcolor\r\n\r\n                                                                )\r\n                                                            )\r\n                                                            ?.addOnSuccessListener {\r\n                                                            }\r\n                                                            ?.addOnFailureListener {\r\n                                                            }\r\n\r\n\r\n                                                        //내 노티피케이션\r\n                                                        firestore?.collection(\"Account\")\r\n                                                            ?.document(\"$currentUser\")\r\n                                                            ?.collection(\"Notification\")\r\n                                                            ?.document(\"${item.uid}\")\r\n                                                            ?.set(\r\n                                                                hashMapOf(\r\n                                                                    \"requestUserId\" to item.uid,\r\n                                                                    \"userName\" to item.userName,\r\n                                                                    \"userColor\" to item.userColor,\r\n                                                                    \"type\" to 1,\r\n                                                                    \"read\" to false,\r\n                                                                    \"timestamp\" to FieldValue.serverTimestamp()\r\n\r\n                                                                )\r\n                                                            )\r\n                                                            ?.addOnSuccessListener {}\r\n                                                            ?.addOnFailureListener {}\r\n\r\n                                                        // 상대방 노티피케이션\r\n                                                        firestore?.collection(\"Account\")\r\n                                                            ?.document(item.uid.toString())\r\n                                                            ?.collection(\"Notification\")\r\n                                                            ?.document(\"${currentUser}\")\r\n                                                            ?.set(\r\n                                                                hashMapOf(\r\n                                                                    \"requestUserId\" to currentUser,\r\n                                                                    \"userName\" to indexname,\r\n                                                                    \"userColor\" to indexcolor,\r\n                                                                    \"type\" to 1,\r\n                                                                    \"read\" to false,\r\n                                                                    \"timestamp\" to FieldValue.serverTimestamp()\r\n\r\n                                                                )\r\n                                                            )\r\n                                                            ?.addOnSuccessListener {\r\n                                                            }\r\n                                                            ?.addOnFailureListener {\r\n                                                            }\r\n\r\n                                                    }\r\n                                                }\r\n\r\n                                        }\r\n                                    }\r\n                            }\r\n                    } else {\r\n                        Toast.makeText(\r\n                            this@AddFriendActivity,\r\n                            \"자기자신을 친구로 추가할 수 없습니다.\", Toast.LENGTH_SHORT\r\n                        ).show()\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n\r\n        // 리사이클러뷰의 아이템 총 개수 반환\r\n        override fun getItemCount(): Int {\r\n            return friend_add.size\r\n        }\r\n\r\n        //관리자(신고)Dialog\r\n        fun callDialog(context: Context, item: Friend) {\r\n\r\n            dialog = ReportDialog(\r\n                context = context,\r\n                userColor = item.userColor,\r\n                userName = item.userName,\r\n                uid = item.uid,\r\n                userMessage = item.userMessage,\r\n                email = item.email!!,\r\n                namebtnListener = reNameListener,\r\n                messagebtnListener = reMessageListener,\r\n                blockbtnListener = blockbtnListener\r\n            )\r\n\r\n            //다이얼로그 타이틀 및 테두리 없애기\r\n            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)\r\n            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))\r\n            dialog.show()\r\n        }\r\n\r\n        //닉네임 신고 버튼 클릭 시\r\n        private val reNameListener = View.OnClickListener {\r\n            index = UUID.randomUUID().toString()\r\n            firestore?.collection(\"Manager\")?.document(\"$index\")\r\n                ?.set(\r\n                    hashMapOf(\r\n                        \"userName\" to dialog.userName,\r\n                        \"email\" to dialog.email,\r\n                        \"index\" to index,\r\n                        \"id\" to dialog.uid,\r\n                    )\r\n                )\r\n\r\n            Toast.makeText(\r\n                this@AddFriendActivity,\r\n                \"닉네임 신고가 되었습니다.\",\r\n                Toast.LENGTH_SHORT\r\n            ).show()\r\n        }\r\n\r\n\r\n        //상태 메세지 신고 버튼 클릭 시\r\n        private val reMessageListener = View.OnClickListener {\r\n            msgindex = UUID.randomUUID().toString()\r\n            firestore?.collection(\"Manager\")?.document(\"$msgindex\")\r\n                ?.set(\r\n                    hashMapOf(\r\n                        \"userMessage\" to dialog.userMessage,\r\n                        \"email\" to dialog.email,\r\n                        \"msgindex\" to msgindex,\r\n                        \"id\" to dialog.uid,\r\n                    )\r\n                )\r\n            Toast.makeText(\r\n                this@AddFriendActivity,\r\n                \"상태 메세지 신고가 되었습니다.\",\r\n                Toast.LENGTH_SHORT\r\n            ).show()\r\n        }\r\n\r\n\r\n        //차단 버튼 클릭 시\r\n        private val blockbtnListener = View.OnClickListener {\r\n            Toast.makeText(\r\n                this@AddFriendActivity,\r\n                \"차단 되었습니다.\",\r\n                Toast.LENGTH_SHORT\r\n            ).show()\r\n        }\r\n\r\n\r\n        // 파이어스토어에서 데이터를 불러와서 검색어가 있는지 판단\r\n        fun search(searchWord: String) {\r\n            firestore?.collection(\"Account\")\r\n                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->\r\n                    // ArrayList 비워줌\r\n                    friend_add.clear()\r\n\r\n                    for (snapshot in querySnapshot!!.documents) {\r\n                        //에러처리(안 해주면 오류)\r\n                        if (snapshot.getString(\"email\") != null && snapshot.getString(\"userName\") != null)\r\n                            if (snapshot.getString(\"email\")!!\r\n                                    .contains(searchWord) || snapshot.getString(\"userName\")!!\r\n                                    .contains(searchWord)\r\n                            ) {\r\n                                val item = snapshot.toObject(Friend::class.java)\r\n                                friend_add.add(item!!)\r\n                            }\r\n                    }\r\n                    searchcount = friend_add.size\r\n                    getCount()\r\n                    notifyDataSetChanged()\r\n                }\r\n        }\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/goaltracker/AddFriendActivity.kt b/app/src/main/java/com/example/goaltracker/AddFriendActivity.kt
+--- a/app/src/main/java/com/example/goaltracker/AddFriendActivity.kt	(revision 9d1520d9c806cb027a6b30346077056936977558)
++++ b/app/src/main/java/com/example/goaltracker/AddFriendActivity.kt	(date 1672269551656)
+@@ -51,6 +51,9 @@
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_add_friend)
+ 
++
++
++
+         searchWord.addTextChangedListener(object : TextWatcher {
+ 
+             //텍스트가 변경되기 바로 이전에 동작
+@@ -86,6 +89,7 @@
+         }
+ 
+ 
++
+     }
+ 
+     //인원 카운트
+@@ -99,6 +103,7 @@
+         // Friend 클래스 ArrayList 생성성
+         var friend_add: ArrayList<Friend> = arrayListOf()
+ 
++
+         init {  // Account의 문서를 불러온 뒤 Friend으로 변환해 ArrayList에 담음
+             firestore?.collection("Account")
+                 ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+@@ -114,7 +119,9 @@
+                     notifyDataSetChanged()
+                 }
+ 
++
+         }
++
+ 
+         // xml파일을 inflate하여 ViewHolder를 생성
+         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+@@ -200,232 +207,250 @@
+             //친구 추가 버튼
+             @SuppressLint("SuspiciousIndentation")
+             fun AddFriendBtnOnclick(item: Friend) {
+-                AddBtn.setOnClickListener {
+-                    val nowTime = System.currentTimeMillis()
+-                    val timeformatter = SimpleDateFormat("yyyy.MM.dd.hh.mm")
+-                    val dateTime = timeformatter.format(nowTime)
+-                    if (item.uid != currentUser) {
+-                        firestore?.collection("Account")?.document("$currentUser")?.get()
+-                            ?.addOnSuccessListener { document ->
+-                                if (document != null) {
+-                                    // 현재 사용자 이름이랑 이메일, 색상 받아오기
+-                                    indexname = document.data?.get("userName").toString()
+-                                    indexemail = document.data?.get("email").toString()
+-                                    indexcolor = document.data?.get("userColor").toString()
+-                                }
++                val friendList : ArrayList<String> = MySharedPreferences.getFriendList(this@AddFriendActivity)
++
++                if (friendList.contains(item.uid)) {
++                    AddBtn.text = "신청 보냄"
++                    AddBtn.isEnabled = false
++                }
++                if (!friendList.contains(item.uid)) {
++                    AddBtn.text = "친구 요청"
++                    AddBtn.setOnClickListener {
++                        val nowTime = System.currentTimeMillis()
++                        val timeformatter = SimpleDateFormat("yyyy.MM.dd.hh.mm")
++                        val dateTime = timeformatter.format(nowTime)
++                        if (item.uid != currentUser) {
++                            firestore?.collection("Account")?.document("$currentUser")?.get()
++                                ?.addOnSuccessListener { document ->
++                                    if (document != null) {
++                                        // 현재 사용자 이름이랑 이메일, 색상 받아오기
++                                        indexname = document.data?.get("userName").toString()
++                                        indexemail = document.data?.get("email").toString()
++                                        indexcolor = document.data?.get("userColor").toString()
++                                    }
+ 
+-                                firestore?.collection("Account")?.document("$currentUser")
+-                                    ?.collection("Friend")
+-                                    ?.whereEqualTo("uid", item.uid.toString())?.get()
+-                                    ?.addOnCompleteListener { task ->
++                                    firestore?.collection("Account")?.document("$currentUser")
++                                        ?.collection("Friend")
++                                        ?.whereEqualTo("uid", item.uid.toString())?.get()
++                                        ?.addOnCompleteListener { task ->
+ 
+ 
+-                                        // 친구 리스트가 없는 경우
+-                                        if (task.result?.size() == 0) {
+-                                            // 내 친구 목록
+-                                            firestore?.collection("Account")
+-                                                ?.document("$currentUser")
+-                                                ?.collection("Friend")
+-                                                ?.document("${item.uid}")
+-                                                ?.set(
+-                                                    hashMapOf(
+-                                                        "uid" to item.uid,
+-                                                        "status" to "request",
+-                                                        "userName" to item.userName,
+-                                                        "email" to item.email,
+-                                                        "userColor" to item.userColor
++                                            // 친구 리스트가 없는 경우
++                                            if (task.result?.size() == 0) {
++                                                // 내 친구 목록
++                                                firestore?.collection("Account")
++                                                    ?.document("$currentUser")
++                                                    ?.collection("Friend")
++                                                    ?.document("${item.uid}")
++                                                    ?.set(
++                                                        hashMapOf(
++                                                            "uid" to item.uid,
++                                                            "status" to "request",
++                                                            "userName" to item.userName,
++                                                            "email" to item.email,
++                                                            "userColor" to item.userColor
+ 
+-                                                    )
+-                                                )
+-                                                ?.addOnSuccessListener {
+-                                                    Toast.makeText(
+-                                                        this@AddFriendActivity,
+-                                                        "친구 신청을 보냈습니다.",
+-                                                        Toast.LENGTH_SHORT
+-                                                    ).show()
++                                                        )
++                                                    )
++                                                    ?.addOnSuccessListener {
++                                                        Toast.makeText(
++                                                            this@AddFriendActivity,
++                                                            "친구 신청을 보냈습니다.",
++                                                            Toast.LENGTH_SHORT
++                                                        ).show()
++                                                        friendList.add(item.uid.toString())
++                                                        AddBtn.text = "신청 보냄"
++                                                        AddBtn.isEnabled = false
++
+ 
+-                                                }
+-                                                ?.addOnFailureListener {}
++                                                    }
++                                                    ?.addOnFailureListener {}
+ 
+-                                            // 상대방 친구 목록
+-                                            firestore?.collection("Account")
+-                                                ?.document(item.uid.toString())
+-                                                ?.collection("Friend")
+-                                                ?.document("${currentUser}")
+-                                                ?.set(
+-                                                    hashMapOf(
+-                                                        "uid" to currentUser,
+-                                                        "status" to "accept",
+-                                                        "userName" to indexname,
+-                                                        "email" to indexemail,
+-                                                        "userColor" to indexcolor
++                                                // 상대방 친구 목록
++                                                firestore?.collection("Account")
++                                                    ?.document(item.uid.toString())
++                                                    ?.collection("Friend")
++                                                    ?.document("${currentUser}")
++                                                    ?.set(
++                                                        hashMapOf(
++                                                            "uid" to currentUser,
++                                                            "status" to "accept",
++                                                            "userName" to indexname,
++                                                            "email" to indexemail,
++                                                            "userColor" to indexcolor
+ 
+-                                                    )
+-                                                )
+-                                                ?.addOnSuccessListener {
+-                                                }
+-                                                ?.addOnFailureListener {
+-                                                }
++                                                        )
++                                                    )
++                                                    ?.addOnSuccessListener {
++                                                    }
++                                                    ?.addOnFailureListener {
++                                                    }
+ 
+-                                            //내 노티피케이션
+-                                            firestore?.collection("Account")
+-                                                ?.document("$currentUser")
+-                                                ?.collection("Notification")
+-                                                ?.document("${item.uid}")
+-                                                ?.set(
+-                                                    hashMapOf(
+-                                                        "requestUserId" to item.uid,
+-                                                        "userName" to item.userName,
+-                                                        "userColor" to item.userColor,
+-                                                        "type" to 1,
+-                                                        "read" to false,
+-                                                        "timestamp" to FieldValue.serverTimestamp()
++                                                //내 노티피케이션
++                                                firestore?.collection("Account")
++                                                    ?.document("$currentUser")
++                                                    ?.collection("Notification")
++                                                    ?.document("${item.uid}")
++                                                    ?.set(
++                                                        hashMapOf(
++                                                            "requestUserId" to item.uid,
++                                                            "userName" to item.userName,
++                                                            "userColor" to item.userColor,
++                                                            "type" to 1,
++                                                            "read" to false,
++                                                            "timestamp" to FieldValue.serverTimestamp()
+ 
+-                                                    )
+-                                                )
+-                                                ?.addOnSuccessListener {}
+-                                                ?.addOnFailureListener {}
++                                                        )
++                                                    )
++                                                    ?.addOnSuccessListener {}
++                                                    ?.addOnFailureListener {}
+ 
+-                                            // 상대방 노티피케이션
+-                                            firestore?.collection("Account")
+-                                                ?.document(item.uid.toString())
+-                                                ?.collection("Notification")
+-                                                ?.document("${currentUser}")
+-                                                ?.set(
+-                                                    hashMapOf(
+-                                                        "requestUserId" to currentUser,
+-                                                        "userName" to indexname,
+-                                                        "userColor" to indexcolor,
+-                                                        "type" to 1,
+-                                                        "read" to false,
+-                                                        "timestamp" to FieldValue.serverTimestamp()
++                                                // 상대방 노티피케이션
++                                                firestore?.collection("Account")
++                                                    ?.document(item.uid.toString())
++                                                    ?.collection("Notification")
++                                                    ?.document("${currentUser}")
++                                                    ?.set(
++                                                        hashMapOf(
++                                                            "requestUserId" to currentUser,
++                                                            "userName" to indexname,
++                                                            "userColor" to indexcolor,
++                                                            "type" to 1,
++                                                            "read" to false,
++                                                            "timestamp" to FieldValue.serverTimestamp()
+ 
+-                                                    )
+-                                                )
+-                                                ?.addOnSuccessListener {
+-                                                }
+-                                                ?.addOnFailureListener {
+-                                                }
++                                                        )
++                                                    )
++                                                    ?.addOnSuccessListener {
++                                                    }
++                                                    ?.addOnFailureListener {
++                                                    }
+ 
+-                                        }
++                                            }
+ 
+-                                        // 친구 리스트가 있는 경우
+-                                        else {
+-                                            var notFriend = true
+-                                            // 이미 친구임
+-                                            firestore?.collection("Account")
+-                                                ?.document("$currentUser")
+-                                                ?.collection("Friend")
+-                                                ?.document("${item.uid}")?.get()
+-                                                ?.addOnSuccessListener { document ->
+-                                                    if (document != null) {
+-                                                        Toast.makeText(
+-                                                            this@AddFriendActivity,
+-                                                            "이미 친구입니다.",
+-                                                            Toast.LENGTH_SHORT
+-                                                        ).show()
+-                                                        notFriend = false
++                                            // 친구 리스트가 있는 경우
++                                            else {
++                                                var notFriend = true
++                                                // 이미 친구임
++                                                firestore?.collection("Account")
++                                                    ?.document("$currentUser")
++                                                    ?.collection("Friend")
++                                                    ?.document("${item.uid}")?.get()
++                                                    ?.addOnSuccessListener { document ->
++                                                        if (document != null) {
++                                                            Toast.makeText(
++                                                                this@AddFriendActivity,
++                                                                "이미 친구입니다.",
++                                                                Toast.LENGTH_SHORT
++                                                            ).show()
++                                                            notFriend = false
+ 
+-                                                    }
++                                                        }
+ 
+-                                                    if (notFriend) {
+-                                                        // 내 친구 목록
+-                                                        firestore?.collection("Account")
+-                                                            ?.document("$currentUser")
+-                                                            ?.collection("Friend")
+-                                                            ?.document("${item.uid}")
+-                                                            ?.set(
+-                                                                hashMapOf(
+-                                                                    "uid" to item.uid,
+-                                                                    "status" to "request",
+-                                                                    "userName" to item.userName,
+-                                                                    "email" to item.email,
+-                                                                    "userColor" to item.userColor
++                                                        if (notFriend) {
++                                                            // 내 친구 목록
++                                                            firestore?.collection("Account")
++                                                                ?.document("$currentUser")
++                                                                ?.collection("Friend")
++                                                                ?.document("${item.uid}")
++                                                                ?.set(
++                                                                    hashMapOf(
++                                                                        "uid" to item.uid,
++                                                                        "status" to "request",
++                                                                        "userName" to item.userName,
++                                                                        "email" to item.email,
++                                                                        "userColor" to item.userColor
+ 
+-                                                                )
+-                                                            )
+-                                                            ?.addOnSuccessListener {
+-                                                                Toast.makeText(
+-                                                                    this@AddFriendActivity,
+-                                                                    "친구 신청을 보냈습니다.",
+-                                                                    Toast.LENGTH_SHORT
+-                                                                ).show()
++                                                                    )
++                                                                )
++                                                                ?.addOnSuccessListener {
++                                                                    Toast.makeText(
++                                                                        this@AddFriendActivity,
++                                                                        "친구 신청을 보냈습니다.",
++                                                                        Toast.LENGTH_SHORT
++                                                                    ).show()
++                                                                    friendList.add(item.uid.toString())
++                                                                    AddBtn.text = "신청 보냄"
++                                                                    AddBtn.isEnabled = false
++
+ 
+-                                                            }
+-                                                            ?.addOnFailureListener {}
++                                                                }
++                                                                ?.addOnFailureListener {}
+ 
+-                                                        // 상대방 친구 목록
+-                                                        firestore?.collection("Account")
+-                                                            ?.document(item.uid.toString())
+-                                                            ?.collection("Friend")
+-                                                            ?.document("${currentUser}")
+-                                                            ?.set(
+-                                                                hashMapOf(
+-                                                                    "uid" to currentUser,
+-                                                                    "status" to "accept",
+-                                                                    "userName" to indexname,
+-                                                                    "email" to indexemail,
+-                                                                    "userColor" to indexcolor
++                                                            // 상대방 친구 목록
++                                                            firestore?.collection("Account")
++                                                                ?.document(item.uid.toString())
++                                                                ?.collection("Friend")
++                                                                ?.document("${currentUser}")
++                                                                ?.set(
++                                                                    hashMapOf(
++                                                                        "uid" to currentUser,
++                                                                        "status" to "accept",
++                                                                        "userName" to indexname,
++                                                                        "email" to indexemail,
++                                                                        "userColor" to indexcolor
+ 
+-                                                                )
+-                                                            )
+-                                                            ?.addOnSuccessListener {
+-                                                            }
+-                                                            ?.addOnFailureListener {
+-                                                            }
++                                                                    )
++                                                                )
++                                                                ?.addOnSuccessListener {
++                                                                }
++                                                                ?.addOnFailureListener {
++                                                                }
+ 
+ 
+-                                                        //내 노티피케이션
+-                                                        firestore?.collection("Account")
+-                                                            ?.document("$currentUser")
+-                                                            ?.collection("Notification")
+-                                                            ?.document("${item.uid}")
+-                                                            ?.set(
+-                                                                hashMapOf(
+-                                                                    "requestUserId" to item.uid,
+-                                                                    "userName" to item.userName,
+-                                                                    "userColor" to item.userColor,
+-                                                                    "type" to 1,
+-                                                                    "read" to false,
+-                                                                    "timestamp" to FieldValue.serverTimestamp()
++                                                            //내 노티피케이션
++                                                            firestore?.collection("Account")
++                                                                ?.document("$currentUser")
++                                                                ?.collection("Notification")
++                                                                ?.document("${item.uid}")
++                                                                ?.set(
++                                                                    hashMapOf(
++                                                                        "requestUserId" to item.uid,
++                                                                        "userName" to item.userName,
++                                                                        "userColor" to item.userColor,
++                                                                        "type" to 1,
++                                                                        "read" to false,
++                                                                        "timestamp" to FieldValue.serverTimestamp()
+ 
+-                                                                )
+-                                                            )
+-                                                            ?.addOnSuccessListener {}
+-                                                            ?.addOnFailureListener {}
++                                                                    )
++                                                                )
++                                                                ?.addOnSuccessListener {}
++                                                                ?.addOnFailureListener {}
+ 
+-                                                        // 상대방 노티피케이션
+-                                                        firestore?.collection("Account")
+-                                                            ?.document(item.uid.toString())
+-                                                            ?.collection("Notification")
+-                                                            ?.document("${currentUser}")
+-                                                            ?.set(
+-                                                                hashMapOf(
+-                                                                    "requestUserId" to currentUser,
+-                                                                    "userName" to indexname,
+-                                                                    "userColor" to indexcolor,
+-                                                                    "type" to 1,
+-                                                                    "read" to false,
+-                                                                    "timestamp" to FieldValue.serverTimestamp()
++                                                            // 상대방 노티피케이션
++                                                            firestore?.collection("Account")
++                                                                ?.document(item.uid.toString())
++                                                                ?.collection("Notification")
++                                                                ?.document("${currentUser}")
++                                                                ?.set(
++                                                                    hashMapOf(
++                                                                        "requestUserId" to currentUser,
++                                                                        "userName" to indexname,
++                                                                        "userColor" to indexcolor,
++                                                                        "type" to 1,
++                                                                        "read" to false,
++                                                                        "timestamp" to FieldValue.serverTimestamp()
+ 
+-                                                                )
+-                                                            )
+-                                                            ?.addOnSuccessListener {
+-                                                            }
+-                                                            ?.addOnFailureListener {
+-                                                            }
++                                                                    )
++                                                                )
++                                                                ?.addOnSuccessListener {
++                                                                }
++                                                                ?.addOnFailureListener {
++                                                                }
+ 
+-                                                    }
+-                                                }
++                                                        }
++                                                    }
+ 
+-                                        }
+-                                    }
+-                            }
+-                    } else {
+-                        Toast.makeText(
+-                            this@AddFriendActivity,
+-                            "자기자신을 친구로 추가할 수 없습니다.", Toast.LENGTH_SHORT
+-                        ).show()
++                                            }
++                                        }
++                                }
++
++                        } else {
++                            Toast.makeText(
++                                this@AddFriendActivity,
++                                "자기자신을 친구로 추가할 수 없습니다.", Toast.LENGTH_SHORT
++                            ).show()
++                        }
+                     }
+                 }
+             }
+@@ -532,6 +557,7 @@
+                     notifyDataSetChanged()
+                 }
+         }
++
+     }
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/goaltracker/MySharedPreferences.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.goaltracker\r\n\r\nimport android.content.Context\r\nimport android.content.SharedPreferences\r\nimport android.graphics.Color\r\n\r\nobject MySharedPreferences {\r\n    private val MY_ACCOUNT : String = \"account\"\r\n\r\n    fun setUserId(context: Context, input: String) {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        val editor : SharedPreferences.Editor = prefs.edit()\r\n        editor.putString(\"UID\", input)\r\n        editor.apply()\r\n    }\r\n\r\n    fun getUserId(context: Context): String {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        return prefs.getString(\"UID\", \"\").toString()\r\n    }\r\n\r\n    fun setUserEmail(context: Context, input: String) {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        val editor : SharedPreferences.Editor = prefs.edit()\r\n        editor.putString(\"email\", input)\r\n        editor.apply()\r\n    }\r\n\r\n    fun getUserEmail(context: Context): String {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        return prefs.getString(\"email\", \"\").toString()\r\n    }\r\n\r\n    fun setUserNickname(context: Context, input: String) {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        val editor : SharedPreferences.Editor = prefs.edit()\r\n        editor.putString(\"nickname\", input)\r\n        editor.apply()\r\n    }\r\n\r\n    fun getUserNickname(context: Context): String {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        return prefs.getString(\"nickname\", \"\").toString()\r\n    }\r\n\r\n    fun setUserColor(context: Context, input: String) {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        val editor : SharedPreferences.Editor = prefs.edit()\r\n        editor.putString(\"userColor\", input)\r\n        editor.apply()\r\n    }\r\n\r\n    fun getUserColor(context: Context): String {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        return prefs.getString(\"userColor\", \"\").toString()\r\n    }\r\n\r\n    fun setUserColorInt(context: Context, input: String) {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        val editor : SharedPreferences.Editor = prefs.edit()\r\n\r\n        var themeName = R.color.profile_color_coral\r\n        if (input == \"#f69b94\") {\r\n            themeName = R.color.profile_color_coral\r\n        } else if (input == \"#f8c8c4\") {\r\n            themeName =R.color.profile_color_babyPink\r\n        } else if (input == \"#fcdcce\") {\r\n            themeName = R.color.profile_color_lightOrange\r\n        } else if (input == \"#96b0e5\") {\r\n            themeName = R.color.profile_color_blue\r\n        } else if (input == \"#92b9e2\") {\r\n            themeName = R.color.profile_color_lightBlue\r\n        } else if (input == \"#ebc0c7\") {\r\n            themeName = R.color.profile_color_lightPink\r\n        } else if (input == \"#7bb6c8\") {\r\n            themeName = R.color.profile_color_turquoise\r\n        } else if (input == \"#aad3d7\") {\r\n            themeName = R.color.profile_color_mint\r\n        } else if (input == \"#f5f1f0\") {\r\n            themeName = R.color.profile_color_beige\r\n        } else if (input == \"#d5e3e6\") {\r\n            themeName = R.color.profile_color_lightGreen\r\n        } else if (input == \"#f2a4b1\") {\r\n            themeName = R.color.profile_color_lightCoral\r\n        } else if (input == \"#7175a5\") {\r\n            themeName = R.color.profile_color_indigo\r\n        } else if (input == \"#a1b3d7\") {\r\n            themeName = R.color.profile_color_babyBlue\r\n        } else if (input == \"#bd83cf\") {\r\n            themeName = R.color.profile_color_purple\r\n        } else if (input == \"#e5afe9\") {\r\n            themeName = R.color.profile_color_lightPurple\r\n        }\r\n\r\n        editor.putInt(\"userColorInt\", themeName)\r\n        editor.commit()\r\n    }\r\n\r\n    fun getUserColorInt(context: Context): Int {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        return prefs.getInt(\"userColorInt\", R.color.profile_color_coral)\r\n    }\r\n\r\n    fun setTheme(context: Context, theme: String){\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        val editor : SharedPreferences.Editor = prefs.edit()\r\n\r\n        var themeName = R.style.Theme_Coral\r\n        if (theme == \"#f69b94\") {\r\n            themeName = R.style.Theme_Coral\r\n        } else if (theme == \"#f8c8c4\") {\r\n            themeName = R.style.Theme_BabyPink\r\n        } else if (theme == \"#fcdcce\") {\r\n            themeName = R.style.Theme_LightOrange\r\n        } else if (theme == \"#96b0e5\") {\r\n            themeName = R.style.Theme_Blue\r\n        } else if (theme == \"#92b9e2\") {\r\n            themeName = R.style.Theme_LightBlue\r\n        } else if (theme == \"#ebc0c7\") {\r\n            themeName = R.style.Theme_LightPink\r\n        } else if (theme == \"#7bb6c8\") {\r\n            themeName = R.style.Theme_Turquoise\r\n        } else if (theme == \"#aad3d7\") {\r\n            themeName = R.style.Theme_Mint\r\n        } else if (theme == \"#f5f1f0\") {\r\n            themeName = R.style.Theme_Beige\r\n        } else if (theme == \"#d5e3e6\") {\r\n            themeName = R.style.Theme_LightGreen\r\n        } else if (theme == \"#f2a4b1\") {\r\n            themeName = R.style.Theme_LightCoral\r\n        } else if (theme == \"#7175a5\") {\r\n            themeName = R.style.Theme_Indigo\r\n        } else if (theme == \"#a1b3d7\") {\r\n            themeName = R.style.Theme_BabyBlue\r\n        } else if (theme == \"#bd83cf\") {\r\n            themeName = R.style.Theme_Purple\r\n        } else if (theme == \"#e5afe9\") {\r\n            themeName = R.style.Theme_LightPurple\r\n        }\r\n\r\n        editor.putInt(\"theme\", themeName)\r\n        editor.apply()\r\n    }\r\n\r\n    fun getTheme(context: Context): Int {\r\n        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)\r\n        return prefs.getInt(\"theme\", R.style.Theme_Mint)\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/goaltracker/MySharedPreferences.kt b/app/src/main/java/com/example/goaltracker/MySharedPreferences.kt
+--- a/app/src/main/java/com/example/goaltracker/MySharedPreferences.kt	(revision 9d1520d9c806cb027a6b30346077056936977558)
++++ b/app/src/main/java/com/example/goaltracker/MySharedPreferences.kt	(date 1672269551648)
+@@ -2,7 +2,8 @@
+ 
+ import android.content.Context
+ import android.content.SharedPreferences
+-import android.graphics.Color
++import org.json.JSONArray
++import org.json.JSONException
+ 
+ object MySharedPreferences {
+     private val MY_ACCOUNT : String = "account"
+@@ -146,4 +147,24 @@
+         val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
+         return prefs.getInt("theme", R.style.Theme_Mint)
+     }
++
++    fun getFriendList(context:Context) : ArrayList<String> {
++        val prefs : SharedPreferences = context.getSharedPreferences(MY_ACCOUNT, Context.MODE_PRIVATE)
++        val json = prefs.getString("friendList", null)
++        val urls = ArrayList<String>()
++        if (json != null) {
++            try {
++                val a = JSONArray(json)
++                for (i in 0 until a.length()) {
++                    val url = a.optString(i)
++                    urls.add(url)
++                }
++            } catch (e: JSONException) {
++                e.printStackTrace()
++            }
++        }
++        return urls
++    }
++
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/goaltracker/Dataframe.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.goaltracker\r\n\r\nimport android.os.Parcelable\r\nimport kotlinx.android.parcel.Parcelize\r\n\r\n@Parcelize\r\ndata class Account (\r\n    var email: String = \"\",\r\n    var userName: String ?= null,\r\n    var userColor:String ?= null,\r\n    var myGoalList:List<String>?=null,\r\n    var notificationList:List<String>?=null,\r\n    var userMessage:String?=null\r\n) : Parcelable\r\n\r\n//public val curUser = Account()\r\n\r\n@Parcelize\r\ndata class Notifications (\r\n    var goalName:String ?=\"\",\r\n    var goalUid:String ?=\"\",\r\n    var message: String ?= \"\",\r\n    var type: Int = 0,\r\n    var read: Boolean = false,\r\n    var userColor:String ?= \"\",\r\n    var userName:String ?= null,\r\n    var requestUserId:String ?= \"\"\r\n) : Parcelable
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/goaltracker/Dataframe.kt b/app/src/main/java/com/example/goaltracker/Dataframe.kt
+--- a/app/src/main/java/com/example/goaltracker/Dataframe.kt	(revision 9d1520d9c806cb027a6b30346077056936977558)
++++ b/app/src/main/java/com/example/goaltracker/Dataframe.kt	(date 1672266840889)
+@@ -8,8 +8,8 @@
+     var email: String = "",
+     var userName: String ?= null,
+     var userColor:String ?= null,
+-    var myGoalList:List<String>?=null,
+-    var notificationList:List<String>?=null,
++    var myGoalList:ArrayList<String> = arrayListOf(),
++    var notificationList:ArrayList<String>?=null,
+     var userMessage:String?=null
+ ) : Parcelable
+ 
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.goaltracker\" >\r\n\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n\r\n    <uses-feature\r\n        android:name=\"android.hardware.camera\"\r\n        android:required=\"true\" /> <!-- 인터넷 권한 -->\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/Theme.GoalTracker\" >\r\n        <activity\r\n            android:name=\".EditGoalActivity\"\r\n            android:exported=\"true\">\r\n        </activity>\r\n        <activity\r\n            android:name=\".AnnouncementActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".GoalRecordActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".StampUploadDialogActivity\"\r\n            android:exported=\"true\"\r\n            android:theme=\"@style/Theme.StampUploadDialog\">\r\n        </activity>\r\n        <activity\r\n            android:name=\".JoinActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".FriendActivity\"\r\n            android:exported=\"true\">\r\n        </activity>\r\n        <activity\r\n            android:name=\".AddFriendActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".AddGoal\"\r\n            android:exported=\"true\">\r\n\r\n        </activity>\r\n        <activity\r\n            android:name=\".StampBoardActivity\"\r\n            android:exported=\"true\">\r\n\r\n        </activity>\r\n        <activity\r\n            android:name=\".GoogleLogin\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".FacebookLogin\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".MainActivity\"\r\n            android:exported=\"true\">\r\n\r\n        </activity>\r\n        <activity\r\n            android:name=\".ProfileActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".LoginActivity\"\r\n            android:exported=\"true\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity\r\n            android:name=\".NoticeActivity\"\r\n            android:exported=\"true\" />\r\n        <activity\r\n            android:name=\".AppNotifyActivity\"\r\n            android:exported=\"true\" />\r\n\r\n        <meta-data\r\n            android:name=\"com.facebook.sdk.ApplicationId\"\r\n            android:value=\"@string/facebook_app_id\" />\r\n\r\n        <activity\r\n            android:name=\"com.theartofdev.edmodo.cropper.CropImageActivity\"\r\n            android:theme=\"@style/Base.Theme.AppCompat\" />\r\n\r\n        <provider\r\n            android:name=\"androidx.core.content.FileProvider\"\r\n            android:authorities=\"com.example.goaltracker.fileprovider\"\r\n            android:exported=\"false\"\r\n            android:grantUriPermissions=\"true\" >\r\n            <meta-data\r\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\r\n                android:resource=\"@xml/filepaths\" />\r\n        </provider>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	(revision 9d1520d9c806cb027a6b30346077056936977558)
++++ b/app/src/main/AndroidManifest.xml	(date 1672110498779)
+@@ -37,7 +37,7 @@
+             android:name=".JoinActivity"
+             android:exported="true" />
+         <activity
+-            android:name=".FriendActivity"
++            android:name=".LoginActivity"
+             android:exported="true">
+         </activity>
+         <activity
+@@ -68,7 +68,7 @@
+             android:name=".ProfileActivity"
+             android:exported="true" />
+         <activity
+-            android:name=".LoginActivity"
++            android:name=".FriendActivity"
+             android:exported="true">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
