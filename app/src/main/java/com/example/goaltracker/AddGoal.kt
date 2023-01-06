@@ -309,6 +309,17 @@ class AddGoal : AppCompatActivity() {
                             .collection("team")
                             .document()
                             .set(team)
+
+                        // Notification에 골 정보 저장
+                        val notification_goal = hashMapOf(
+                            "goalName" to title.text.toString(),
+                            "goalUid" to goalID,
+                            "message" to memo.text.toString(),
+                            "type" to 2,
+                            "request" to false
+                        )
+                        firestore?.collection("Account")?.document(item.uid.toString())
+                            ?.collection("Notification")?.document()?.set(notification_goal)
                     }
                     // 체크 해제 시 삭제
                     else {
