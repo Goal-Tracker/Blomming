@@ -55,6 +55,7 @@
                 android:layout_marginBottom="32dp"
                 android:gravity="center"
                 android:text="이름"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/Report_name_button"
@@ -100,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
+                    android:textColor="@color/black"
                     android:text="1234@gmail.com" />
             </androidx.cardview.widget.CardView>
 
@@ -166,6 +168,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:text="hihihiroo~"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/cardView"
                 app:layout_constraintEnd_toEndOf="@+id/Profile_name_dialog"
                 app:layout_constraintStart_toStartOf="@+id/Profile_name_dialog"
