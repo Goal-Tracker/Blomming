@@ -121,4 +121,11 @@ class GoogleLogin() : AppCompatActivity(){
         startActivityForResult(signInIntent, RC_SIGN_IN)
     } //signIn end
 
+    // 이미 Account가 생성된 계정인지 확인
+    fun searchAccount(searchWord:String, option:String) {
+        fireStore?.collection("Account")?.addSnapshotListener{ querySanpshot, firebaseFirestoreException ->
+
+        }
+    }
+
 }

@@ -193,7 +193,8 @@ class StampBoardActivity() : AppCompatActivity() {
                                     uid = uid,
                                     name = nickname,
                                     profileColor = theme,
-                                    message = message
+                                    message = message,
+                                    request = true
                                 )
                             )
 

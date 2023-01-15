@@ -189,7 +189,7 @@ class NoticeActivity : AppCompatActivity() {
                 viewHolder.notice_button.setOnClickListener {
                     firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
                         var curUser = it.toObject(Account::class.java)!!
-                        val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString())
+                        val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString(), true)
 
                         firestore?.collection("Goal")?.document(item.goalUid.toString())
                             ?.collection("team")
