@@ -13,7 +13,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.example.goaltracker.MySharedPreferences.setTheme
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -67,7 +66,7 @@ class PokeDialog(context: Context) : Dialog(context) {
         } else {
             commentUpload_button.text = "콕 찌르기"
             commentUpload_button.isEnabled = true
-            bgButton.setColor(ContextCompat.getColor(context, Color.parseColor(MySharedPreferences.getUserColor(context))))
+            bgButton.setColor(ContextCompat.getColor(context, MySharedPreferences.getUserColorInt(context)))
 
             commentUpload_button.setOnClickListener {
                 Toast.makeText(it.context, profile.name + " 님을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
