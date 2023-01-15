@@ -143,7 +143,7 @@ class AddGoal : AppCompatActivity() {
 
             if(memo.text != null)
             {
-                firestore!!.collection("Goal").document(goalID)?.update("message", memo.text.toString())
+                firestore!!.collection("Goal").document(goalID)?.update("memo", memo.text.toString())
             }
 
             // 사용자 정보 저장
@@ -163,18 +163,9 @@ class AddGoal : AppCompatActivity() {
             }
 
             // Account에 goalList 저장
-            firestore!!.collection("Goal").document(goalID).collection("team")
-                ?.whereEqualTo("request", true)
-                .addSnapshotListener { value, e ->
-                    val goalList = ArrayList<String>()
-                    goalList.clear()
-                    for (doc in value!!) {
-                        doc.getString("goalUid")?.let {
-                            goalList.add(it!!)
-                        }
-                    }
-                    firestore?.collection("Account")?.document("$accountUId")?.update("myGoalList", goalList)
-                }
+            val goalList = ArrayList<String>()
+            goalList.add(goalID)
+            firestore?.collection("Account")?.document("$accountUId")?.update("myGoalList", goalList)
 
             // Notification에 골 정보 저장
             val notification_goal = hashMapOf(
