@@ -144,6 +144,9 @@ class NoticeActivity : AppCompatActivity() {
                                     ?.addOnSuccessListener {
                                         viewHolder.notice_button.text = "수락 완료"
                                         viewHolder.notice_button.isEnabled = false
+                                        var friendList = MySharedPreferences.getFriendList(this)
+                                        friendList.add(item.requestUserId.toString())
+                                        MySharedPreferences.setFriendList(this, friendList)
                                     }
                                     ?.addOnFailureListener {
                                         throw IllegalArgumentException()
