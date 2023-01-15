@@ -200,10 +200,10 @@ class NoticeActivity : AppCompatActivity() {
                                 val goalUpdate = hashMapOf<String, Any?>(
                                     "myGoalList" to goalList,
                                 )
-                                MySharedPreferences.setGoalList(this, curUser.myGoalList)
+                                firestore?.collection("Account")?.document(accountUId)?.update(goalUpdate)
+                                MySharedPreferences.setGoalList(this, goalList)
                                 goalList = MySharedPreferences.getGoalList(this)
                                 Log.d("myGoalList", goalList.toString())
-                                firestore?.collection("Account")?.document(accountUId)?.update(goalUpdate)
                                 viewHolder.notice_button.text = "수락 완료"
                                 viewHolder.notice_button.isEnabled = false
                             }
