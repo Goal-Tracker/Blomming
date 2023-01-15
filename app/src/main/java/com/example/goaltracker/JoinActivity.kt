@@ -64,7 +64,6 @@ class JoinActivity : AppCompatActivity() {
 
         joinCheckButton.setOnClickListener {
             signinAndSignup()
-            startActivity(Intent(this, ProfileActivity::class.java))
         }
 
 
@@ -88,6 +87,8 @@ class JoinActivity : AppCompatActivity() {
 
                             fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
                             Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, ProfileActivity::class.java))
+                            finish()
                         } else if(task.exception?.message.isNullOrEmpty()) {
                             // Show the error message
                             Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
