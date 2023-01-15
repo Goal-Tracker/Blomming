@@ -174,14 +174,25 @@ class ProfileActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-
                 var accountUId: String? = ""
                 accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-                val curUser = hashMapOf<String, Any?>(
+//                var curUser = Account()
+//
+//                curUser.uid = accountUId
+//                curUser.email = firebaseAuth?.currentUser?.email.toString()
+//                curUser.userName = name.text.toString()
+//                curUser.userColor = backgroundColor
+//                curUser.userMessage = ""
+//                curUser.myGoalList = ArrayList<String>()
+
+                var curUser = hashMapOf<String, Any?>(
                     "userName" to name.text.toString(),
                     "userColor" to backgroundColor,
-                    "uid" to accountUId
+                    "uid" to accountUId,
+                    "email" to firebaseAuth?.currentUser?.email.toString(),
+                    "userMessage" to "",
+                    "myGoalList" to ArrayList<String>()
                 )
 
 //                curUser.Email = firebaseAuth?.currentUser?.email.toString()
@@ -191,13 +202,22 @@ class ProfileActivity : AppCompatActivity() {
                 Log.d("현재유저", curUser.toString())
 
                 fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
+                fireStore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+                    var user = it.toObject(Account::class.java)!!
+                    var color = user.userColor.toString()
+                    var friendList = ArrayList<String>()
+                    MySharedPreferences.setUserId(this, user.uid)
+                    MySharedPreferences.setUserEmail(this, user.email)
+                    MySharedPreferences.setUserNickname(this, user.userName.toString())
+                    MySharedPreferences.setUserColor(this, color)
+                    MySharedPreferences.setUserColorInt(this, color)
+                    MySharedPreferences.setTheme(this, color)
+                    MySharedPreferences.setGoalList(this, user.myGoalList)
+                    MySharedPreferences.setFriendList(this, friendList)
 
-                MySharedPreferences.setUserNickname(this, name.text.toString())
-                MySharedPreferences.setUserColor(this, backgroundColor)
-                MySharedPreferences.setUserId(this, accountUId)
-
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
             }
         }
 
