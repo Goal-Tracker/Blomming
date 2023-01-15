@@ -113,23 +113,23 @@ class StampUploadDialogActivity : AppCompatActivity() {
 
                                 storageRef.putFile(imageResultURL).addOnSuccessListener {
                                     Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
+
+                                    val stampData = hashMapOf(
+                                        "comment" to comment_editText.text.toString(),
+                                        "image" to imgFileName,
+                                        "uid" to MySharedPreferences.getUserId(this),
+                                        "userColor" to MySharedPreferences.getUserColor(this),
+                                        "userName" to MySharedPreferences.getUserNickname(this),
+                                        "type" to type
+                                    )
+
+                                    Log.d(TAG, "stampData : $stampData")
+
+                                    db.collection("Stamp").document(stamp_id).update(
+                                        mapOf("dayRecord.day${stampNum}" to FieldValue.arrayUnion(stampData))
+                                    )
                                 }
                             }
-
-                            val stampData = hashMapOf(
-                                "comment" to comment_editText.text.toString(),
-                                "image" to imgFileName,
-                                "uid" to MySharedPreferences.getUserId(this),
-                                "userColor" to MySharedPreferences.getUserColor(this),
-                                "userName" to MySharedPreferences.getUserNickname(this),
-                                "type" to type
-                            )
-
-                            Log.d(TAG, "stampData : $stampData")
-
-                            db.collection("Stamp").document(stamp_id).update(
-                                    mapOf("dayRecord.day${stampNum}" to FieldValue.arrayUnion(stampData))
-                                )
                         } else {
                             Log.d("TAG", "Stamp num receive fail")
                         }
