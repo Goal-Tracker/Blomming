@@ -129,6 +129,21 @@ class StampUploadDialogActivity : AppCompatActivity() {
                                         mapOf("dayRecord.day${stampNum}" to FieldValue.arrayUnion(stampData))
                                     )
                                 }
+                            } else {
+                                val stampData = hashMapOf(
+                                    "comment" to comment_editText.text.toString(),
+                                    "image" to "",
+                                    "uid" to MySharedPreferences.getUserId(this),
+                                    "userColor" to MySharedPreferences.getUserColor(this),
+                                    "userName" to MySharedPreferences.getUserNickname(this),
+                                    "type" to type
+                                )
+
+                                Log.d(TAG, "stampData : $stampData")
+
+                                db.collection("Stamp").document(stamp_id).update(
+                                    mapOf("dayRecord.day${stampNum}" to FieldValue.arrayUnion(stampData))
+                                )
                             }
                         } else {
                             Log.d("TAG", "Stamp num receive fail")
