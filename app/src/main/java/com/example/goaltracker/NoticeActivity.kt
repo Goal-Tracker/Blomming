@@ -189,7 +189,7 @@ class NoticeActivity : AppCompatActivity() {
                 viewHolder.notice_button.setOnClickListener {
                     firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
                         var curUser = it.toObject(Account::class.java)!!
-                        val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString())
+                        val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString(), true)
 
                         firestore?.collection("Goal")?.document(item.goalUid.toString())
                             ?.collection("team")
@@ -200,10 +200,10 @@ class NoticeActivity : AppCompatActivity() {
                                 val goalUpdate = hashMapOf<String, Any?>(
                                     "myGoalList" to goalList,
                                 )
-                                MySharedPreferences.setGoalList(this, curUser.myGoalList)
+                                firestore?.collection("Account")?.document(accountUId)?.update(goalUpdate)
+                                MySharedPreferences.setGoalList(this, goalList)
                                 goalList = MySharedPreferences.getGoalList(this)
                                 Log.d("myGoalList", goalList.toString())
-                                firestore?.collection("Account")?.document(accountUId)?.update(goalUpdate)
                                 viewHolder.notice_button.text = "수락 완료"
                                 viewHolder.notice_button.isEnabled = false
                             }
