@@ -100,7 +100,6 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_text.text = item.message
             viewHolder.notice_profile_name.text = item.userName?.substring(0, 1)
             viewHolder.notice_button.setVisibility(View.GONE)
-            viewHolder.notice_cancel_button.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color = item.userColor
             if (color != null) {
@@ -163,7 +162,7 @@ class NoticeActivity : AppCompatActivity() {
 
 
         } else if (item.type == 2) {  // 골 초대
-            viewHolder.notice_text.text = item.userName+"\n새로운 골에 초대받았습니다."
+            viewHolder.notice_text.text = item.goalName+"\n"+item.userName+"\n새로운 골에 초대받았습니다."
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
 
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
@@ -174,7 +173,7 @@ class NoticeActivity : AppCompatActivity() {
 
             var accountUId: String?=""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
-            val goalList : ArrayList<String> = MySharedPreferences.getGoalList(this)
+            var goalList : ArrayList<String> = MySharedPreferences.getGoalList(this)
 
             if (goalList.contains(item.goalUid)) {
                 viewHolder.notice_button.text = "수락 완료"
@@ -196,6 +195,9 @@ class NoticeActivity : AppCompatActivity() {
                                 val goalUpdate = hashMapOf<String, Any?>(
                                     "myGoalList" to goalList,
                                 )
+                                MySharedPreferences.setGoalList(this, curUser.myGoalList)
+                                goalList = MySharedPreferences.getGoalList(this)
+                                Log.d("myGoalList", goalList.toString())
                                 firestore?.collection("Account")?.document(accountUId)?.update(goalUpdate)
                                 viewHolder.notice_button.text = "수락 완료"
                                 viewHolder.notice_button.isEnabled = false
@@ -212,7 +214,6 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_text.text = "["+item.goalName+"]\n"+item.userName+"의 콕 찌르기가 도착했습니다.\n아직, 오늘의 목표를 완료하지 못하셨나요?"
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_button.setVisibility(View.GONE)
-            viewHolder.notice_cancel_button.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color :String = item.userColor.toString()
             if (color != null) {
