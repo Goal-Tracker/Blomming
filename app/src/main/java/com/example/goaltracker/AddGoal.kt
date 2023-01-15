@@ -315,14 +315,15 @@ class AddGoal : AppCompatActivity() {
                         // Notification에 골 정보 저장
                         val userUID = firestore!!.collection("Account").document(accountUId)
                         userUID.addSnapshotListener { snapshot, e ->
-                            val userUid = snapshot?.get("uid").toString()
                             val userName = snapshot?.get("uid").toString()
+                            val userUid = snapshot?.get("uid").toString()
                             val profle = snapshot?.get("userColor").toString()
 
                             val notification_goal = hashMapOf(
                                 "goalName" to title.text.toString(),
                                 "goalUid" to goalID,
                                 "type" to 2,
+                                "userName" to userName,
                                 "requestUserId" to userUid,
                                 "userColor" to profle,
                                 "timestamp" to FieldValue.serverTimestamp(),
