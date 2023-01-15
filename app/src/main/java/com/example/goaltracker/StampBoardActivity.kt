@@ -230,24 +230,28 @@ class StampBoardActivity() : AppCompatActivity() {
                         Log.d("Add stamp member : ", member.toString())
 
                         val uid: String = member.get("uid").toString()
-                        val nickname: String = member.get("userName").toString()
-                        val theme: String = member.get("profileColor").toString()
-                        val message: String = member.get("message").toString()
 
-                        teamDatas.add(
-                            GoalTeamData(
-                                uid = uid,
-                                name = nickname,
-                                profileColor = theme,
-                                message = message
+                        db.collection("Account").document(uid).get().addOnSuccessListener {
+                            val nickname: String = it.get("userName").toString()
+                            val theme: String = it.get("userColor").toString()
+                            val message: String = it.get("userMessage").toString()
+
+                            teamDatas.add(
+                                GoalTeamData(
+                                    uid = uid,
+                                    name = nickname,
+                                    profileColor = theme,
+                                    message = message
+                                )
                             )
-                        )
 
-                        Log.d("teamDatas result : ", teamDatas.toString())
+                            Log.d("teamDatas result : ", teamDatas.toString())
 
-                        teamDatas.distinct()
-                        goalTeamAdapter.teamDatas = teamDatas
-                        goalTeamAdapter.notifyDataSetChanged()
+                            teamDatas.distinct()
+                            goalTeamAdapter.teamDatas = teamDatas
+                            goalTeamAdapter.notifyDataSetChanged()
+
+                        }
                     }
                 }
         }
