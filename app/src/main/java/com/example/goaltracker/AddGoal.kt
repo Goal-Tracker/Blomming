@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
@@ -297,8 +298,8 @@ class AddGoal : AppCompatActivity() {
 
             fun addFriendsBtnOnclick(item: Friend){
                 binding.checkBox.setOnClickListener {
-                    // 체크한 친구만 Goal에 추가
                     if ((it as CheckBox).isChecked) {
+                        // 체크한 친구만 Goal에 추가
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
@@ -313,22 +314,38 @@ class AddGoal : AppCompatActivity() {
                             .set(team)
 
                         // Notification에 골 정보 저장
-                        val notification_goal = hashMapOf(
-                            "goalName" to title.text.toString(),
-                            "goalUid" to goalID,
-                            "type" to 2,
-                            "request" to false
-                        )
-                        firestore?.collection("Account")?.document(item.uid.toString())
-                            ?.collection("Notification")?.document()?.set(notification_goal)
+                        val userUID = firestore!!.collection("Account").document(accountUId)
+                        userUID.addSnapshotListener { snapshot, e ->
+                            val userUid = snapshot?.get("uid").toString()
+                            val profle = snapshot?.get("userColor").toString()
+
+                            // Notification에 골 정보 저장
+                            val notification_goal = hashMapOf(
+                                "goalName" to title.text.toString(),
+                                "goalUid" to goalID,
+                                "type" to 2,
+                                "request" to false,
+                                "requestUserId" to userUid,
+                                "userColor" to profle,
+                                "timestamp" to FieldValue.serverTimestamp(),
+                                "read" to false
+                            )
+                            firestore?.collection("Account")?.document(item.uid.toString())
+                                ?.collection("Notification")?.document(goalID)?.set(notification_goal)
+                        }
                     }
                     // 체크 해제 시 삭제
                     else {
+                        // 체크 해제된 팀원 삭제
                         firestore!!.collection("Goal")
                             .document(goalID)
                             .collection("team")
                             .document(item.uid.toString())
                             .delete()
+
+                        // Notification의 골 정보 삭제
+                        firestore?.collection("Account")?.document(item.uid.toString())
+                            ?.collection("Notification")?.document(goalID)?.delete()
                     }
                 }
             }
