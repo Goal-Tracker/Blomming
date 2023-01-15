@@ -156,14 +156,14 @@ class AddGoal : AppCompatActivity() {
                     "userName" to userName,
                     "uid" to userUid,
                     "profileColor" to profle,
-                    "request" to true
-                )
+                    "request" to true,
+                    )
                 firestore!!.collection("Goal").document(goalID)
                     .collection("team").document(userUid).set(user)
             }
 
             // Account에 goalList 저장
-            firestore!!.collection("Account").document(accountUId).collection("Notification")
+            firestore!!.collection("Goal").document(goalID).collection("team")
                 ?.whereEqualTo("request", true)
                 .addSnapshotListener { value, e ->
                     val goalList = ArrayList<String>()
@@ -181,8 +181,7 @@ class AddGoal : AppCompatActivity() {
                 "goalName" to title.text.toString(),
                 "goalUid" to goalID,
                 "type" to 2,
-                "request" to true
-            )
+                )
             firestore?.collection("Account")?.document("$accountUId")
                 ?.collection("Notification")?.document()?.set(notification_goal)
 
@@ -317,14 +316,13 @@ class AddGoal : AppCompatActivity() {
                         val userUID = firestore!!.collection("Account").document(accountUId)
                         userUID.addSnapshotListener { snapshot, e ->
                             val userUid = snapshot?.get("uid").toString()
+                            val userName = snapshot?.get("uid").toString()
                             val profle = snapshot?.get("userColor").toString()
 
-                            // Notification에 골 정보 저장
                             val notification_goal = hashMapOf(
                                 "goalName" to title.text.toString(),
                                 "goalUid" to goalID,
                                 "type" to 2,
-                                "request" to false,
                                 "requestUserId" to userUid,
                                 "userColor" to profle,
                                 "timestamp" to FieldValue.serverTimestamp(),
