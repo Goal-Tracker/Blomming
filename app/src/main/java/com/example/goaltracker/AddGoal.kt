@@ -14,10 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
 import kotlinx.android.synthetic.main.item_member.view.*
+import kotlinx.android.synthetic.main.report_dialog.*
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 import java.text.SimpleDateFormat
@@ -131,12 +134,16 @@ class AddGoal : AppCompatActivity() {
                 "title" to title.text.toString(),
                 "startDay" to startDay.text.toString(),
                 "endDay" to endDay.text.toString(),
-                "memo" to memo.text.toString(),
                 "action" to true,
                 "stampId" to stampID,
                 "day" to fewDay(),  //날짜 차이 계산
             )
             firestore!!.collection("Goal").document(goalID).set(goal)
+
+            if(memo.text != null)
+            {
+                firestore!!.collection("Goal").document(goalID)?.update("message", memo.text.toString())
+            }
 
             // 사용자 정보 저장
             val userUID = firestore!!.collection("Account").document(accountUId)
@@ -150,11 +157,8 @@ class AddGoal : AppCompatActivity() {
                     "profileColor" to profle,
                     "request" to true
                 )
-                firestore!!.collection("Goal")
-                    .document(goalID)
-                    .collection("team")
-                    .document()
-                    .set(user)
+                firestore!!.collection("Goal").document(goalID)
+                    .collection("team").document(userUid).set(user)
             }
 
             // Account에 goalList 저장
@@ -175,13 +179,11 @@ class AddGoal : AppCompatActivity() {
             val notification_goal = hashMapOf(
                 "goalName" to title.text.toString(),
                 "goalUid" to goalID,
-                "message" to memo.text.toString(),
                 "type" to 2,
                 "request" to true
             )
             firestore?.collection("Account")?.document("$accountUId")
                 ?.collection("Notification")?.document()?.set(notification_goal)
-
 
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
@@ -307,14 +309,13 @@ class AddGoal : AppCompatActivity() {
                         firestore!!.collection("Goal")
                             .document(goalID)
                             .collection("team")
-                            .document()
+                            .document(item.uid.toString())
                             .set(team)
 
                         // Notification에 골 정보 저장
                         val notification_goal = hashMapOf(
                             "goalName" to title.text.toString(),
                             "goalUid" to goalID,
-                            "message" to memo.text.toString(),
                             "type" to 2,
                             "request" to false
                         )
