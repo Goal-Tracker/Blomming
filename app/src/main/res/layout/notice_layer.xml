@@ -53,8 +53,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/notice_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="title"
+                android:fontFamily="@font/ko_pub_world_dotum_bold"
+                android:textColor="#585858"
+                android:textSize="14sp" />
             <TextView
                 android:id="@+id/notice_text"
                 android:layout_width="wrap_content"
@@ -69,7 +77,7 @@
             android:layout_width="0dp"
             android:layout_height="23dp"
             android:layout_gravity="center"
-            android:layout_weight="0.7">
+            android:layout_weight="0.6">
 
             <Button
                 android:id="@+id/notice_button"
@@ -81,14 +89,6 @@
                 android:textSize="10sp"
                 android:fontFamily="@font/ko_pub_world_dotum_medium"
                 android:background="@drawable/add_button"/>
-
-            <Button
-                android:id="@+id/notice_cancel_button"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="3dp"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_baseline_close_poke_24"/>
 
         </LinearLayout>
 

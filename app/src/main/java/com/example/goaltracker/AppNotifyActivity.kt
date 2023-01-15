@@ -86,7 +86,6 @@ class AppNotifyActivity : AppCompatActivity() {
             viewHolder.notice_text.text = item.message
             viewHolder.notice_profile_name.text = item.userName?.substring(0, 1)
             viewHolder.notice_button.setVisibility(View.GONE)
-            viewHolder.notice_cancel_button.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color = item.userColor
             if (color != null) {
