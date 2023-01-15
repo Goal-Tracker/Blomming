@@ -216,10 +216,10 @@ class NoticeActivity : AppCompatActivity() {
             }
 
         } else if (item.type == 3) {  // 콕 찌르기
-            viewHolder.notice_text.text = "["+item.goalName+"]\n"+item.userName+"의 콕 찌르기가 도착했습니다.\n아직, 오늘의 목표를 완료하지 못하셨나요?"
+            viewHolder.notice_text.text = item.userName+"님의 콕 찌르기가 도착했습니다.\n아직 오늘의 목표를 완료하지 못하셨나요?"
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_button.setVisibility(View.GONE)
-            viewHolder.notice_title.setVisibility(View.GONE)
+            viewHolder.notice_title.text = item.goalName
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color :String = item.userColor.toString()
             if (color != null) {
