@@ -49,7 +49,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             MySharedPreferences.setUserColorInt(this, color)
             MySharedPreferences.setTheme(this, color)
             MySharedPreferences.setUserMessage(this, curUser.userMessage.toString())
+            MySharedPreferences.setGoalList(this, curUser.myGoalList)
         }
+        db.collection("Account")
+            .document(accountUId)
+            .collection("Friend")
+            .whereEqualTo("status", "friend")
+            .get()
+            .addOnSuccessListener { friendList ->
+                Log.d("status가 friend인 문서 개수", friendList.size().toString())
+                val friendDocuments: MutableList<DocumentSnapshot> = friendList.documents
+                var friendsUId : ArrayList<String> ?= arrayListOf()
+                for (document in friendDocuments) {
+                    friendsUId?.add(document.id)
+                }
+                if (friendsUId != null) {
+                    MySharedPreferences.setFriendList(this, friendsUId)
+                }
+                val list : ArrayList<String> = MySharedPreferences.getFriendList(this)
+                if (list!=null) {
+                    for (value in list) {
+                        Log.d("mysharedpreferences에 저장된 friend", value)
+                    }
+                }
+            }
 
         setTheme(MySharedPreferences.getTheme(this))
         setContentView(R.layout.drawer_main)
