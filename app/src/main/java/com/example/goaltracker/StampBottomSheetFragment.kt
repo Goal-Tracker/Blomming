@@ -1,17 +1,9 @@
 package com.example.goaltracker
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.ContentValues
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +12,6 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -51,12 +42,10 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         }
     }
 
-    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_stamp_bottom_sheet, container, false)
 
         stamp_recyclerView = view.findViewById(R.id.stamp_recyclerView)
@@ -77,14 +66,10 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         val goal_id = stampInfo.goal_id
         val stamp_num = stampInfo.num
         var notYet: Int
-        Log.d("User Comment", "stamp_id : $goal_id, stamp_num : $stamp_num")
-
 
         val goal_db = db.collection("Goal").document(goal_id)
-
         goal_db.addSnapshotListener { goal_snapshot, e ->
             val goal_day = goal_snapshot?.get("day").toString().toInt()
-
             val start_day = goal_snapshot?.get("startDay") as String
 
             var start_date = start_day + " 00:00:00"
@@ -94,7 +79,6 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             var certified = false
 
             var calcDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-
             val pastDate = (calcDate+1).toInt()
 
             // notYet = 0 : 기간 지남
@@ -110,19 +94,12 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                 notYet = 0
             }
 
-            Log.d(TAG, "notYet : $notYet")
-
-            val stamp_id = goal_snapshot?.get("stampId") as String
+            val stamp_id = goal_snapshot.get("stampId") as String
             val stamp_db = db.collection("Stamp").document(stamp_id)
-
             stamp_db.addSnapshotListener { stamp_snapshot, e ->
                 try {
                     val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
                     val commentArray = dayRecord["day$stamp_num"] as List<HashMap<String, String>>
-
-                    Log.d("StampBottomSheetFragment", "commentArray length : ${commentArray.size}")
-
-                    Log.d("User Comment day", "User Comment date : " + commentArray.toString())
 
                     todayStampDatas.apply {
                         for (commentInfo in commentArray) {
@@ -160,11 +137,6 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                     } else {
                         addPastStamp.visibility = View.GONE
                     }
-
-                    Log.d(TAG, "notYet, if : $notYet")
-                    Log.d(TAG, "notYet == 0 : ${notYet == 0}")
-                    Log.d(TAG, "notYet == 1 : ${notYet == 1}")
-                    Log.d(TAG, "notYet == 2 : ${notYet == 2}")
 
                     if (notYet == 0){ // 이미 기간이 지난 경우
                         Log.d("stamp status", "notYet: $notYet")
@@ -209,11 +181,9 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         }
                     }
                 } catch (e: Exception){
-                    Log.d(ContentValues.TAG, "[Error] $e")
+                    Log.d(TAG, "[Error] $e")
 
                     if (notYet == 0){ // 이미 기간이 지난 경우
-                        Log.d("stamp status", "notYet: $notYet")
-
                         noneStamp_textView.visibility = View.VISIBLE
                         today_stamp_noneStamp_button.visibility = View.VISIBLE
                         stamp_recyclerView.visibility = View.GONE
@@ -225,8 +195,6 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
 
                     } else if(notYet == 2) {  // 아직 기간이 아닌 경우
-                        Log.d("stamp status", "notYet: $notYet")
-
                         addPastStamp.visibility = View.GONE
 
                         noneStamp_textView.visibility = View.VISIBLE
@@ -252,22 +220,11 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         today_stamp_button.isEnabled = false
 
                         today_stamp_noneStamp_button.text = "오늘의 도장 찍기"
-                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
-
+                        bgButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
                     }
                 }
-
-                Log.d("todayStampDatas result : ", todayStampDatas.toString())
             }
         }
-
-
-
-//        data class TodayStampData(val num : Int, val title : String, val nickname : String, val comment : String, val image : Int)
-
-
-        Log.d("todayStampDatas result2 : ", todayStampDatas.toString())
-
 
         today_stamp_button.setOnClickListener {
             Toast.makeText(requireContext(), "today stamp button click", Toast.LENGTH_SHORT).show()

@@ -36,4 +36,18 @@
 
     <color name="main_color">#36375a</color>
     <color name="gray">#eeeeee</color>
+
+    <array name="array_dot_active">
+        <item>@color/main_color</item>
+        <item>@color/main_color</item>
+        <item>@color/main_color</item>
+        <item>@color/main_color</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/profile_color_coral</item>
+        <item>@color/profile_color_coral</item>
+        <item>@color/profile_color_coral</item>
+        <item>@color/profile_color_coral</item>
+    </array>
 </resources>

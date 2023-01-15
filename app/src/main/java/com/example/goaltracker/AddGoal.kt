@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
@@ -23,13 +23,13 @@ import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-
+import kotlin.collections.ArrayList
 
 class AddGoal : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
     var firebaseAuth : FirebaseAuth?= null
-    private val accountUId = Firebase.auth.currentUser?.uid
+    private val accountUId = Firebase.auth.currentUser?.uid.toString()
 
     lateinit var title: EditText            // 이름
     lateinit var startDay: EditText         // 시작일
@@ -46,15 +46,11 @@ class AddGoal : AppCompatActivity() {
     var startDay_calendar = Calendar.getInstance()
     var endDay_calendar = Calendar.getInstance()
 
-
-    lateinit var document : String
-
     // ArrayList 생성
     var FriendsList : ArrayList<Friend> = arrayListOf()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(MySharedPreferences.getTheme(this))
+        setTheme(MySharedPreferences.getTheme(this)) // 테마적용
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_goal)
 
@@ -143,8 +139,7 @@ class AddGoal : AppCompatActivity() {
             firestore!!.collection("Goal").document(goalID).set(goal)
 
             // 사용자 정보 저장
-            val userUID = firestore!!.collection("Account").document(accountUId.toString())
-
+            val userUID = firestore!!.collection("Account").document(accountUId)
             userUID.addSnapshotListener { snapshot, e ->
                 val userName = snapshot?.get("userName").toString()
                 val userUid = snapshot?.get("uid").toString()
@@ -152,7 +147,8 @@ class AddGoal : AppCompatActivity() {
                 val user = hashMapOf(
                     "userName" to userName,
                     "uid" to userUid,
-                    "profileColor" to profle
+                    "profileColor" to profle,
+                    "request" to true
                 )
                 firestore!!.collection("Goal")
                     .document(goalID)
@@ -161,29 +157,31 @@ class AddGoal : AppCompatActivity() {
                     .set(user)
             }
 
-            // Account에 저장
-            var goalList = arrayListOf("")
-            firestore?.collection("Account")!!.document(accountUId.toString()).collection("Notification")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                // ArrayList 비워줌
-                goalList.clear()
-
-                for (snapshot in querySnapshot!!.documents) {
-
-                    val userGoal = snapshot.getString("goalUid")
-                    goalList.add(userGoal.toString())
+            // Account에 goalList 저장
+            firestore!!.collection("Account").document(accountUId).collection("Notification")
+                ?.whereEqualTo("request", true)
+                .addSnapshotListener { value, e ->
+                    val goalList = ArrayList<String>()
+                    goalList.clear()
+                    for (doc in value!!) {
+                        doc.getString("goalUid")?.let {
+                            goalList.add(it!!)
+                        }
+                    }
+                    firestore?.collection("Account")?.document("$accountUId")?.update("myGoalList", goalList)
                 }
-            }
 
+            // Notification에 골 정보 저장
             val notification_goal = hashMapOf(
                 "goalName" to title.text.toString(),
                 "goalUid" to goalID,
                 "message" to memo.text.toString(),
                 "type" to 2,
-                "myGoalList" to goalList
+                "request" to true
             )
-
             firestore?.collection("Account")?.document("$accountUId")
                 ?.collection("Notification")?.document()?.set(notification_goal)
+
 
             // Stamp에 저장
             val hashMap = HashMap<String, String>()
@@ -192,8 +190,8 @@ class AddGoal : AppCompatActivity() {
                 "dayRecord" to hashMap
             )
             firestore!!.collection("Stamp").document(stampID).set(goal_ID)
-
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
+
 
             // 메인 화면으로 이동
             val intent = Intent(this, MainActivity::class.java)
@@ -302,14 +300,26 @@ class AddGoal : AppCompatActivity() {
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
-                            "profileColor" to item.userColor.toString()
-                        )
+                            "profileColor" to item.userColor.toString(),
+                            "request" to false
+                            )
 
                         firestore!!.collection("Goal")
                             .document(goalID)
                             .collection("team")
                             .document()
                             .set(team)
+
+                        // Notification에 골 정보 저장
+                        val notification_goal = hashMapOf(
+                            "goalName" to title.text.toString(),
+                            "goalUid" to goalID,
+                            "message" to memo.text.toString(),
+                            "type" to 2,
+                            "request" to false
+                        )
+                        firestore?.collection("Account")?.document(item.uid.toString())
+                            ?.collection("Notification")?.document()?.set(notification_goal)
                     }
                     // 체크 해제 시 삭제
                     else {

@@ -1,28 +1,15 @@
 package com.example.goaltracker
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
-import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
-import com.google.firebase.FirebaseException
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.MetadataChanges
-import com.squareup.okhttp.Dispatcher
-import kotlinx.android.synthetic.main.goals_layer.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -54,11 +41,6 @@ class StampBoardActivity() : AppCompatActivity() {
         setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stamp_board)
-
-        // uid 저장
-//        MySharedPreferences.setUserId(this, "QL5QEcUUl5QKxKWOKQ2J")
-//        MySharedPreferences.setUserNickname(this, "임정수")
-//        MySharedPreferences.setUserColor(this, "#fcdcce")
 
         edit_goal = findViewById(R.id.edit_goal)
         goal_back_imageButton = findViewById(R.id.goal_back_imageButton)
@@ -124,9 +106,6 @@ class StampBoardActivity() : AppCompatActivity() {
             goal_progressBar.max = goal_day
             goal_progressBar.progress = past_date
 
-            Log.d("goal_db", "Date : $goal_day")
-            Log.d("goal_db", "stamp_id : $stamp_id")
-
             var start_date = start_day + " 00:00:00"
             var sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
             var date = sf.parse(start_date)
@@ -151,37 +130,17 @@ class StampBoardActivity() : AppCompatActivity() {
                             for (i in 1..goal_day) {
                                 val notYet: Boolean = pastDate <= i
 
-                                val dayRecord =
-                                    stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
-                                Log.d(TAG, "[dayRecord[\"Day$i\"]] ${dayRecord["Day$i"]}")
-                                if (dayRecord["Day$i"] != null) {
-                                    Log.d(TAG, "[dayRecord[\"Day$i\"]] inner ${dayRecord["Day$i"]}")
-                                    var commentArray =
-                                        dayRecord["Day$i"] as List<HashMap<String, String>>
+                                val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
+                                if (dayRecord["day$i"] != null) {
+                                    var commentArray = dayRecord["day$i"] as List<HashMap<String, String>>
                                     var themeArray = ArrayList<String>()
                                     var commentNum = commentArray.size
 
-                                    Log.d(TAG, "[dayRecord[\"Day$i\"]] not null :  ${commentArray}")
-
                                     if (commentNum > 0) {
-                                        Log.d(
-                                            TAG,
-                                            "[dayRecord[\"Day$i\"]] commentNum > 0 :  ${commentArray}"
-                                        )
-
                                         for (commentInfo in commentArray) {
-                                            Log.d(
-                                                TAG,
-                                                "[day_record[\"Day$i\"]] commentInfo :  ${commentInfo}"
-                                            )
-
-                                            themeArray.add(commentInfo["UserColor"].toString())
-                                            Log.d(TAG, "$i : [themeArray] $themeArray")
+                                            themeArray.add(commentInfo["userColor"].toString())
                                         }
 
-                                        Log.d(TAG, "$i : [inner themeArray] $themeArray")
-
-                                        Log.d(TAG, "comment not null num : $i")
                                         stampDatas.add(
                                             StampBoardData(
                                                 goal_id = goal_id,
@@ -194,9 +153,6 @@ class StampBoardActivity() : AppCompatActivity() {
                                         )
                                     }
                                 } else {
-                                    Log.d(ContentValues.TAG, "[day_record[\"Day$i\"]] is empty")
-                                    Log.d(ContentValues.TAG, "comment null num : $i")
-
                                     stampDatas.add(
                                         StampBoardData(
                                             goal_id = goal_id,
@@ -210,13 +166,11 @@ class StampBoardActivity() : AppCompatActivity() {
                                 }
                             }
 
-                            Log.d("stampData result inner : ", stampDatas.toString())
-
                             stampDatas.sortBy { it.num }
                             stampBoardAdapter.stampDatas = stampDatas
                             stampBoardAdapter.notifyDataSetChanged()
                         } catch (e: Exception) {
-                            Log.d(ContentValues.TAG, "[Error] $e")
+                            Log.d(TAG, "[Error] $e")
                         }
                     }
                 }
@@ -227,31 +181,23 @@ class StampBoardActivity() : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     for (member in result) {
-                        Log.d("Add stamp member : ", member.toString())
-
                         val uid: String = member.get("uid").toString()
+                        val nickname: String = member.get("userName").toString()
+                        val theme: String = member.get("profileColor").toString()
+                        val message: String = member.get("message").toString()
 
-                        db.collection("Account").document(uid).get().addOnSuccessListener {
-                            val nickname: String = it.get("userName").toString()
-                            val theme: String = it.get("userColor").toString()
-                            val message: String = it.get("userMessage").toString()
-
-                            teamDatas.add(
-                                GoalTeamData(
-                                    uid = uid,
-                                    name = nickname,
-                                    profileColor = theme,
-                                    message = message
-                                )
+                        teamDatas.add(
+                            GoalTeamData(
+                                uid = uid,
+                                name = nickname,
+                                profileColor = theme,
+                                message = message
                             )
+                        )
 
-                            Log.d("teamDatas result : ", teamDatas.toString())
-
-                            teamDatas.distinct()
-                            goalTeamAdapter.teamDatas = teamDatas
-                            goalTeamAdapter.notifyDataSetChanged()
-
-                        }
+                        teamDatas.distinct()
+                        goalTeamAdapter.teamDatas = teamDatas
+                        goalTeamAdapter.notifyDataSetChanged()
                     }
                 }
         }
@@ -266,8 +212,6 @@ class StampBoardActivity() : AppCompatActivity() {
         var date = sf.parse(first_date)
 
         var calcDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-
-        Log.d("test: 날짜!!", "$calcDate 일 차이남!!")
 
         return (calcDate + 1).toInt()
     }

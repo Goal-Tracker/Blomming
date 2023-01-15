@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.notice_view.*
 class NoticeActivity : AppCompatActivity() {
 
     lateinit var noticeAdapter: NoticesAdapter
-//    val notices = mutableListOf<Notification>()
+    //    val notices = mutableListOf<Notification>()
     var firebaseAuth : FirebaseAuth ?= null
     var firestore : FirebaseFirestore ?= null
 
@@ -95,8 +95,6 @@ class NoticeActivity : AppCompatActivity() {
 
     private fun setNoticeList(holder: NoticesAdapter.ViewHolder, item: Notifications) {
         var viewHolder = (holder as NoticesAdapter.ViewHolder).itemView
-
-
 
         if (item.type == 0) { // 관리자 공지
             viewHolder.notice_text.text = item.message
@@ -170,7 +168,6 @@ class NoticeActivity : AppCompatActivity() {
 
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color : String? = item.userColor
-            Log.d(item.userColor, "유저 컬러")
             if (color != null) {
                 profileColor.setColor(Color.parseColor(color))
             }

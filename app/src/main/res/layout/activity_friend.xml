@@ -40,7 +40,6 @@
                     android:layout_alignBottom="@id/imageView"
                     android:fontFamily="@font/fontstyle"
                     android:text="친구 목록"
-                    android:textColor="#FFFFFF"
                     android:textSize="15sp"
                     android:translationX="20dp"
                     android:translationY="56dp"
@@ -57,7 +56,8 @@
                     android:background="@android:color/transparent"
                     android:padding="0sp"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon" />
+                    app:srcCompat="@drawable/icon"
+                    app:tint="?attr/colorButtonNormal" />
 
             </RelativeLayout>
 
@@ -182,8 +182,8 @@
                         </RelativeLayout>
                     </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/searchWord"
+                    <TextView
+                        android:id="@+id/search"
                         android:layout_width="335dp"
                         android:layout_height="38dp"
                         android:layout_marginLeft="10dp"
@@ -191,6 +191,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/shadow_1"
                         android:fontFamily="@font/fontstyle"
+                        android:gravity="center_vertical"
                         android:hint="새로운 친구를 검색해주세요."
                         android:inputType="textEmailAddress"
                         android:lineSpacingExtra="6sp"
