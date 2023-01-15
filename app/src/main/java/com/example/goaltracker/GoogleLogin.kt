@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
 
 @Suppress("DEPRECATION")
@@ -24,6 +25,7 @@ class GoogleLogin() : AppCompatActivity(){
 
     //firebase auth
     lateinit var firebaseAuth: FirebaseAuth
+    var fireStore : FirebaseFirestore?=null
     //google client
     lateinit var googleSignInClient: GoogleSignInClient
     //private const val TAG = "GoogleActivity"
@@ -33,6 +35,7 @@ class GoogleLogin() : AppCompatActivity(){
         super.onCreate(savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        fireStore= FirebaseFirestore.getInstance()
 
         val gso= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken("470402455172-qtfn7a7up7efsa1dn84ttbnu53nrp951.apps.googleusercontent.com")
@@ -47,7 +50,7 @@ class GoogleLogin() : AppCompatActivity(){
     public override fun onStart() {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(this)
-        if(account!==null){ // 이미 로그인 되어 있을시 바로 프로필 설정 화면으로 이동
+        if(account!==null){ // 이미 로그인 되어 있을시 바로 메인 화면으로 이동
             toMainActivity(firebaseAuth.currentUser)
         }
     }  //onStart end
@@ -79,6 +82,15 @@ class GoogleLogin() : AppCompatActivity(){
             .addOnCompleteListener(this) { task ->
                 if(task.isSuccessful) {
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
+                    //account db 저장
+                    var userAccount = Account()
+                    var accountName : String ?= ""
+
+                    accountName=firebaseAuth?.currentUser?.uid.toString()
+                    userAccount.email= firebaseAuth?.currentUser?.email.toString()
+
+                    fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
+                    Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
                     toProfileActivity(firebaseAuth.currentUser)
                 } else{
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 실패", task.exception)
