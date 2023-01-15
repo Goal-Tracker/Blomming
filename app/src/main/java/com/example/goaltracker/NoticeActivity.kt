@@ -100,6 +100,7 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_text.text = item.message
             viewHolder.notice_profile_name.text = item.userName?.substring(0, 1)
             viewHolder.notice_button.setVisibility(View.GONE)
+            viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color = item.userColor
             if (color != null) {
@@ -109,6 +110,7 @@ class NoticeActivity : AppCompatActivity() {
         } else if (item.type == 1) {  // 친구 요청
             viewHolder.notice_text.text = item.userName+"님이 친구 요청을 보냈습니다."
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
+            viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color = item.userColor
             if (color != null) {
@@ -162,9 +164,9 @@ class NoticeActivity : AppCompatActivity() {
 
 
         } else if (item.type == 2) {  // 골 초대
-            viewHolder.notice_text.text = item.goalName+"\n"+item.userName+"\n새로운 골에 초대받았습니다."
+            viewHolder.notice_text.text = item.userName+"님이 새로운 골에 초대했습니다."
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
-
+            viewHolder.notice_title.text = item.goalName
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color : String? = item.userColor
             if (color != null) {
@@ -214,6 +216,7 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_text.text = "["+item.goalName+"]\n"+item.userName+"의 콕 찌르기가 도착했습니다.\n아직, 오늘의 목표를 완료하지 못하셨나요?"
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_button.setVisibility(View.GONE)
+            viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             val color :String = item.userColor.toString()
             if (color != null) {

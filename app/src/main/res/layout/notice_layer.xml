@@ -53,8 +53,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/notice_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="title"
+                android:fontFamily="@font/ko_pub_world_dotum_bold"
+                android:textColor="#585858"
+                android:textSize="14sp" />
             <TextView
                 android:id="@+id/notice_text"
                 android:layout_width="wrap_content"
