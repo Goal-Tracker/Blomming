@@ -48,15 +48,13 @@ class AddFriendActivity : AppCompatActivity() {
     var indexname : String? = null
     var indexemail : String? = null
     var indexcolor : String? = null
-    lateinit var friends: Account
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(MySharedPreferences.getTheme(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_friend)
 
-
-
-
+        //검색창
         searchWord.addTextChangedListener(object : TextWatcher {
 
             //텍스트가 변경되기 바로 이전에 동작
@@ -85,14 +83,10 @@ class AddFriendActivity : AppCompatActivity() {
             startActivity(Intent(this, FriendActivity::class.java))
         }
 
-
         // 검색 옵션에 따라 검색
         searchBtn.setOnClickListener {
             (FriendAddRecyclerView.adapter as RecyclerViewAdapter).search(searchWord.text.toString())
         }
-
-
-
     }
 
     //인원 카운트
@@ -117,13 +111,8 @@ class AddFriendActivity : AppCompatActivity() {
                         var item = snapshot.toObject(Friend::class.java)
                         friend_add.add(item!!)
                     }
-
-
                     notifyDataSetChanged()
                 }
-
-
-
         }
 
 
@@ -151,23 +140,23 @@ class AddFriendActivity : AppCompatActivity() {
             holder.itemView.setOnClickListener {
                 callDialog(it.context, account)
             }
-
         }
 
 
-
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            //MySharedPreferences 사용해 데이터 저장
             val friendList: ArrayList<String> =
                 MySharedPreferences.getFriendList(this@AddFriendActivity)
             fun loadNoticeTime(item: Friend) {
                 Log.d(item.uid.toString(), "불러오기")
+                //friendlist에 item.uid가 있다면
                 if (friendList.contains(item.uid)) {
                     AddBtn.text = "신청 보냄"
                     AddBtn.isEnabled = false
                 }
+                //friendlist에 item.uid가 없다면
                 if (!friendList.contains(item.uid.toString())) {
                     AddBtn.text = "친구 요청"
-                    AddBtn.isEnabled = false
                 }
 
             }
@@ -245,7 +234,6 @@ class AddFriendActivity : AppCompatActivity() {
                                             ?.collection("Friend")
                                             ?.whereEqualTo("uid", item.uid.toString())?.get()
                                             ?.addOnCompleteListener { task ->
-
 
                                                 // 친구 리스트가 없는 경우
                                                 if (task.result?.size() == 0) {

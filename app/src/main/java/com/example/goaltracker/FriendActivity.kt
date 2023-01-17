@@ -68,7 +68,6 @@ class FriendActivity : AppCompatActivity() {
         FriendRequestRecyclerView.setHasFixedSize(true)
 
 
-
         //x버튼 누르면 main 화면으로 이동
         backBtn.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -214,8 +213,6 @@ class FriendActivity : AppCompatActivity() {
     }
 
 
-
-
     //친구 신청 취소
     inner class FriendRequestAdapter(private val context: MutableList<Friend>) :
         RecyclerView.Adapter<FriendRequestAdapter.ViewHolder>() {
@@ -255,13 +252,12 @@ class FriendActivity : AppCompatActivity() {
             holder.setFriendRequestName(friend_request[position])
             holder.SetFriendRequestColor(friend_request[position])
             holder.RequestBtnOnclick(friend_request[position])
-
-
         }
 
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
+            val friendList: ArrayList<String> =
+                MySharedPreferences.getFriendList(this@FriendActivity)
             private val RequestName: TextView = itemView.findViewById(R.id.RequestName)
             private val RequestColor: ImageView = itemView.findViewById(R.id.RequestColor)
             private val RequestBtn: Button = itemView.findViewById(R.id.RequestBtn)
@@ -298,6 +294,11 @@ class FriendActivity : AppCompatActivity() {
             //친구 신청 취소 버튼
             fun RequestBtnOnclick(item: Friend) {
                 RequestBtn.setOnClickListener {
+
+                    var friendList = MySharedPreferences.getFriendList(this@FriendActivity)
+                    friendList.remove(item.uid.toString())
+                    MySharedPreferences.setFriendList(this@FriendActivity, friendList)
+
                     // 내 친구 목록
                     firestore?.collection("Account")?.document("$currentUser")
                         ?.collection("Friend")
@@ -318,10 +319,7 @@ class FriendActivity : AppCompatActivity() {
 
         // 리사이클러뷰의 아이템 총 개수 반환
         override fun getItemCount() = friend_request.size
-
     }
-
-
 
 
     //친구 목록
@@ -448,6 +446,10 @@ class FriendActivity : AppCompatActivity() {
                 ?.document("${dialog.uid}")
                 ?.delete()
                 ?.addOnSuccessListener {
+                    var friendList = MySharedPreferences.getFriendList(this@FriendActivity)
+                    friendList.remove(dialog.uid.toString())
+                    MySharedPreferences.setFriendList(this@FriendActivity, friendList)
+
                     Toast.makeText(this@FriendActivity, "친구를 삭제했습니다.", Toast.LENGTH_SHORT).show()
                     dialog?.dismiss()
                 }
