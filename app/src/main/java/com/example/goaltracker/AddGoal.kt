@@ -152,20 +152,26 @@ class AddGoal : AppCompatActivity() {
                 val userName = snapshot?.get("userName").toString()
                 val userUid = snapshot?.get("uid").toString()
                 val profle = snapshot?.get("userColor").toString()
+
                 val user = hashMapOf(
                     "userName" to userName,
                     "uid" to userUid,
                     "profileColor" to profle,
                     "request" to true,
+                    "goalUid" to goalID
                     )
                 firestore!!.collection("Goal").document(goalID)
                     .collection("team").document(userUid).set(user)
             }
 
-            // Account에 goalList 저장
-            val goalList = ArrayList<String>()
-            goalList.add(goalID)
-            firestore?.collection("Account")?.document("$accountUId")?.update("myGoalList", goalList)
+            // myGoalList 추가
+            firestore!!.collection("Account").document(accountUId)
+                .addSnapshotListener { snapshot, e ->
+                val goalList = snapshot?.get("myGoalList") as ArrayList<String>
+                goalList.add(goalID)
+                firestore?.collection("Account")?.document("$accountUId")
+                    ?.update("myGoalList", goalList) // 끝이 없으어....
+            }
 
             // Notification에 골 정보 저장
             val notification_goal = hashMapOf(
@@ -294,6 +300,7 @@ class AddGoal : AppCompatActivity() {
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
                             "profileColor" to item.userColor.toString(),
+                            "goalUid" to goalID,
                             "request" to false
                             )
 
