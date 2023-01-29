@@ -186,8 +186,6 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                     }
                 } catch (e: Exception){
                     Log.d(TAG, "[Error] $e")
-
-                    onStart()
                 }
             }
         }
