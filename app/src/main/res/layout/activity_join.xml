@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:background="#ffffff"
         android:orientation="vertical">
 
@@ -33,25 +34,32 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:passwordToggleEnabled="false">
 
-                <EditText
-                    android:id="@+id/signupID"
-                    android:layout_width="313dp"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:paddingLeft="15dp"
-                    android:hint="이메일"
-                    android:textColor="#363639"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/ko_pub_world_dotum_medium"
-                    android:background="@drawable/gray_edittext"></EditText>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <EditText
+                        android:id="@+id/signupID"
+                        android:layout_width="313dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/gray_edittext"
+                        android:fontFamily="@font/ko_pub_world_dotum_medium"
+                        android:hint="이메일"
+                        android:paddingLeft="15dp"
+                        android:textColor="#363639"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></EditText>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
             <!--
             <TextView
@@ -63,64 +71,84 @@
                 android:text="이메일 형식으로 입력해주세요"
                 android:textSize="11sp"/> -->
 
-            <com.google.android.material.textfield.TextInputLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true">
+                android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/signupPW"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/signupPW"
+                        android:layout_width="313dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/gray_edittext"
+                        android:fontFamily="@font/ko_pub_world_dotum_medium"
+                        android:hint="비밀번호"
+                        android:paddingLeft="15dp"
+                        android:textColor="#363639"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></EditText>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/signupPWcheck"
+                        android:layout_width="313dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/pwcheck_edittext"
+                        android:fontFamily="@font/ko_pub_world_dotum_medium"
+                        android:hint="비밀번호 확인"
+                        android:paddingLeft="15dp"
+                        android:textColor="#363639"
+                        android:textSize="13sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></EditText>
+
+                    <TextView
+                        android:id="@+id/pwCheck_error"
+                        android:layout_width="300dp"
+                        android:layout_height="30dp"
+                        android:textColor="#FF0000"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/signupPWcheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/joinCheckButton"
                     android:layout_width="313dp"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginRight="40dp"
-                    android:paddingLeft="15dp"
-                    android:hint="비밀번호"
-                    android:textColor="#363639"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/ko_pub_world_dotum_medium"
-                    android:background="@drawable/gray_edittext"></EditText>
+                    android:background="@drawable/add_button"
+                    android:text="회원 가입 완료"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"></Button>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true">
-
-                <EditText
-                    android:id="@+id/signupPWcheck"
-                    android:layout_width="313dp"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginRight="40dp"
-                    android:paddingLeft="15dp"
-                    android:hint="비밀번호 확인"
-                    android:textColor="#363639"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/ko_pub_world_dotum_medium"
-                    android:background="@drawable/pwcheck_edittext"></EditText>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:id="@+id/pwCheck_error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:textColor="#FF0000"
-                android:textSize="11sp"/>
-
-            <ImageButton
-                android:id="@+id/joinCheckButton"
-                android:layout_width="313dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="53dp"
-                android:background="@drawable/joincheckbtn"></ImageButton>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 

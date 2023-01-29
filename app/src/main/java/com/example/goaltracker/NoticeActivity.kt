@@ -34,6 +34,12 @@ class NoticeActivity : AppCompatActivity() {
     var firebaseAuth : FirebaseAuth ?= null
     var firestore : FirebaseFirestore ?= null
 
+//    private val binding: ActivitySwipeBinding by lazy{
+//        ActivitySwiprBinding.inflate(
+//            layoutInflater
+//        )
+//    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

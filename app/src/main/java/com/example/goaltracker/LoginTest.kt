@@ -15,8 +15,8 @@ class LoginTest():AppCompatActivity() {
             startActivity(Intent(this, GoogleLogin::class.java))
         }
 
-        facebookLogin.setOnClickListener {
-            startActivity(Intent(this, FacebookLogin::class.java))
-        }
+//        facebookLogin.setOnClickListener {
+//            startActivity(Intent(this, FacebookLogin::class.java))
+//        }
     }
 }

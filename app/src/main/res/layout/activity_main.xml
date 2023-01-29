@@ -24,7 +24,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.6">
+                android:layout_weight="0.8">
 
                 <!-- 툴바 -->
                 <include layout="@layout/main_toolbar"/>
@@ -75,7 +75,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:background="@drawable/main_border"
             android:orientation="vertical">
 
@@ -88,7 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
+                    android:layout_marginTop="21dp"
                     android:fontFamily="@font/ko_pub_world_dotum_bold"
                     android:text="진행 중인 GOAL"
                     android:textColor="#363639" />

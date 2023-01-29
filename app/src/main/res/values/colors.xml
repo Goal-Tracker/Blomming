@@ -32,6 +32,8 @@
     <color name="inputBox_outline">#e8e8e8</color>
     <color name="green_edittext">#1DDB16</color>
     <color name="red_edittext">#FF0000</color>
+    <color name="red">#FF3636</color>
+    <color name="login_button">#8a8a8a</color>
 
 
     <color name="main_color">#36375a</color>
