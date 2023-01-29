@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             MySharedPreferences.setUserMessage(this, curUser.userMessage.toString())
             MySharedPreferences.setGoalList(this, curUser.myGoalList)
         }
+
         db.collection("Account")
             .document(accountUId)
             .collection("Friend")
@@ -87,7 +88,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val nav_header = nav_view.getHeaderView(0)
         val navUserName = nav_header.findViewById<TextView>(R.id.nav_userName)
         val navUserEmail = nav_header.findViewById<TextView>(R.id.nav_userId)
-        //var navUserProfile :GradientDrawable = nav_header.nav_profile_icon.background as GradientDrawable
         val navUserNameShort = nav_header.findViewById<TextView>(R.id.nav_profile_name)
 
         curUserName.text = MySharedPreferences.getUserNickname(this)
@@ -139,14 +139,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         rv_goal.adapter = goalRecordOngoingAdapter
 
         // 추후엔 Dataframe에서 가져다 사용하기
-        db.collection("Account").document(accountUId).addSnapshotListener { it, accountException ->
+        db.collection("Account").document(accountUId).get().addOnSuccessListener { it ->
             val onGoingGoalDatas = ArrayList<GoalRecordData>()
             curUser = it?.toObject(Account::class.java)!!
             curUser.myGoalList.forEach { goal_id ->
                 Log.d(TAG, "goal id : $goal_id")
                 val goal_db = db.collection("Goal").document(goal_id)
 
-                goal_db.addSnapshotListener { snapshot, goalException ->
+                goal_db.get().addOnSuccessListener { snapshot ->
                     var teamNameList = arrayListOf<String>()
                     var teamThemeList = arrayListOf<String>()
                     val goal_day = snapshot?.get("day").toString().toInt()
@@ -162,12 +162,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         // 데이터 한 번만 가져오기
                         db.collection("Goal").document(goal_id).collection("team")
                             .whereEqualTo("request", true)
-                            .addSnapshotListener { goalSnapshot, teampException ->
-                                if (teampException != null) {
-                                    Log.d(TAG, "Error getting documents: ", teampException)
-                                    return@addSnapshotListener
-                                }
-
+                            .get()
+                            .addOnSuccessListener { goalSnapshot ->
                                 if (goalSnapshot != null) {
                                     for (document in goalSnapshot) {
                                         teamNameList.add(document["userName"].toString())
