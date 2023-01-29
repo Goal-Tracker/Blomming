@@ -42,11 +42,11 @@ class GoalRecordFinishedFragment : Fragment() {
 
         db.collection("Account").document(MySharedPreferences.getUserId(requireContext())).get().addOnSuccessListener {
             val curUser = it.toObject(Account::class.java)!!
-            curUser.myGoalList?.forEach { goal_id ->
+            curUser.myGoalList.forEach { goal_id ->
                 Log.d(TAG, "goal id : $goal_id")
                 val goal_db = db.collection("Goal").document(goal_id)
 
-                goal_db.addSnapshotListener { snapshot, e ->
+                goal_db.get().addOnSuccessListener { snapshot ->
                     var teamNameList = arrayListOf<String>()
                     var teamThemeList = arrayListOf<String>()
                     val goal_day = snapshot?.get("day").toString().toInt()
@@ -87,7 +87,7 @@ class GoalRecordFinishedFragment : Fragment() {
                                 goalRecordOngoingAdapter.notifyDataSetChanged()
                             }
                             .addOnFailureListener { exception ->
-                                Log.d(ContentValues.TAG, "Error getting documents: ", exception)
+                                Log.d(TAG, "Error getting documents: ", exception)
                             }
                     }
 

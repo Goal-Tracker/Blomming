@@ -2,13 +2,14 @@ package com.example.goaltracker
 
 import android.content.ContentValues
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -30,6 +31,15 @@ class GoalRecordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_goal_record)
 
+        var swipe = findViewById<SwipeRefreshLayout>(R.id.swipe)
+        swipe.setOnRefreshListener {
+            val intent = intent
+            finish()
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            swipe.isRefreshing = false
+        }
+
         tab_layout = findViewById(R.id.tab_layout)
         tab_viewPager = findViewById(R.id.tab_viewPager)
         goal_back_imageButton = findViewById(R.id.goal_back_imageButton)
@@ -42,11 +52,11 @@ class GoalRecordActivity : AppCompatActivity() {
             val curUser = it.toObject(Account::class.java)!!
             var pastNum = 0
             var tabName = arrayOf<String>("진행중  ", "완료된  ")
-            curUser.myGoalList?.forEach { goal_id ->
+            curUser.myGoalList.forEach { goal_id ->
                 Log.d(ContentValues.TAG, "goal id : $goal_id")
                 val goal_db = db.collection("Goal").document(goal_id)
 
-                goal_db.addSnapshotListener { snapshot, e ->
+                goal_db.get().addOnSuccessListener { snapshot ->
                     val goal_day = snapshot?.get("day").toString().toInt()
                     val start_day = snapshot?.get("startDay").toString()
                     val past_date = pastCalc(start_day);
@@ -57,7 +67,7 @@ class GoalRecordActivity : AppCompatActivity() {
                     }
 
                     tabName = arrayOf<String>("진행중  ${pastNum}",
-                        "완료된  ${curUser.myGoalList?.size?.minus(pastNum)}")
+                        "완료된  ${curUser.myGoalList.size.minus(pastNum)}")
                     TabLayoutMediator(tab_layout, tab_viewPager) { tab, position ->
                         tab.text = tabName[position]
                     }.attach()

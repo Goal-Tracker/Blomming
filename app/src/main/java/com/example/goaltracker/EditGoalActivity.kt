@@ -13,7 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goaltracker.databinding.ItemMemberBinding
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_add_goal.*
 import kotlinx.android.synthetic.main.item_member.view.*
 import java.text.SimpleDateFormat
@@ -24,6 +27,7 @@ import java.util.concurrent.TimeUnit
 class EditGoalActivity : AppCompatActivity() {
 
     var firestore : FirebaseFirestore? = null
+    private val accountUId = Firebase.auth.currentUser?.uid.toString()
 
     lateinit var title: EditText            // 이름
     lateinit var startDay: EditText         // 시작일
@@ -36,8 +40,6 @@ class EditGoalActivity : AppCompatActivity() {
     // 달력
     var startDay_calendar = Calendar.getInstance()
     var endDay_calendar = Calendar.getInstance()
-
-    lateinit var document : String
 
     // ArrayList 생성
     var FriendsList : ArrayList<Friend> = arrayListOf()
@@ -107,16 +109,22 @@ class EditGoalActivity : AppCompatActivity() {
         // 데이터 저장
         save_btn.setOnClickListener {
 
-            val goal = hashMapOf(
-                "title" to title.text.toString(),
-                "startDay" to startDay.text.toString(),
-                "endDay" to endDay.text.toString(),
-                "memo" to memo.text.toString(),
-                "action" to true,
-                "stampId" to UUID.randomUUID().toString(),
-                "day" to fewDay(),  //날짜 차이 계산
-            )
-            firestore!!.collection("Goal").document(goal_id).set(goal)
+            // goal 데이터 받아오기
+            val userUID = firestore!!.collection("Goal").document(goal_id)
+            userUID.addSnapshotListener { snapshot, e ->
+                val stampId = snapshot?.get("stampId").toString()
+
+                val goal = hashMapOf(
+                    "title" to title.text.toString(),
+                    "startDay" to startDay.text.toString(),
+                    "endDay" to endDay.text.toString(),
+                    "memo" to memo.text.toString(),
+                    "action" to true,
+                    "stampId" to stampId,
+                    "day" to fewDay(),  //날짜 차이 계산
+                )
+                firestore!!.collection("Goal").document(goal_id).set(goal)
+            }
 
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_SHORT).show()
 
@@ -199,7 +207,9 @@ class EditGoalActivity : AppCompatActivity() {
                         val team = hashMapOf(
                             "userName" to item.userName.toString(),
                             "uid" to item.uid.toString(),
-                            "profileColor" to item.userColor.toString()
+                            "profileColor" to item.userColor.toString(),
+                            "goalUid" to goal_id,
+                            "request" to false
                         )
 
                         firestore!!.collection("Goal")
@@ -207,6 +217,27 @@ class EditGoalActivity : AppCompatActivity() {
                             .collection("team")
                             .document(item.uid.toString())
                             .set(team)
+
+                        // Notification에 골 정보 저장
+                        val userUID = firestore!!.collection("Account").document(accountUId)
+                        userUID.addSnapshotListener { snapshot, e ->
+                            val userName = snapshot?.get("userName").toString()
+                            val userUid = snapshot?.get("uid").toString()
+                            val profle = snapshot?.get("userColor").toString()
+
+                            val notification_goal = hashMapOf(
+                                "goalName" to title.text.toString(),
+                                "goalUid" to goal_id,
+                                "type" to 2,
+                                "userName" to userName,
+                                "requestUserId" to userUid,
+                                "userColor" to profle,
+                                "timestamp" to FieldValue.serverTimestamp(),
+                                "read" to false
+                            )
+                            firestore?.collection("Account")?.document(item.uid.toString())
+                                ?.collection("Notification")?.document(goal_id)?.set(notification_goal)
+                        }
                     }
                     // 체크 해제 시 삭제
                     else {
