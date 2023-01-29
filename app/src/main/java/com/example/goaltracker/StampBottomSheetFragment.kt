@@ -163,7 +163,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                             stamp_recyclerView.visibility = View.VISIBLE
                             today_stamp_button.visibility = View.VISIBLE
                             today_stamp_noneStamp_button.isEnabled = false
-                            today_stamp_button.isEnabled = true
+                            today_stamp_button.isEnabled = false
 
                             today_stamp_button.text = "도장찍기 완료"
                             bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
