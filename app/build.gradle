@@ -125,6 +125,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:20.1.2'
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.7'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.1.0'
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
     //noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

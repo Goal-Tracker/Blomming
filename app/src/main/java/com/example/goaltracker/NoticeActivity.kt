@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.main_toolbar.*
+import kotlinx.android.synthetic.main.notice_layer.*
 import kotlinx.android.synthetic.main.notice_layer.view.*
 import kotlinx.android.synthetic.main.notice_view.*
 
@@ -33,6 +34,12 @@ class NoticeActivity : AppCompatActivity() {
     //    val notices = mutableListOf<Notification>()
     var firebaseAuth : FirebaseAuth ?= null
     var firestore : FirebaseFirestore ?= null
+
+//    private val binding: ActivitySwipeBinding by lazy{
+//        ActivitySwiprBinding.inflate(
+//            layoutInflater
+//        )
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,6 +170,10 @@ class NoticeActivity : AppCompatActivity() {
                     }
                     // 내 친구 목록
                 }
+            }
+
+            viewHolder.notice_delete_button.setOnClickListener {
+                
             }
 
 
