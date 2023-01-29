@@ -33,6 +33,7 @@
     <color name="green_edittext">#1DDB16</color>
     <color name="red_edittext">#FF0000</color>
     <color name="red">#FF3636</color>
+    <color name="new_notice">#f2574b</color>
     <color name="login_button">#8a8a8a</color>
 
 

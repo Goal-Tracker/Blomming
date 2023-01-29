@@ -2,7 +2,6 @@ package com.example.goaltracker
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +9,7 @@ import android.widget.Toast
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
                 if (notReadNotices.isNotEmpty()) {
-                    alarmButton.setBackgroundResource(R.drawable.alarm_close)
+                    new_notice.isVisible = false
                 }
             }
 
@@ -125,7 +125,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //버튼 클릭시 동작
         alarmButton.setOnClickListener {
-            alarmButton.setBackgroundResource(R.drawable.alarmbtn)
             startActivity(Intent(this, NoticeActivity::class.java))
         }
 

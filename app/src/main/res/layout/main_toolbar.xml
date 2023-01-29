@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:orientation="horizontal"
             android:layout_marginTop="30dp"
             android:layout_marginRight="20dp"
@@ -26,17 +26,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginRight="20dp"
                 android:background="#00ff0000"
                 android:src="@drawable/alarmbtn"
                 android:tint="?attr/colorButtonNormal"
                 tools:ignore="UseAppTint" />
+
+            <View
+                android:id="@+id/new_notice"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_round"
+                android:backgroundTint="@color/new_notice"/>
 
             <ImageButton
                 android:id="@+id/menubtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 android:background="#00ff0000"
                 android:src="@drawable/menubtn"
                 android:tint="?attr/colorButtonNormal"
