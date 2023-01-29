@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragment() {
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
@@ -99,37 +100,40 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             stamp_db.addSnapshotListener { stamp_snapshot, e ->
                 try {
                     val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
-                    val commentArray = dayRecord["day$stamp_num"] as List<HashMap<String, String>>
 
-                    todayStampDatas.apply {
-                        for (commentInfo in commentArray) {
-                            val comment = commentInfo["comment"] as String
-                            val name = commentInfo["userName"] as String
-                            val theme = commentInfo["userColor"] as String
-                            val img = commentInfo["image"] as String
-                            val type = commentInfo["type"] as Boolean
+                    if (dayRecord.containsKey("day$stamp_num")) {
+                        val commentArray = dayRecord["day$stamp_num"] as List<HashMap<String, String>>
 
-                            add(
-                                TodayStampData(
-                                    stamp_id = stamp_id,
-                                    num = stamp_num,
-                                    nickname = name,
-                                    theme = theme,
-                                    comment = comment,
-                                    image = img,
-                                    type = type
+                        todayStampDatas.apply {
+                            for (commentInfo in commentArray) {
+                                val comment = commentInfo["comment"] as String
+                                val name = commentInfo["userName"] as String
+                                val theme = commentInfo["userColor"] as String
+                                val img = commentInfo["image"] as String
+                                val type = commentInfo["type"] as Boolean
+
+                                add(
+                                    TodayStampData(
+                                        stamp_id = stamp_id,
+                                        num = stamp_num,
+                                        nickname = name,
+                                        theme = theme,
+                                        comment = comment,
+                                        image = img,
+                                        type = type
+                                    )
                                 )
-                            )
 
-                            if (name == MySharedPreferences.getUserNickname(requireContext())) {
-                                certified = true
+                                if (name == MySharedPreferences.getUserNickname(requireContext())) {
+                                    certified = true
+                                }
                             }
+
+                            Log.d("User Comment", "User todayStampDatas : " + todayStampDatas.toString())
+
+                            todayStampAdapter.todayStampDatas = todayStampDatas
+                            todayStampAdapter.notifyDataSetChanged()
                         }
-
-                        Log.d("User Comment", "User todayStampDatas : " + todayStampDatas.toString())
-
-                        todayStampAdapter.todayStampDatas = todayStampDatas
-                        todayStampAdapter.notifyDataSetChanged()
                     }
 
                     if (!certified && pastDate <= goal_day) {
@@ -183,45 +187,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                 } catch (e: Exception){
                     Log.d(TAG, "[Error] $e")
 
-                    if (notYet == 0){ // 이미 기간이 지난 경우
-                        noneStamp_textView.visibility = View.VISIBLE
-                        today_stamp_noneStamp_button.visibility = View.VISIBLE
-                        stamp_recyclerView.visibility = View.GONE
-                        today_stamp_button.visibility = View.GONE
-                        today_stamp_noneStamp_button.isEnabled = false
-                        today_stamp_button.isEnabled = false
-
-                        today_stamp_noneStamp_button.text = "기간이 지났습니다"
-                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-
-                    } else if(notYet == 2) {  // 아직 기간이 아닌 경우
-                        addPastStamp.visibility = View.GONE
-
-                        noneStamp_textView.visibility = View.VISIBLE
-                        today_stamp_noneStamp_button.visibility = View.VISIBLE
-                        stamp_recyclerView.visibility = View.GONE
-                        today_stamp_button.visibility = View.GONE
-                        today_stamp_noneStamp_button.isEnabled = false
-                        today_stamp_button.isEnabled = false
-
-                        today_stamp_noneStamp_button.text = "아직 기간이 아닙니다"
-                        bgNoneButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-
-                    } else {
-                        Log.d("stamp status", "notYet: $notYet")
-
-                        addPastStamp.visibility = View.GONE
-
-                        noneStamp_textView.visibility = View.VISIBLE
-                        today_stamp_noneStamp_button.visibility = View.VISIBLE
-                        stamp_recyclerView.visibility = View.GONE
-                        today_stamp_button.visibility = View.GONE
-                        today_stamp_noneStamp_button.isEnabled = true
-                        today_stamp_button.isEnabled = false
-
-                        today_stamp_noneStamp_button.text = "오늘의 도장 찍기"
-                        bgButton.setColor(ContextCompat.getColor(requireContext(), MySharedPreferences.getUserColorInt(requireContext())))
-                    }
+                    onStart()
                 }
             }
         }
