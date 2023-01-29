@@ -164,14 +164,8 @@ class AddGoal : AppCompatActivity() {
                     .collection("team").document(userUid).set(user)
             }
 
-            // myGoalList 추가
-            firestore!!.collection("Account").document(accountUId)
-                .addSnapshotListener { snapshot, e ->
-                val goalList = snapshot?.get("myGoalList") as ArrayList<String>
-                goalList.add(goalID)
-                firestore?.collection("Account")?.document("$accountUId")
-                    ?.update("myGoalList", goalList) // 끝이 없으어....
-            }
+            firestore?.collection("Account")?.document(accountUId)
+                ?.update("myGoalList", FieldValue.arrayUnion(goalID))
 
             // Notification에 골 정보 저장
             val notification_goal = hashMapOf(
