@@ -39,11 +39,11 @@ class GoalRecordOngoingFragment : Fragment() {
         // 추후엔 Dataframe에서 가져다 사용하기
         db.collection("Account").document(MySharedPreferences.getUserId(requireContext())).get().addOnSuccessListener {
             val curUser = it.toObject(Account::class.java)!!
-            curUser.myGoalList?.forEach { goal_id ->
+            curUser.myGoalList.forEach { goal_id ->
                 Log.d(TAG, "goal id : $goal_id")
                 val goal_db = db.collection("Goal").document(goal_id)
 
-                goal_db.addSnapshotListener { snapshot, e ->
+                goal_db.get().addOnSuccessListener { snapshot ->
                     var teamNameList = arrayListOf<String>()
                     var teamThemeList = arrayListOf<String>()
                     val goal_day = snapshot?.get("day").toString().toInt()
@@ -68,8 +68,8 @@ class GoalRecordOngoingFragment : Fragment() {
 
                                 onGoingGoalDatas.add(
                                     GoalRecordData(
-                                        goalId =  goal_id,
-                                        title =  title,
+                                        goalId = goal_id,
+                                        title = title,
                                         participateNum = result.size(),
                                         startDate = start_day_str,
                                         endDate = end_day_str,
