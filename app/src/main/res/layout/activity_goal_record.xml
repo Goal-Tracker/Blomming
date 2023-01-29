@@ -54,8 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabTextColor="@color/greyish_brown"
-        app:tabSelectedTextColor="?attr/colorButtonNormal" />
-<!--        app:tabIndicatorColor="@color/main_color" />-->
+        app:tabSelectedTextColor="@color/greyish_brown" />
 
 
     <androidx.viewpager2.widget.ViewPager2
