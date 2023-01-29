@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -80,6 +81,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         setSupportActionBar(main_toolbar) //툴바를 액티비티의 앱바로 지정
         supportActionBar?.setDisplayShowTitleEnabled(false)  //툴바에 타이틀 안보이게
+
+        var swipe = findViewById<SwipeRefreshLayout>(R.id.swipe)
+        swipe.setOnRefreshListener {
+            val intent = intent
+            finish()
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+            swipe.isRefreshing = false
+        }
 
         //네비게이션 드로어 내에 있는 화면의 이벤트를 처리하기 위해 생성
         nav_view.setNavigationItemSelectedListener(this) //Navigation 리스너
