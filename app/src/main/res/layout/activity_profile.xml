@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,7 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.8"
+            android:layout_weight="0.5"
             android:orientation="vertical">
 
             <ImageButton
@@ -31,232 +32,180 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7">
+                android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
+                    android:id="@+id/color1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="83dp">
+                    app:layout_constraintBottom_toTopOf="@+id/color2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <ImageButton
+                        android:id="@+id/c_f69b94"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/b_f69b94"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_f69b94"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@drawable/b_f69b94"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_f8c8c4"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_f8c8c4"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_f8c8c4"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_f8c8c4"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_fcdcce"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_fcdcce"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_fcdcce"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_fcdcce"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_96b0e5"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_96b0e5"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_96b0e5"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_96b0e5"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_92b9e2"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_92b9e2"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_92b9e2"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_92b9e2"></ImageButton>
+                </LinearLayout>
 
-                    </LinearLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
-                android:orientation="horizontal">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
+                    android:id="@+id/color2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="83dp">
+                    app:layout_constraintBottom_toTopOf="@+id/color3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/color1">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <ImageButton
+                        android:id="@+id/c_ebc0c7"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/b_ebc0c7"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_ebc0c7"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@drawable/b_ebc0c7"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_7bb6c8"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_7bb6c8"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_7bb6c8"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_7bb6c8"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_aad3d7"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_aad3d7"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_aad3d7"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_aad3d7"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_f5f1f0"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_f5f1f0"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_f5f1f0"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_f5f1f0"></ImageButton>
-
-                        <ImageButton
-                            android:id="@+id/c_d5e3e6"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_d5e3e6"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_d5e3e6"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_d5e3e6"></ImageButton>
 
 
-                    </LinearLayout>
+                </LinearLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
-                android:orientation="horizontal">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
+                    android:id="@+id/color3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="83dp">
+                    app:layout_constraintBottom_toTopOf="@+id/joinName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/color2">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <ImageButton
+                        android:id="@+id/c_f2a4b1"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/b_f2a4b1"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_f2a4b1"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@drawable/b_f2a4b1"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_7175a5"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_7175a5"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_7175a5"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_7175a5"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_a1b3d7"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_a1b3d7"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_a1b3d7"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_a1b3d7"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_bd83cf"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_bd83cf"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_bd83cf"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_bd83cf"></ImageButton>
+                    <ImageButton
+                        android:id="@+id/c_e5afe9"
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="18dp"
+                        android:background="@drawable/b_e5afe9"></ImageButton>
 
-                        <ImageButton
-                            android:id="@+id/c_e5afe9"
-                            android:layout_width="31dp"
-                            android:layout_height="31dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="18dp"
-                            android:background="@drawable/b_e5afe9"></ImageButton>
-
-                    </LinearLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/joinName"
                     android:layout_width="313dp"
                     android:layout_height="48dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginRight="40dp"
                     android:background="@drawable/gray_edittext"
                     android:fontFamily="@font/ko_pub_world_dotum_medium"
                     android:hint="이름을 설정하세요"
                     android:paddingLeft="15dp"
                     android:textColor="#363639"
-                    android:textSize="13sp"></EditText>
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/color3"></EditText>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/pfSettingButton"
-                    android:layout_width="313dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="16dp"
-                    android:text="프로필 변경 완료"
-                    android:textColor="#ffffff"
-                    android:fontFamily="@font/ko_pub_world_dotum_bold"
-                    android:background="@drawable/pfsettingbtn"></ImageButton>
-
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
@@ -264,7 +213,27 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.8"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/pfSettingButton"
+                    android:layout_width="313dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/add_button"
+                    android:fontFamily="@font/ko_pub_world_dotum_bold"
+                    android:text="프로필 변경 완료"
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

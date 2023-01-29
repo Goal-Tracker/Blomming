@@ -32,7 +32,7 @@ class NoticeAdapter (private val context:Context) : RecyclerView.Adapter<NoticeA
     inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
         val noticeName : TextView = itemView.findViewById(R.id.notice_profile_name)
         val noticeContent : TextView = itemView.findViewById(R.id.notice_text)
-        val acceptButton : Button = itemView.findViewById(R.id.notice_button)
+        val deleteButton : Button = itemView.findViewById(R.id.notice_delete_button)
         val noticeTitle : TextView = itemView.findViewById(R.id.notice_title)
 
         fun bind(item: Notifications) {

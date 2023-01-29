@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.protobuf.Empty
 import kotlinx.android.synthetic.main.activity_login.*
 
 @Suppress("DEPRECATION")
@@ -83,15 +84,30 @@ class GoogleLogin() : AppCompatActivity(){
                 if(task.isSuccessful) {
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 성공", task.exception)
                     //account db 저장
-                    var userAccount = Account()
-                    var accountName : String ?= ""
+                    var accountEmails = ArrayList<String>()
+                    fireStore?.collection("Account")?.addSnapshotListener{ querySanpshot, firebaseFirestoreException ->
+                        for (snapshot in querySanpshot!!.documents) {
+                            var item = snapshot.toObject(Account::class.java)!!
+                            Log.d("email", item.email)
+                            accountEmails.add(item.email)
+                        }
+                        Log.d("accoutEmails: ", accountEmails.toString())
 
-                    accountName=firebaseAuth?.currentUser?.uid.toString()
-                    userAccount.email= firebaseAuth?.currentUser?.email.toString()
+                        var userAccount = Account()
+                        var accountUId : String ?= ""
+                        accountUId=firebaseAuth?.currentUser?.uid.toString()
+                        userAccount.email= firebaseAuth?.currentUser?.email.toString()
 
-                    fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
-                    Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
-                    toProfileActivity(firebaseAuth.currentUser)
+                        if (accountEmails.contains(userAccount.email)){
+                            Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+                            toMainActivity(firebaseAuth.currentUser)
+                        }
+                        else {
+                            fireStore?.collection("Account")?.document(accountUId)?.set(userAccount)
+                            Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
+                            toProfileActivity(firebaseAuth.currentUser)
+                        }
+                    }
                 } else{
                     Log.w("LoginActivity", "firebaseAuthWithGoogle 실패", task.exception)
                     Snackbar.make(findViewById<LinearLayout>(R.id.activity_login), "로그인에 실패하였습니다.", Snackbar.LENGTH_SHORT).show()
@@ -121,11 +137,5 @@ class GoogleLogin() : AppCompatActivity(){
         startActivityForResult(signInIntent, RC_SIGN_IN)
     } //signIn end
 
-    // 이미 Account가 생성된 계정인지 확인
-    fun searchAccount(searchWord:String, option:String) {
-        fireStore?.collection("Account")?.addSnapshotListener{ querySanpshot, firebaseFirestoreException ->
-
-        }
-    }
 
 }
