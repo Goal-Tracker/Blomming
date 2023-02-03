@@ -114,6 +114,7 @@
                             android:id="@+id/DayButtonGroup"
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
+                            android:layout_marginLeft="10dp"
                             app:alignItems="center">
 
                             <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
@@ -138,7 +139,6 @@
                                 android:id="@+id/btn_50"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
                                 app:toggle_selectedBackgroundColor="?attr/colorPrimary"
                                 app:toggle_text="50일"
                                 app:toggle_btnCornerRadius="200dp"
@@ -148,7 +148,6 @@
                                 android:id="@+id/btn_100"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
                                 app:toggle_selectedBackgroundColor="?attr/colorPrimary"
                                 app:toggle_text="100일"
                                 app:toggle_textSize="12dp"
@@ -159,7 +158,6 @@
                                 android:id="@+id/btn_etc"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
                                 app:toggle_selectedBackgroundColor="?attr/colorPrimary"
                                 app:toggle_text="기타"
                                 app:toggle_btnCornerRadius="200dp"
@@ -302,7 +300,7 @@
 
                         <androidx.core.widget.NestedScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="250dp"
+                            android:layout_height="wrap_content"
                             tools:ignore="MissingClass">
 
                             <androidx.recyclerview.widget.RecyclerView

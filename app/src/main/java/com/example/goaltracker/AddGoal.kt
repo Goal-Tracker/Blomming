@@ -164,6 +164,7 @@ class AddGoal : AppCompatActivity() {
                     .collection("team").document(userUid).set(user)
             }
 
+            // myGoalList 추가
             firestore?.collection("Account")?.document(accountUId)
                 ?.update("myGoalList", FieldValue.arrayUnion(goalID))
 
@@ -260,7 +261,8 @@ class AddGoal : AppCompatActivity() {
 
     inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         init {  // 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
-            firestore?.collection("Account")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            firestore?.collection("Account")?.document(accountUId)
+                ?.collection("Friend")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 // ArrayList 비워줌
                 FriendsList.clear()
 
