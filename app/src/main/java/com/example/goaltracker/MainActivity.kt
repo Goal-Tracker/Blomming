@@ -17,16 +17,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.drawer_header.view.*
 import kotlinx.android.synthetic.main.drawer_main.*
 import kotlinx.android.synthetic.main.main_toolbar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     val db = FirebaseFirestore.getInstance()
-    val firebaseAuth =FirebaseAuth.getInstance()
+    val firebaseAuth = FirebaseAuth.getInstance()
 
     lateinit var goalRecordOngoingAdapter: GoalRecordAdapter
 
@@ -42,7 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d("friendsList", MySharedPreferences.getFriendList(this).toString())
         Log.d("userColor", MySharedPreferences.getUserColor(this))
 
-        db?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+        db.collection("Account").document(accountUId).get().addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
             var color = curUser.userColor.toString()
             MySharedPreferences.setUserNickname(this, curUser.userName.toString())
@@ -174,27 +178,41 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             .get()
                             .addOnSuccessListener { goalSnapshot ->
                                 if (goalSnapshot != null) {
-                                    for (document in goalSnapshot) {
-                                        teamNameList.add(document["userName"].toString())
-                                        teamThemeList.add(document["profileColor"].toString())
-                                    }
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        runBlocking {
+                                            for (document in goalSnapshot) {
+                                                db.collection("Account")
+                                                    .document(document["uid"].toString())
+                                                    .get().addOnSuccessListener { accountSnapshot ->
+                                                        teamNameList.add(accountSnapshot["userName"].toString())
+                                                        teamThemeList.add(accountSnapshot["userColor"].toString())
+                                                        Log.d(TAG, "[FOR] teamNameList : $teamNameList, teamThemeList : $teamThemeList")
+                                                    }.await()
+                                            }
+                                        }
 
-                                    onGoingGoalDatas.add(
-                                        GoalRecordData(
-                                            goalId = goal_id,
-                                            title = title,
-                                            participateNum = goalSnapshot.size(),
-                                            startDate = start_day_str,
-                                            endDate = end_day_str,
-                                            todayNum = past_date,
-                                            stampNum = goal_day,
-                                            teamNameList = teamNameList,
-                                            teamThemeList = teamThemeList
+                                        Log.d(TAG, "[DONE] teamNameList : $teamNameList, teamThemeList : $teamThemeList")
+
+                                        onGoingGoalDatas.add(
+                                            GoalRecordData(
+                                                goalId = goal_id,
+                                                title = title,
+                                                participateNum = goalSnapshot.size(),
+                                                startDate = start_day_str,
+                                                endDate = end_day_str,
+                                                todayNum = past_date,
+                                                stampNum = goal_day,
+                                                teamNameList = teamNameList,
+                                                teamThemeList = teamThemeList
+                                            )
                                         )
-                                    )
 
-                                    goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
-                                    goalRecordOngoingAdapter.notifyDataSetChanged()
+                                        runOnUiThread {
+                                            Log.d(TAG, "onGoingGoalDatas : $onGoingGoalDatas")
+                                            goalRecordOngoingAdapter.goalDatas = onGoingGoalDatas
+                                            goalRecordOngoingAdapter.notifyDataSetChanged()
+                                        }
+                                    }
                                 }
                             }
                     }

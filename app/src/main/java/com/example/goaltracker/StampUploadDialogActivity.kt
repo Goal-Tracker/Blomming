@@ -134,8 +134,6 @@ class StampUploadDialogActivity : AppCompatActivity() {
                                     "comment" to comment_editText.text.toString(),
                                     "image" to "",
                                     "uid" to MySharedPreferences.getUserId(this),
-                                    "userColor" to MySharedPreferences.getUserColor(this),
-                                    "userName" to MySharedPreferences.getUserNickname(this),
                                     "type" to type
                                 )
 

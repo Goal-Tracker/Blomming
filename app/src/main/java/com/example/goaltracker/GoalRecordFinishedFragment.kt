@@ -1,6 +1,5 @@
 package com.example.goaltracker
 
-import android.content.ContentValues
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -63,31 +67,44 @@ class GoalRecordFinishedFragment : Fragment() {
                         db.collection("Goal").document(goal_id).collection("team")
                             .whereEqualTo("request", true)
                             .get()
-                            .addOnSuccessListener { result ->
-                                for (document in result) {
-                                    teamNameList.add(document["userName"].toString())
-                                    teamThemeList.add(document["profileColor"].toString())
+                            .addOnSuccessListener { goalSnapshot ->
+                                if (goalSnapshot != null) {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        runBlocking {
+                                            for (document in goalSnapshot) {
+                                                db.collection("Account")
+                                                    .document(document["uid"].toString())
+                                                    .get().addOnSuccessListener { accountSnapshot ->
+                                                        teamNameList.add(accountSnapshot["userName"].toString())
+                                                        teamThemeList.add(accountSnapshot["userColor"].toString())
+                                                        Log.d(TAG, "[FOR] teamNameList : $teamNameList, teamThemeList : $teamThemeList")
+                                                    }.await()
+                                            }
+                                        }
+
+                                        Log.d(TAG, "[DONE] teamNameList : $teamNameList, teamThemeList : $teamThemeList")
+
+                                        finishedGoalDatas.add(
+                                            GoalRecordData(
+                                                goalId = goal_id,
+                                                title = title,
+                                                participateNum = goalSnapshot.size(),
+                                                startDate = start_day_str,
+                                                endDate = end_day_str,
+                                                todayNum = past_date,
+                                                stampNum = goal_day,
+                                                teamNameList = teamNameList,
+                                                teamThemeList = teamThemeList
+                                            )
+                                        )
+
+                                        activity?.runOnUiThread {
+                                            Log.d(TAG, "onGoingGoalDatas : $finishedGoalDatas")
+                                            goalRecordOngoingAdapter.goalDatas = finishedGoalDatas
+                                            goalRecordOngoingAdapter.notifyDataSetChanged()
+                                        }
+                                    }
                                 }
-
-                                finishedGoalDatas.add(
-                                    GoalRecordData(
-                                        goalId =  goal_id,
-                                        title =  title,
-                                        participateNum = result.size(),
-                                        startDate = start_day_str,
-                                        endDate = end_day_str,
-                                        todayNum = past_date,
-                                        stampNum = goal_day,
-                                        teamNameList = teamNameList,
-                                        teamThemeList = teamThemeList
-                                    )
-                                )
-
-                                goalRecordOngoingAdapter.goalDatas = finishedGoalDatas
-                                goalRecordOngoingAdapter.notifyDataSetChanged()
-                            }
-                            .addOnFailureListener { exception ->
-                                Log.d(TAG, "Error getting documents: ", exception)
                             }
                     }
 
