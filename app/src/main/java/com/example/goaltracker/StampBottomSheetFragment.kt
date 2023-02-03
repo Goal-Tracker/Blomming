@@ -16,6 +16,11 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -97,42 +102,58 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
             val stamp_id = goal_snapshot.get("stampId") as String
             val stamp_db = db.collection("Stamp").document(stamp_id)
-            stamp_db.addSnapshotListener { stamp_snapshot, e ->
+            stamp_db.get().addOnSuccessListener { stamp_snapshot ->
                 try {
                     val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
 
                     if (dayRecord.containsKey("day$stamp_num")) {
                         val commentArray = dayRecord["day$stamp_num"] as List<HashMap<String, String>>
 
-                        todayStampDatas.apply {
-                            for (commentInfo in commentArray) {
-                                val comment = commentInfo["comment"] as String
-                                val name = commentInfo["userName"] as String
-                                val theme = commentInfo["userColor"] as String
-                                val img = commentInfo["image"] as String
-                                val type = commentInfo["type"] as Boolean
+                        CoroutineScope(Dispatchers.IO).launch {
+                            runBlocking {
+                                todayStampDatas.apply {
+                                    for (commentInfo in commentArray) {
+                                        db.collection("Account")
+                                            .document(commentInfo["uid"].toString())
+                                            .get().addOnSuccessListener { accountSnapshot ->
+                                                val name = accountSnapshot["userName"] as String
+                                                val theme = accountSnapshot["userColor"] as String
+                                                val comment = commentInfo["comment"] as String
+                                                val img = commentInfo["image"] as String
+                                                val type = commentInfo["type"] as Boolean
 
-                                add(
-                                    TodayStampData(
-                                        stamp_id = stamp_id,
-                                        num = stamp_num,
-                                        nickname = name,
-                                        theme = theme,
-                                        comment = comment,
-                                        image = img,
-                                        type = type
+                                                add(
+                                                    TodayStampData(
+                                                        stamp_id = stamp_id,
+                                                        num = stamp_num,
+                                                        nickname = name,
+                                                        theme = theme,
+                                                        comment = comment,
+                                                        image = img,
+                                                        type = type
+                                                    )
+                                                )
+
+                                                if (name == MySharedPreferences.getUserNickname(
+                                                        requireContext()
+                                                    )
+                                                ) {
+                                                    certified = true
+                                                }
+                                            }.await()
+                                    }
+
+                                    Log.d(
+                                        "User Comment",
+                                        "User todayStampDatas : " + todayStampDatas.toString()
                                     )
-                                )
 
-                                if (name == MySharedPreferences.getUserNickname(requireContext())) {
-                                    certified = true
+                                    activity?.runOnUiThread {
+                                        todayStampAdapter.todayStampDatas = todayStampDatas
+                                        todayStampAdapter.notifyDataSetChanged()
+                                    }
                                 }
                             }
-
-                            Log.d("User Comment", "User todayStampDatas : " + todayStampDatas.toString())
-
-                            todayStampAdapter.todayStampDatas = todayStampDatas
-                            todayStampAdapter.notifyDataSetChanged()
                         }
                     }
 

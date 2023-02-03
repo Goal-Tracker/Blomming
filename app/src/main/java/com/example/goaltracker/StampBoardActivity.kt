@@ -10,6 +10,11 @@ import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -125,50 +130,60 @@ class StampBoardActivity() : AppCompatActivity() {
                     val stamp_db = db.collection("Stamp").document(stamp_id)
                     stamp_db.addSnapshotListener { stamp_snapshot, e ->
                         try {
-                            val stampDatas = ArrayList<StampBoardData>()
+                            CoroutineScope(Dispatchers.IO).launch {
+                                runBlocking {
+                                    val stampDatas = ArrayList<StampBoardData>()
 
-                            for (i in 1..goal_day) {
-                                val notYet: Boolean = pastDate <= i
+                                    for (i in 1..goal_day) {
+                                        val notYet: Boolean = pastDate <= i
 
-                                val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
-                                if (dayRecord["day$i"] != null) {
-                                    var commentArray = dayRecord["day$i"] as List<HashMap<String, String>>
-                                    var themeArray = ArrayList<String>()
-                                    var commentNum = commentArray.size
+                                        val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
+                                        if (dayRecord["day$i"] != null) {
+                                            var commentArray = dayRecord["day$i"] as List<HashMap<String, String>>
+                                            var themeArray = ArrayList<String>()
+                                            var commentNum = commentArray.size
 
-                                    if (commentNum > 0) {
-                                        for (commentInfo in commentArray) {
-                                            themeArray.add(commentInfo["userColor"].toString())
-                                        }
+                                            if (commentNum > 0) {
+                                                for (commentInfo in commentArray) {
+                                                    db.collection("Account")
+                                                        .document(commentInfo["uid"].toString())
+                                                        .get().addOnSuccessListener { accountSnapshot ->
+                                                            themeArray.add(accountSnapshot["userColor"].toString())
+                                                        }.await()
+                                                }
 
-                                        stampDatas.add(
-                                            StampBoardData(
-                                                goal_id = goal_id,
-                                                num = i,
-                                                stamp = notYet,
-                                                participateNum = participateNum,
-                                                stampNum = themeArray.size,
-                                                stampThemeList = themeArray
+                                                stampDatas.add(
+                                                    StampBoardData(
+                                                        goal_id = goal_id,
+                                                        num = i,
+                                                        stamp = notYet,
+                                                        participateNum = participateNum,
+                                                        stampNum = themeArray.size,
+                                                        stampThemeList = themeArray
+                                                    )
+                                                )
+                                            }
+                                        } else {
+                                            stampDatas.add(
+                                                StampBoardData(
+                                                    goal_id = goal_id,
+                                                    num = i,
+                                                    stamp = notYet,
+                                                    participateNum = participateNum,
+                                                    stampNum = 0,
+                                                    stampThemeList = ArrayList<String>()
+                                                )
                                             )
-                                        )
+                                        }
                                     }
-                                } else {
-                                    stampDatas.add(
-                                        StampBoardData(
-                                            goal_id = goal_id,
-                                            num = i,
-                                            stamp = notYet,
-                                            participateNum = participateNum,
-                                            stampNum = 0,
-                                            stampThemeList = ArrayList<String>()
-                                        )
-                                    )
+
+                                    runOnUiThread {
+                                        stampDatas.sortBy { it.num }
+                                        stampBoardAdapter.stampDatas = stampDatas
+                                        stampBoardAdapter.notifyDataSetChanged()
+                                    }
                                 }
                             }
-
-                            stampDatas.sortBy { it.num }
-                            stampBoardAdapter.stampDatas = stampDatas
-                            stampBoardAdapter.notifyDataSetChanged()
                         } catch (e: Exception) {
                             Log.d(TAG, "[Error] $e")
                         }
