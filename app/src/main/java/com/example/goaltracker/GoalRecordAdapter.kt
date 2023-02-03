@@ -78,7 +78,7 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
             if (Data.participateNum == 1) {
                 goal_member1_view.visibility = View.VISIBLE
                 goal_member1_textView.visibility = View.VISIBLE
-                goal_member1_textView.text = Data.teamNameList[0][1].toString()
+                goal_member1_textView.text = Data.teamNameList[0][0].toString()
                 member1_bgShape.setColor(Color.parseColor(Data.teamThemeList[0]))
 
                 goal_member2_view.visibility = View.GONE
@@ -93,12 +93,12 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
             } else if (Data.participateNum == 2) {
                 goal_member1_view.visibility = View.VISIBLE
                 goal_member1_textView.visibility = View.VISIBLE
-                goal_member1_textView.text = Data.teamNameList[0][1].toString()
+                goal_member1_textView.text = Data.teamNameList[0][0].toString()
                 member1_bgShape.setColor(Color.parseColor(Data.teamThemeList[0]))
 
                 goal_member2_view.visibility = View.VISIBLE
                 goal_member2_textView.visibility = View.VISIBLE
-                goal_member2_textView.text = Data.teamNameList[1][1].toString()
+                goal_member2_textView.text = Data.teamNameList[1][0].toString()
                 member2_bgShape.setColor(Color.parseColor(Data.teamThemeList[1]))
 
                 goal_member3_view.visibility = View.GONE
@@ -111,17 +111,17 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
             } else if (Data.participateNum == 3) {
                 goal_member1_view.visibility = View.VISIBLE
                 goal_member1_textView.visibility = View.VISIBLE
-                goal_member1_textView.text = Data.teamNameList[0][1].toString()
+                goal_member1_textView.text = Data.teamNameList[0][0].toString()
                 member1_bgShape.setColor(Color.parseColor(Data.teamThemeList[0]))
 
                 goal_member2_view.visibility = View.VISIBLE
                 goal_member2_textView.visibility = View.VISIBLE
-                goal_member2_textView.text = Data.teamNameList[1][1].toString()
+                goal_member2_textView.text = Data.teamNameList[1][0].toString()
                 member2_bgShape.setColor(Color.parseColor(Data.teamThemeList[1]))
 
                 goal_member3_view.visibility = View.VISIBLE
                 goal_member3_textView.visibility = View.VISIBLE
-                goal_member3_textView.text = Data.teamNameList[2][1].toString()
+                goal_member3_textView.text = Data.teamNameList[2][0].toString()
                 member3_bgShape.setColor(Color.parseColor(Data.teamThemeList[2]))
 
                 goal_member4_view.visibility = View.GONE
@@ -131,22 +131,22 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
             } else if (Data.participateNum == 4) {
                 goal_member1_view.visibility = View.VISIBLE
                 goal_member1_textView.visibility = View.VISIBLE
-                goal_member1_textView.text = Data.teamNameList[0][1].toString()
+                goal_member1_textView.text = Data.teamNameList[0][0].toString()
                 member1_bgShape.setColor(Color.parseColor(Data.teamThemeList[0]))
 
                 goal_member2_view.visibility = View.VISIBLE
                 goal_member2_textView.visibility = View.VISIBLE
-                goal_member2_textView.text = Data.teamNameList[1][1].toString()
+                goal_member2_textView.text = Data.teamNameList[1][0].toString()
                 member2_bgShape.setColor(Color.parseColor(Data.teamThemeList[1]))
 
                 goal_member3_view.visibility = View.VISIBLE
                 goal_member3_textView.visibility = View.VISIBLE
-                goal_member3_textView.text = Data.teamNameList[2][1].toString()
+                goal_member3_textView.text = Data.teamNameList[2][0].toString()
                 member3_bgShape.setColor(Color.parseColor(Data.teamThemeList[2]))
 
                 goal_member4_view.visibility = View.VISIBLE
                 goal_member4_textView.visibility = View.VISIBLE
-                goal_member4_textView.text = Data.teamNameList[3][1].toString()
+                goal_member4_textView.text = Data.teamNameList[3][0].toString()
                 member4_bgShape.setColor(Color.parseColor(Data.teamThemeList[3]))
 
 
@@ -156,28 +156,28 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
             } else if (Data.participateNum == 5) {
                 goal_member1_view.visibility = View.VISIBLE
                 goal_member1_textView.visibility = View.VISIBLE
-                goal_member1_textView.text = Data.teamNameList[0][1].toString()
+                goal_member1_textView.text = Data.teamNameList[0][0].toString()
                 member1_bgShape.setColor(Color.parseColor(Data.teamThemeList[0]))
 
                 goal_member2_view.visibility = View.VISIBLE
                 goal_member2_textView.visibility = View.VISIBLE
-                goal_member2_textView.text = Data.teamNameList[1][1].toString()
+                goal_member2_textView.text = Data.teamNameList[1][0].toString()
                 member2_bgShape.setColor(Color.parseColor(Data.teamThemeList[1]))
 
                 goal_member3_view.visibility = View.VISIBLE
                 goal_member3_textView.visibility = View.VISIBLE
-                goal_member3_textView.text = Data.teamNameList[2][1].toString()
+                goal_member3_textView.text = Data.teamNameList[2][0].toString()
                 member3_bgShape.setColor(Color.parseColor(Data.teamThemeList[2]))
 
                 goal_member4_view.visibility = View.VISIBLE
                 goal_member4_textView.visibility = View.VISIBLE
-                goal_member4_textView.text = Data.teamNameList[3][1].toString()
+                goal_member4_textView.text = Data.teamNameList[3][0].toString()
                 member4_bgShape.setColor(Color.parseColor(Data.teamThemeList[3]))
 
 
                 goal_member5_view.visibility = View.VISIBLE
                 goal_member5_textView.visibility = View.VISIBLE
-                goal_member5_textView.text = Data.teamNameList[4][1].toString()
+                goal_member5_textView.text = Data.teamNameList[4][0].toString()
                 member5_bgShape.setColor(Color.parseColor(Data.teamThemeList[4]))
             }
 
