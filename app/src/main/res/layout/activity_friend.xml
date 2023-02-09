@@ -84,7 +84,7 @@
                             android:id="@+id/contentBox1"
                             android:layout_width="335dp"
                             android:layout_height="130dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginTop="70dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/box"
@@ -134,7 +134,7 @@
                             android:id="@+id/contentBox2"
                             android:layout_width="335dp"
                             android:layout_height="130dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="18dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/box"
@@ -143,7 +143,7 @@
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/FriendAcceptRecyclerView"
                                 android:layout_width="320dp"
-                                android:layout_height="310dp"
+                                android:layout_height="wrap_content"
                                 android:layout_below="@+id/title2"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="2dp"
@@ -186,7 +186,7 @@
                         android:id="@+id/search"
                         android:layout_width="335dp"
                         android:layout_height="38dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/shadow_1"
@@ -218,7 +218,7 @@
                     android:id="@+id/contentBox3"
                     android:layout_width="335dp"
                     android:layout_height="372dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="18dp"
                     android:layout_marginTop="30dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/box"
@@ -226,12 +226,12 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/FriendRecyclerView"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         android:layout_width="335dp"
                         android:layout_height="310dp"
                         android:layout_below="@+id/title3"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="2dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/item_friend" />
 
                     <TextView
