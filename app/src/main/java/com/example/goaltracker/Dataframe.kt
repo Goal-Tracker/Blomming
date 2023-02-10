@@ -17,6 +17,7 @@ data class Account (
 
 @Parcelize
 data class Notifications (
+    var noticeId:String ?= "",
     var goalName:String ?="",
     var goalUid:String ?="",
     var message: String ?= "",
