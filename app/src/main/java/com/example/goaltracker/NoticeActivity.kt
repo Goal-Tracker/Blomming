@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.android.synthetic.main.main_toolbar.*
 import kotlinx.android.synthetic.main.notice_layer.*
 import kotlinx.android.synthetic.main.notice_layer.view.*
@@ -109,20 +110,31 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_button.setVisibility(View.GONE)
             viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
-            val color = item.userColor
-            if (color != null) {
-                profileColor.setColor(Color.parseColor(color))
-            }
+            Log.d("item requestUserId", item?.requestUserId.toString())
+            firestore?.collection("Account")?.document(item.requestUserId.toString())
+                ?.get()?.addOnSuccessListener { document ->
+                    var account = document.toObject(Account::class.java)
+                    var color = account?.userColor.toString()
+
+                    if (color != null) {
+                        profileColor.setColor(Color.parseColor(color))
+                    }
+                }
 
         } else if (item.type == 1) {  // 친구 요청
             viewHolder.notice_text.text = item.userName+"님이 친구 요청을 보냈습니다."
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
-            val color = item.userColor
-            if (color != null) {
-                profileColor.setColor(Color.parseColor(color))
-            }
+            firestore?.collection("Account")?.document(item.requestUserId.toString())
+                ?.get()?.addOnSuccessListener { document ->
+                    var account = document.toObject(Account::class.java)
+                    var color = account?.userColor.toString()
+
+                    if (color != null) {
+                        profileColor.setColor(Color.parseColor(color))
+                    }
+                }
 
             var accountUId: String? = ""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
@@ -182,10 +194,15 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_title.text = item.goalName
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
-            val color : String? = item.userColor
-            if (color != null) {
-                profileColor.setColor(Color.parseColor(color))
-            }
+            firestore?.collection("Account")?.document(item.requestUserId.toString())
+                ?.get()?.addOnSuccessListener { document ->
+                    var account = document.toObject(Account::class.java)
+                    var color = account?.userColor.toString()
+
+                    if (color != null) {
+                        profileColor.setColor(Color.parseColor(color))
+                    }
+                }
 
             var accountUId: String?=""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
@@ -232,10 +249,15 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_button.setVisibility(View.GONE)
             viewHolder.notice_title.text = item.goalName
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
-            val color :String = item.userColor.toString()
-            if (color != null) {
-                profileColor.setColor(Color.parseColor(color))
-            }
+            firestore?.collection("Account")?.document(item.requestUserId.toString())
+                ?.get()?.addOnSuccessListener { document ->
+                    var account = document.toObject(Account::class.java)
+                    var color = account?.userColor.toString()
+
+                    if (color != null) {
+                        profileColor.setColor(Color.parseColor(color))
+                    }
+                }
 
         } else {
             throw Exception("해당 유형의 알림이 존재하지 않습니다.")
