@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         var accountUId = firebaseAuth?.currentUser?.uid.toString()
 
-        Log.d("friendsList", MySharedPreferences.getFriendList(this).toString())
-        Log.d("userColor", MySharedPreferences.getUserColor(this))
+//        Log.d("friendsList", MySharedPreferences.getFriendList(this).toString())
+//        Log.d("userColor", MySharedPreferences.getUserColor(this))
 
         db.collection("Account").document(accountUId).get().addOnSuccessListener {
             curUser = it.toObject(Account::class.java)!!
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .whereEqualTo("status", "friend")
             .get()
             .addOnSuccessListener { friendList ->
-                Log.d("status가 friend인 문서 개수", friendList.size().toString())
+//                Log.d("status가 friend인 문서 개수", friendList.size().toString())
                 val friendDocuments: MutableList<DocumentSnapshot> = friendList.documents
                 var friendsUId : ArrayList<String> ?= arrayListOf()
                 for (document in friendDocuments) {
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val list : ArrayList<String> = MySharedPreferences.getFriendList(this)
                 if (list!=null) {
                     for (value in list) {
-                        Log.d("mysharedpreferences에 저장된 friend", value)
+//                        Log.d("mysharedpreferences에 저장된 friend", value)
                     }
                 }
             }
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                 for (snapshot in querySnapshot!!.documents) {
                     var item = snapshot.toObject(Notifications::class.java)
-//                    Log.d("item", item.toString())
+                    Log.d("item", item.toString())
                     notReadNotices.add(item!!)
                 }
 
