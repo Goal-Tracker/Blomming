@@ -185,7 +185,13 @@ class NoticeActivity : AppCompatActivity() {
             }
 
             viewHolder.notice_delete_button.setOnClickListener {
-                
+                firestore?.collection("Account")?.document(accountUId!!)?.collection("Notification")?.document(item!!.requestUserId.toString())
+                    ?.delete()?.addOnSuccessListener {
+                        Log.d("Delete", "Success!!!!")
+                    }
+                    ?.addOnFailureListener {
+                        throw IllegalArgumentException()
+                    }
             }
 
 
@@ -241,6 +247,16 @@ class NoticeActivity : AppCompatActivity() {
                         firestore?.collection("Account")?.document()
                     }
                 }
+            }
+
+            viewHolder.notice_delete_button.setOnClickListener {
+                firestore?.collection("Account")?.document(accountUId!!)?.collection("Notification")?.document(item!!.goalUid.toString())
+                    ?.delete()?.addOnSuccessListener {
+                        Log.d("Delete", "Success!!!!")
+                    }
+                    ?.addOnFailureListener {
+                        throw IllegalArgumentException()
+                    }
             }
 
         } else if (item.type == 3) {  // 콕 찌르기
