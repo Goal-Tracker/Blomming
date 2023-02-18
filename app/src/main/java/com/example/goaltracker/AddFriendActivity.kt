@@ -185,6 +185,7 @@ class AddFriendActivity : AppCompatActivity() {
 
             //친구 추가 프로필
             fun SetFriendAddColor(item: Friend) {
+                //색상
                 var circleResource : GradientDrawable = AddColor.background as GradientDrawable
                 firestore?.collection("Account")?.document(item.uid.toString())
                     ?.get()?.addOnSuccessListener { document ->
