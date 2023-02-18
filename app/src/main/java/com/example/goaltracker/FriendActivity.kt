@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -160,26 +161,16 @@ class FriendActivity : AppCompatActivity() {
 
             //친구 프로필
             fun SetFriendAcceptColor(item: Friend) {
-                var circleResource = 0
-                when (item.userColor) {
-                    "#f69b94" -> circleResource = R.drawable.b_f69b94
-                    "#f8c8c4" -> circleResource = R.drawable.b_f8c8c4
-                    "#fcdcce" -> circleResource = R.drawable.b_fcdcce
-                    "#96b0e5" -> circleResource = R.drawable.b_96b0e5
-                    "#92b9e2" -> circleResource = R.drawable.b_92b9e2
-                    "#ebc0c7" -> circleResource = R.drawable.b_ebc0c7
-                    "#7bb6c8" -> circleResource = R.drawable.b_7bb6c8
-                    "#aad3d7" -> circleResource = R.drawable.b_aad3d7
-                    "#f5f1f0" -> circleResource = R.drawable.b_f5f1f0
-                    "#d5e3e6" -> circleResource = R.drawable.b_d5e3e6
-                    "#f2a4b1" -> circleResource = R.drawable.b_f2a4b1
-                    "#7175a5" -> circleResource = R.drawable.b_7175a5
-                    "#a1b3d7" -> circleResource = R.drawable.b_a1b3d7
-                    "#bd83cf" -> circleResource = R.drawable.b_bd83cf
-                    "#e5afe9" -> circleResource = R.drawable.b_e5afe9
+                var circleResource : GradientDrawable = AcceptColor.background as GradientDrawable
+                firestore?.collection("Account")?.document(item.uid.toString())
+                    ?.get()?.addOnSuccessListener { document ->
+                        var account = document.toObject(Account::class.java)
+                        var color = account?.userColor.toString()
 
-                }
-                AcceptColor.setImageResource(circleResource)
+                        if (color != null) {
+                            circleResource.setColor(Color.parseColor(color))
+                        }
+                    }
             }
 
             //친구 수락 버튼
@@ -269,26 +260,16 @@ class FriendActivity : AppCompatActivity() {
 
             //친구 프로필
             fun SetFriendRequestColor(item: Friend) {
-                var circleResource = 0
-                when (item.userColor) {
-                    "#f69b94" -> circleResource = R.drawable.b_f69b94
-                    "#f8c8c4" -> circleResource = R.drawable.b_f8c8c4
-                    "#fcdcce" -> circleResource = R.drawable.b_fcdcce
-                    "#96b0e5" -> circleResource = R.drawable.b_96b0e5
-                    "#92b9e2" -> circleResource = R.drawable.b_92b9e2
-                    "#ebc0c7" -> circleResource = R.drawable.b_ebc0c7
-                    "#7bb6c8" -> circleResource = R.drawable.b_7bb6c8
-                    "#aad3d7" -> circleResource = R.drawable.b_aad3d7
-                    "#f5f1f0" -> circleResource = R.drawable.b_f5f1f0
-                    "#d5e3e6" -> circleResource = R.drawable.b_d5e3e6
-                    "#f2a4b1" -> circleResource = R.drawable.b_f2a4b1
-                    "#7175a5" -> circleResource = R.drawable.b_7175a5
-                    "#a1b3d7" -> circleResource = R.drawable.b_a1b3d7
-                    "#bd83cf" -> circleResource = R.drawable.b_bd83cf
-                    "#e5afe9" -> circleResource = R.drawable.b_e5afe9
+                var circleResource: GradientDrawable = RequestColor.background as GradientDrawable
+                firestore?.collection("Account")?.document(item.uid.toString())
+                    ?.get()?.addOnSuccessListener { document ->
+                        var account = document.toObject(Account::class.java)
+                        var color = account?.userColor.toString()
 
-                }
-                RequestColor.setImageResource(circleResource)
+                        if (color != null) {
+                            circleResource.setColor(Color.parseColor(color))
+                        }
+                    }
             }
 
             //친구 신청 취소 버튼
@@ -390,26 +371,16 @@ class FriendActivity : AppCompatActivity() {
 
             //친구 프로필
             fun SetFriendColor(item: Friend) {
-                var circleResource = 0
-                when (item.userColor) {
-                    "#f69b94" -> circleResource = R.drawable.b_f69b94
-                    "#f8c8c4" -> circleResource = R.drawable.b_f8c8c4
-                    "#fcdcce" -> circleResource = R.drawable.b_fcdcce
-                    "#96b0e5" -> circleResource = R.drawable.b_96b0e5
-                    "#92b9e2" -> circleResource = R.drawable.b_92b9e2
-                    "#ebc0c7" -> circleResource = R.drawable.b_ebc0c7
-                    "#7bb6c8" -> circleResource = R.drawable.b_7bb6c8
-                    "#aad3d7" -> circleResource = R.drawable.b_aad3d7
-                    "#f5f1f0" -> circleResource = R.drawable.b_f5f1f0
-                    "#d5e3e6" -> circleResource = R.drawable.b_d5e3e6
-                    "#f2a4b1" -> circleResource = R.drawable.b_f2a4b1
-                    "#7175a5" -> circleResource = R.drawable.b_7175a5
-                    "#a1b3d7" -> circleResource = R.drawable.b_a1b3d7
-                    "#bd83cf" -> circleResource = R.drawable.b_bd83cf
-                    "#e5afe9" -> circleResource = R.drawable.b_e5afe9
+                var circleResource: GradientDrawable = FriendColor.background as GradientDrawable
+                firestore?.collection("Account")?.document(item.uid.toString())
+                    ?.get()?.addOnSuccessListener { document ->
+                        var account = document.toObject(Account::class.java)
+                        var color = account?.userColor.toString()
 
-                }
-                FriendColor.setImageResource(circleResource)
+                        if (color != null) {
+                            circleResource.setColor(Color.parseColor(color))
+                        }
+                    }
             }
 
             //친구 이메일
