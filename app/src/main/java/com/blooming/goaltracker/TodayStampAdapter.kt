@@ -20,12 +20,12 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
 
     var todayStampDatas = ArrayList<TodayStampData>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodayStampAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.today_stamp_item,parent,false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TodayStampAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val stamp = todayStampDatas[position]
 
         val listener = View.OnClickListener {

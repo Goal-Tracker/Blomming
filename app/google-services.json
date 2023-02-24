@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:470402455172:android:f5089544a1d1af5da314d1",
         "android_client_info": {
-          "package_name": "com.example.myapplication"
+          "package_name": "com.blooming.myapplication"
         }
       },
       "oauth_client": [
@@ -47,7 +47,7 @@
           "client_id": "470402455172-95mck8j3vbkgbsh3bnbeade6pfhg4j7o.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.goaltracker",
+            "package_name": "com.blooming.goaltracker",
             "certificate_hash": "9449d0a68b5b00f851c8f8257766d8ff858c57cc"
           }
         },
@@ -76,7 +76,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:470402455172:android:280996aa4a8b68dda314d1",
         "android_client_info": {
-          "package_name": "com.example.myapplication"
+          "package_name": "com.blooming.myapplication"
         }
       },
       "oauth_client": [

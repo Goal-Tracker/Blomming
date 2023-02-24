@@ -12,13 +12,13 @@ class NoticeAdapter (private val context:Context) : RecyclerView.Adapter<NoticeA
 
     private var noticeDto = mutableListOf<Notifications>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.notice_layer, parent, false)
 
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: NoticeAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(noticeDto[position])
     }
 

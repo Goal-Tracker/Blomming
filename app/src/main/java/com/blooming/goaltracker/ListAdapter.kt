@@ -9,7 +9,7 @@ import java.util.*
 
 // 리사이클러 뷰 어댑터
 class ListAdapter(val itemList: ArrayList<Friend>): RecyclerView.Adapter<ListAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
         return ViewHolder(view)
     }
@@ -18,7 +18,7 @@ class ListAdapter(val itemList: ArrayList<Friend>): RecyclerView.Adapter<ListAda
         return itemList.size
     }
 
-    override fun onBindViewHolder(holder: ListAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text = itemList[position].userName
     }
 

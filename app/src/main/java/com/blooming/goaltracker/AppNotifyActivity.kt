@@ -59,7 +59,7 @@ class AppNotifyActivity : AppCompatActivity() {
 
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticesAdapter.ViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.notice_layer, parent, false)
 
             return ViewHolder(view)

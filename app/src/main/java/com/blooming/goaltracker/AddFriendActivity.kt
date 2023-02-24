@@ -250,9 +250,15 @@ class AddFriendActivity : AppCompatActivity() {
                                                             AddBtn.text = "신청 보냄"
                                                             AddBtn.isEnabled = false
                                                             Log.d(friendList.toString(), "저장")
-                                                            var friendList = MySharedPreferences.getFriendList(this@AddFriendActivity)
+                                                            var friendList =
+                                                                MySharedPreferences.getFriendList(
+                                                                    this@AddFriendActivity
+                                                                )
                                                             friendList.add(item.uid.toString())
-                                                            MySharedPreferences.setFriendList(this@AddFriendActivity, friendList)
+                                                            MySharedPreferences.setFriendList(
+                                                                this@AddFriendActivity,
+                                                                friendList
+                                                            )
                                                         }
                                                         ?.addOnFailureListener {}
 
@@ -362,9 +368,15 @@ class AddFriendActivity : AppCompatActivity() {
                                                                         AddBtn.text = "신청 보냄"
                                                                         AddBtn.isEnabled = false
                                                                         Log.d(friendList.toString(), "저장")
-                                                                        var friendList = MySharedPreferences.getFriendList(this@AddFriendActivity)
+                                                                        var friendList =
+                                                                            MySharedPreferences.getFriendList(
+                                                                                this@AddFriendActivity
+                                                                            )
                                                                         friendList.add(item.uid.toString())
-                                                                        MySharedPreferences.setFriendList(this@AddFriendActivity, friendList)
+                                                                        MySharedPreferences.setFriendList(
+                                                                            this@AddFriendActivity,
+                                                                            friendList
+                                                                        )
 
                                                                     }
                                                                     ?.addOnFailureListener {}

@@ -92,7 +92,8 @@ class LoginActivity : AppCompatActivity() {
                                     if (friendsUId != null) {
                                         MySharedPreferences.setFriendList(this, friendsUId)
                                     }
-                                    val list : ArrayList<String> = MySharedPreferences.getFriendList(this)
+                                    val list : ArrayList<String> =
+                                        MySharedPreferences.getFriendList(this)
                                     if (list!=null) {
                                         for (value in list) {
                                             Log.d("mysharedpreferences에 저장된 friend", value)

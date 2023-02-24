@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 class AnnouncementAdapter(private val context: Context) : RecyclerView.Adapter<AnnouncementAdapter.ViewHolder>() {
     var announcementDatas = ArrayList<AnnouncementData>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnouncementAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.announcement_item,parent,false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: AnnouncementAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val announcement = announcementDatas[position]
 
         holder.apply {

@@ -197,7 +197,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
                     // 그림파일을 성공적으로 만들었다면 startActivityForResult로 보내기
                     photoFile?.also {
                         val photoURI: Uri = FileProvider.getUriForFile(
-                            this, "com.example.goaltracker.fileprovider", it
+                            this, "com.blooming.goaltracker.fileprovider", it
                         )
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     }

@@ -17,12 +17,12 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
 
     var goalDatas = ArrayList<GoalRecordData>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalRecordAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_goal_record, parent,false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: GoalRecordAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val goal = goalDatas[position]
 
         val listener = View.OnClickListener {
