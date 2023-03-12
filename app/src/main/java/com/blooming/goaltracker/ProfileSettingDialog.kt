@@ -20,6 +20,7 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
     private lateinit var onClickListener: OnDialogClickListener
     var userNick : String = ""
     var userMessage : String = ""
+    var userColor : String = ""
 
     fun setOnClickListener(listener: OnDialogClickListener) {
         onClickListener = listener
@@ -48,12 +49,15 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
         fireStore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
             var curUser = it.toObject(Account::class.java)
             edit_nick.hint = curUser?.userName
+            userNick = curUser?.userName.toString()
             if (curUser?.userMessage.isNullOrEmpty()) {
                 edit_message.hint = "상태메시지를 입력하세요."
+                userMessage = ""
             } else {
                 edit_message.hint = curUser?.userMessage
+                userMessage = curUser?.userMessage.toString()
             }
-            edit_profile_color = curUser?.userColor
+            userColor = curUser?.userColor.toString()
         }
 
         dialog.s_f69b94.setOnClickListener {
@@ -210,27 +214,35 @@ class ProfileSettingDialog(context: Context) : Dialog(context){
             // 프로필 색상 및 닉네임 수정 코드 추가 필요
             var nick = edit_nick.text.toString()
             var message = edit_message.text.toString()
-            if (nick == "") {
-                Toast.makeText(it.context, "닉네임을 입력하세요", Toast.LENGTH_LONG)
+//            Log.d("프로필 색상", edit_profile_color.toString())
+            if (nick == "" && message == "" && edit_profile_color==null) {
                 Log.d("test", "닉네임 입력안함")
+                dialog.dismiss()
             } else {
-                if (message!=""){
-                    val curUser = hashMapOf<String, Any?>(
-                        "userName" to edit_nick.text.toString(),
-                        "userColor" to edit_profile_color,
-                        "userMessage" to edit_message.text.toString()
-                    )
-                    fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
+                if (nick!=""){
+                    nick = edit_nick.text.toString()
+                } else {
+                    nick = userNick
                 }
-                if (message=="") {
-                    val curUser = hashMapOf<String, Any?>(
-                        "userName" to edit_nick.text.toString(),
-                        "userColor" to edit_profile_color,
-                    )
-                    fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
+                if (message!="") {
+                    message = edit_message.text.toString()
+                } else {
+                    message = userMessage
                 }
+                if (edit_profile_color == null) {
+                    edit_profile_color = userColor
+                }
+                val curUser = hashMapOf<String, Any?>(
+                    "userName" to nick,
+                    "userColor" to edit_profile_color,
+                    "userMessage" to message
+                )
+                fireStore?.collection("Account")?.document(accountUId)?.update(curUser)
                 Toast.makeText(it.context, "프로필 설정 완료", Toast.LENGTH_LONG)
                 dialog.dismiss()
+                Log.d("닉네임", nick)
+                Log.d("색상", edit_profile_color.toString())
+                Log.d("상메", message)
             }
         }
     }
