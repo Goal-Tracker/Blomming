@@ -15,12 +15,27 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:layout_weight="1">
+
+        </LinearLayout>
+
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1.2"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/logo_img_xml"
+            android:background="@drawable/logo_shape"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2">
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -183,7 +198,7 @@
                     android:layout_marginTop="80dp"
                     android:fontFamily="@font/ko_pub_world_dotum_bold"
                     android:text="소셜 로그인"
-                    android:textColor="#ffffff"
+                    android:textColor="#33334f"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"></TextView>

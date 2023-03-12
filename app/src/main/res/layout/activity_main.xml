@@ -70,8 +70,9 @@
                         android:layout_marginLeft="25dp"
                         android:layout_marginTop="10dp"
                         android:background="#00ff0000"
-                        android:src="@drawable/goaladdbtn"
-                        app:tint="?attr/colorButtonNormal" />
+                        app:tint="?attr/colorButtonNormal"
+                        tools:ignore="SpeakableTextPresentCheck"
+                        android:src="@drawable/goal_add_btn_xml" />
 
                 </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
@@ -42,9 +43,11 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, JoinActivity::class.java))
         }
 
-        googleLogin.setOnClickListener{
-            startActivity(Intent(this, GoogleLogin::class.java))
-        }
+        googleLogin.isVisible = false
+
+//        googleLogin.setOnClickListener{
+//            startActivity(Intent(this, GoogleLogin::class.java))
+//        }
 
 //        facebookLogin.setOnClickListener {
 //            startActivity(Intent(this, FacebookLogin::class.java))

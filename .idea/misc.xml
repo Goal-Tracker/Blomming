@@ -97,6 +97,8 @@
         <entry key="app/src/main/res/drawable/comment_input_borderline.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/custom_button.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/custom_checkbox.xml" value="0.1695" />
+        <entry key="app/src/main/res/drawable/goal_add_btn.xml" value="0.1835" />
+        <entry key="app/src/main/res/drawable/goal_add_btn_xml.xml" value="0.1835" />
         <entry key="app/src/main/res/drawable/goal_list.xml" value="0.1015" />
         <entry key="app/src/main/res/drawable/goal_record_top.xml" value="0.222" />
         <entry key="app/src/main/res/drawable/gray_edittext.xml" value="0.312" />
@@ -105,8 +107,11 @@
         <entry key="app/src/main/res/drawable/ic_title_bar.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/login_border.xml" value="0.1695" />
         <entry key="app/src/main/res/drawable/login_button.xml" value="0.1695" />
+        <entry key="app/src/main/res/drawable/logo_img_xml.xml" value="0.1835" />
+        <entry key="app/src/main/res/drawable/logo_shape.xml" value="0.124" />
         <entry key="app/src/main/res/drawable/main_border.xml" value="0.135" />
         <entry key="app/src/main/res/drawable/menu_border.xml" value="0.135" />
+        <entry key="app/src/main/res/drawable/notice_btn_xml.xml" value="0.1835" />
         <entry key="app/src/main/res/drawable/profile_setting_background.xml" value="0.158" />
         <entry key="app/src/main/res/drawable/profile_view.xml" value="0.1835" />
         <entry key="app/src/main/res/drawable/pwcheck_edittext.xml" value="0.121" />
@@ -134,7 +139,7 @@
         <entry key="app/src/main/res/layout/announcement_item.xml" value="0.3978201634877384" />
         <entry key="app/src/main/res/layout/change_pw_dialog.xml" value="0.28442028985507245" />
         <entry key="app/src/main/res/layout/drawer_header.xml" value="0.5319320678710937" />
-        <entry key="app/src/main/res/layout/drawer_main.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/drawer_main.xml" value="0.40110992431640635" />
         <entry key="app/src/main/res/layout/fragment_goal_record_activity2.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/fragment_goal_record_finished.xml" value="0.29281311035156254" />
         <entry key="app/src/main/res/layout/fragment_goal_record_ongoing.xml" value="0.30416666666666664" />
@@ -144,7 +149,7 @@
         <entry key="app/src/main/res/layout/item_friend_add.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/item_goal_record.xml" value="0.25860238449565376" />
         <entry key="app/src/main/res/layout/item_member.xml" value="0.3380208333333333" />
-        <entry key="app/src/main/res/layout/main_toolbar.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/main_toolbar.xml" value="0.33523712158203123" />
         <entry key="app/src/main/res/layout/notice_layer.xml" value="0.3136184692382813" />
         <entry key="app/src/main/res/layout/notice_layer_basic.xml" value="0.18568840579710144" />
         <entry key="app/src/main/res/layout/notice_layer_friend.xml" value="0.15405405405405406" />
