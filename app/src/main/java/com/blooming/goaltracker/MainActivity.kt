@@ -80,6 +80,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
 
+        val notReadNotices = arrayListOf<Notifications>()
+        db.collection("Account")
+            .document(accountUId)
+            .collection("Notification")
+            .whereArrayContains("read", false).get().addOnSuccessListener { querySnapshot ->
+                notReadNotices.clear()
+
+                for (snapshot in querySnapshot!!.documents) {
+                    var item = snapshot.toObject(Notifications::class.java)
+                    Log.d("item", item.toString())
+                    notReadNotices.add(item!!)
+                    Log.d("안 읽은 알림", notReadNotices.toString())
+                }
+
+                if (notReadNotices.isNotEmpty()) {
+                    new_notice.isVisible = false
+                }
+            }
+
         setTheme(MySharedPreferences.getTheme(this))
         setContentView(R.layout.drawer_main)
 
@@ -109,24 +128,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navUserEmail.text = MySharedPreferences.getUserEmail(this)
         //navUserProfile.setColor(MySharedPreferences.getUserColorInt(this))
         navUserNameShort.text = (MySharedPreferences.getUserNickname(this)).substring(0 until 1)
-
-        val notReadNotices = arrayListOf<Notifications>()
-        db.collection("Account")
-            .document(accountUId)
-            .collection("Notification")
-            .whereArrayContains("read", false).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                notReadNotices.clear()
-
-                for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(Notifications::class.java)
-                    Log.d("item", item.toString())
-                    notReadNotices.add(item!!)
-                }
-
-                if (notReadNotices.isNotEmpty()) {
-                    new_notice.isVisible = false
-                }
-            }
 
         // --------------------------------골 추가 버튼 연결--------------------------------------- //
 
