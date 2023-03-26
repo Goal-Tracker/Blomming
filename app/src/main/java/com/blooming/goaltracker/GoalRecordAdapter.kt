@@ -26,7 +26,6 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
         val goal = goalDatas[position]
 
         val listener = View.OnClickListener {
-            Toast.makeText(it.context, "Clicked : ${goal.title}", Toast.LENGTH_SHORT).show()
             val intent = Intent(holder.itemView?.context, StampBoardActivity::class.java)
             intent.putExtra("goalId", goal.goalId)
             ContextCompat.startActivity(holder.itemView.context, intent, null)

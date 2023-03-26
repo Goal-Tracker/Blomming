@@ -28,12 +28,8 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val stamp = todayStampDatas[position]
 
-        val listener = View.OnClickListener {
-            Toast.makeText(it.context, "Clicked : ${stamp.nickname}", Toast.LENGTH_SHORT).show()
-        }
-
         holder.apply {
-            bind(listener, stamp)
+            bind(stamp)
         }
     }
 
@@ -51,7 +47,7 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
         private val nickname_textView: TextView = itemView.findViewById(R.id.nickname_textView)
         private val comment_textView: TextView = itemView.findViewById(R.id.comment_textView)
 
-        fun bind(listener: View.OnClickListener, Data: TodayStampData) {
+        fun bind(Data: TodayStampData) {
             // 이미지 로드
             if (Data.image != "") {
                 var fbStorage = FirebaseStorage.getInstance()
@@ -95,8 +91,6 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
             } else {
                 nickname_textView.text = Data.nickname + " (지각)"
             }
-
-            view.setOnClickListener(listener)
         }
     }
 

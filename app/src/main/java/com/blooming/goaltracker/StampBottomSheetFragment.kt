@@ -214,7 +214,6 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         }
 
         today_stamp_button.setOnClickListener {
-            Toast.makeText(requireContext(), "today stamp button click", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, StampUploadDialogActivity::class.java)
             intent.putExtra("stampInfo", stampInfo)
             intent.putExtra("stampNum", stamp_num)
@@ -223,7 +222,6 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         }
 
         today_stamp_noneStamp_button.setOnClickListener {
-            Toast.makeText(requireContext(), "today stamp button click", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, StampUploadDialogActivity::class.java)
             intent.putExtra("stampInfo", stampInfo)
             intent.putExtra("stampNum", stamp_num)
@@ -232,7 +230,6 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         }
 
         addPastStamp.setOnClickListener {
-            Toast.makeText(requireContext(), "addPastStamp", Toast.LENGTH_SHORT).show()
             val intent = Intent(context, StampUploadDialogActivity::class.java)
             intent.putExtra("stampInfo", stampInfo)
             intent.putExtra("stampNum", stamp_num)

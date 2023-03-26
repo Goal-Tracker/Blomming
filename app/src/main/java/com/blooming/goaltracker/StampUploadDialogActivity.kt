@@ -78,23 +78,15 @@ class StampUploadDialogActivity : AppCompatActivity() {
         }
 
         certImage_imageView.setOnClickListener {
-            Toast.makeText(it.context, "You Click Certification Image Button", Toast.LENGTH_SHORT).show()
-
             if(checkPermission()){
-                Toast.makeText(it.context, "checkPermission()", Toast.LENGTH_SHORT).show()
                 dispatchTakePictureIntent()
             } else{
-                Toast.makeText(it.context, "requestPermission()", Toast.LENGTH_SHORT).show()
                 requestPermission()
             }
         }
 
         commentUpload_button.setOnClickListener {
-            if (comment_editText.text.toString().trim().isEmpty()){
-                Toast.makeText(it.context, "comment is empty", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(it.context, "You Click Comment Upload Button", Toast.LENGTH_SHORT).show()
-
+            if (!comment_editText.text.toString().trim().isEmpty()){
                 Log.d(TAG, "goal id : " + stampInfo.goal_id)
                 val goal_db = db.collection("Goal").document(stampInfo.goal_id)
 
@@ -112,8 +104,6 @@ class StampUploadDialogActivity : AppCompatActivity() {
                                 val storageRef = fbStorage.reference.child("stamp").child(imgFileName)
 
                                 storageRef.putFile(imageResultURL).addOnSuccessListener {
-                                    Toast.makeText(this, "Image Uploaded", Toast.LENGTH_SHORT).show()
-
                                     val stampData = hashMapOf(
                                         "comment" to comment_editText.text.toString(),
                                         "image" to imgFileName,
@@ -157,8 +147,6 @@ class StampUploadDialogActivity : AppCompatActivity() {
         }
 
         close_dialog_button.setOnClickListener {
-            Toast.makeText(it.context, "You Click Close Button", Toast.LENGTH_SHORT).show()
-
             finish()
         }
     }
@@ -262,7 +250,7 @@ class StampUploadDialogActivity : AppCompatActivity() {
                     }
                 }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
                     val error = result.error
-                    Toast.makeText(this@StampUploadDialogActivity, error.message, Toast.LENGTH_SHORT).show()
+                    Log.e(TAG, error.message.toString())
                 }
             }
         }

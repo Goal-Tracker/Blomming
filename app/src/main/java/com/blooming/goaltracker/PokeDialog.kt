@@ -54,8 +54,6 @@ class PokeDialog(context: Context) : Dialog(context) {
         profile_message.text = profile.message.toString()
 
         close_dialog_button.setOnClickListener {
-            Toast.makeText(it.context, "You Click Close Button", Toast.LENGTH_SHORT).show()
-
             dlg.dismiss()
         }
 
