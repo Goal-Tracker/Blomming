@@ -80,23 +80,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
 
-        val notReadNotices = arrayListOf<Notifications>()
         db.collection("Account")
             .document(accountUId)
             .collection("Notification")
-            .whereArrayContains("read", false).get().addOnSuccessListener { querySnapshot ->
-                notReadNotices.clear()
+            .whereEqualTo("read", false).get().addOnSuccessListener { querySnapshot ->
 
-                for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(Notifications::class.java)
-                    Log.d("item", item.toString())
-                    notReadNotices.add(item!!)
-                    Log.d("안 읽은 알림", notReadNotices.toString())
+                val notReadNoticeDocuments: MutableList<DocumentSnapshot> = querySnapshot.documents
+
+                if(notReadNoticeDocuments.isNotEmpty()){
+                    new_notice.isVisible = true
                 }
 
-                if (notReadNotices.isNotEmpty()) {
+                if(notReadNoticeDocuments.isEmpty()){
                     new_notice.isVisible = false
                 }
+
             }
 
         setTheme(MySharedPreferences.getTheme(this))

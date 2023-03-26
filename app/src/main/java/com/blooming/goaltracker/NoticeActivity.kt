@@ -8,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.main_toolbar.*
 import kotlinx.android.synthetic.main.notice_layer.view.*
 import kotlinx.android.synthetic.main.notice_view.*
 
@@ -20,8 +23,10 @@ class NoticeActivity : AppCompatActivity() {
 
     lateinit var noticeAdapter: NoticesAdapter
     //    val notices = mutableListOf<Notification>()
-    var firebaseAuth : FirebaseAuth ?= null
-    var firestore : FirebaseFirestore ?= null
+    val firebaseAuth = FirebaseAuth.getInstance()
+    val firestore = FirebaseFirestore.getInstance()
+    var accountUId = firebaseAuth?.currentUser?.uid.toString()
+    val notices = firestore.collection("Account").document(accountUId).collection("Notification")
 
 //    private val binding: ActivitySwipeBinding by lazy{
 //        ActivitySwiprBinding.inflate(
@@ -32,11 +37,20 @@ class NoticeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        notices
+            .whereEqualTo("read", false).get().addOnSuccessListener { querySnapshot ->
+
+                val notReadNoticeDocuments: MutableList<DocumentSnapshot> = querySnapshot.documents
+
+                for (document in notReadNoticeDocuments){
+                    notices.document(document.id).update("read", true)
+//                    Log.d("read", "true로 바꿈")
+                }
+
+            }
+
         setTheme(MySharedPreferences.getTheme(this))
         setContentView(R.layout.notice_view)
-
-        firebaseAuth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
 
         notice_list.adapter = NoticesAdapter()
 
@@ -49,20 +63,19 @@ class NoticeActivity : AppCompatActivity() {
     inner class NoticesAdapter: RecyclerView.Adapter<NoticesAdapter.ViewHolder>(){
         private var noticeDto = arrayListOf<Notifications>()
         init {
-            var accountUId: String? = ""
-            accountUId = firebaseAuth?.currentUser?.uid.toString()
-            firestore?.collection("Account")?.document(accountUId)?.collection("Notification")?.
-            orderBy("timestamp", Query.Direction.DESCENDING)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                noticeDto.clear()
+            notices
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    noticeDto.clear()
 
-                for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(Notifications::class.java)
-//                    Log.d("item", item.toString())
-                    noticeDto.add(item!!)
+                    for (snapshot in querySnapshot!!.documents) {
+                        var item = snapshot.toObject(Notifications::class.java)
+//                        Log.d("item", item.toString())
+                        noticeDto.add(item!!)
+                    }
+                    notifyDataSetChanged()
+//                    Log.d("개수", noticeDto.size.toString())
                 }
-                notifyDataSetChanged()
-                Log.d("개수", noticeDto.size.toString())
-            }
         }
 
         inner class ViewHolder(view: View):RecyclerView.ViewHolder(view){
@@ -91,6 +104,8 @@ class NoticeActivity : AppCompatActivity() {
     private fun setNoticeList(holder: NoticesAdapter.ViewHolder, item: Notifications) {
         var viewHolder = (holder as NoticesAdapter.ViewHolder).itemView
 
+        val getRequestNotice = firestore.collection("Account").document(item.requestUserId.toString())
+
         if (item.type == 0) { // 관리자 공지
             viewHolder.notice_text.text = item.message
             viewHolder.notice_profile_name.text = item.userName?.substring(0, 1)
@@ -98,8 +113,9 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             Log.d("item requestUserId", item?.requestUserId.toString())
-            firestore?.collection("Account")?.document(item.requestUserId.toString())
-                ?.get()?.addOnSuccessListener { document ->
+            getRequestNotice
+                .get()
+                .addOnSuccessListener { document ->
                     var account = document.toObject(Account::class.java)
                     var color = account?.userColor.toString()
 
@@ -113,8 +129,9 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
-            firestore?.collection("Account")?.document(item.requestUserId.toString())
-                ?.get()?.addOnSuccessListener { document ->
+            getRequestNotice
+                .get()
+                .addOnSuccessListener { document ->
                     var account = document.toObject(Account::class.java)
                     var color = account?.userColor.toString()
 
@@ -137,28 +154,30 @@ class NoticeActivity : AppCompatActivity() {
                 viewHolder.notice_button.setOnClickListener {
                     try {
                         Log.d(item.requestUserId.toString(), "요청한 유저 아이디")
-                        firestore?.collection("Account")?.document(accountUId!!)
-                            ?.collection("Friend")
-                            ?.document(item.requestUserId.toString())
-                            ?.update("status", "friend")
-                            ?.addOnSuccessListener {
+                        firestore
+                            .collection("Account")
+                            .document(accountUId!!)
+                            .collection("Friend")
+                            .document(item.requestUserId.toString())
+                            .update("status", "friend")
+                            .addOnSuccessListener {
                                 // 내 account db에서 status friend로 바꾸기가 성공적으로 완료되면 상대방 account db에서 status friend로 바꾸기
-                                firestore?.collection("Account")?.document(item.requestUserId.toString())
-                                    ?.collection("Friend")
-                                    ?.document(accountUId!!)
-                                    ?.update("status", "friend")
-                                    ?.addOnSuccessListener {
+                                getRequestNotice
+                                    .collection("Friend")
+                                    .document(accountUId!!)
+                                    .update("status", "friend")
+                                    .addOnSuccessListener {
                                         viewHolder.notice_button.text = "수락 완료"
                                         viewHolder.notice_button.isEnabled = false
                                         var friendList = MySharedPreferences.getFriendList(this)
                                         friendList.add(item.requestUserId.toString())
                                         MySharedPreferences.setFriendList(this, friendList)
                                     }
-                                    ?.addOnFailureListener {
+                                    .addOnFailureListener {
                                         throw IllegalArgumentException()
                                     }
                             }
-                            ?.addOnFailureListener {
+                            .addOnFailureListener {
                                 throw IllegalArgumentException()
                             }
 
@@ -172,11 +191,13 @@ class NoticeActivity : AppCompatActivity() {
             }
 
             viewHolder.notice_delete_button.setOnClickListener {
-                firestore?.collection("Account")?.document(accountUId!!)?.collection("Notification")?.document(item!!.requestUserId.toString())
-                    ?.delete()?.addOnSuccessListener {
+                notices
+                    .document(item!!.requestUserId.toString())
+                    .delete()
+                    .addOnSuccessListener {
                         Log.d("Delete", "Success!!!!")
                     }
-                    ?.addOnFailureListener {
+                    .addOnFailureListener {
                         throw IllegalArgumentException()
                     }
             }
@@ -187,8 +208,9 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_title.text = item.goalName
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
-            firestore?.collection("Account")?.document(item.requestUserId.toString())
-                ?.get()?.addOnSuccessListener { document ->
+            getRequestNotice
+                .get()
+                .addOnSuccessListener { document ->
                     var account = document.toObject(Account::class.java)
                     var color = account?.userColor.toString()
 
@@ -208,20 +230,28 @@ class NoticeActivity : AppCompatActivity() {
             if (!goalList.contains(item.goalUid)) {
                 viewHolder.notice_button.text = "Goal 수락"
                 viewHolder.notice_button.setOnClickListener {
-                    firestore?.collection("Account")?.document(accountUId)?.get()?.addOnSuccessListener {
+                    firestore
+                        .collection("Account")
+                        .document(accountUId)
+                        .get()
+                        .addOnSuccessListener {
                         var curUser = it.toObject(Account::class.java)!!
                         val userInfo = GoalTeamData(accountUId, curUser?.userName.toString(), curUser?.userColor.toString(), curUser?.userMessage.toString(), true)
 
-                        firestore?.collection("Goal")?.document(item.goalUid.toString())
-                            ?.collection("team")
-                            ?.document(accountUId!!)
-                            ?.set(userInfo)
-                            ?.addOnSuccessListener {
+                        firestore.collection("Goal")
+                            .document(item.goalUid.toString())
+                            .collection("team")
+                            .document(accountUId!!)
+                            .set(userInfo)
+                            .addOnSuccessListener {
                                 goalList.add(item.goalUid.toString())
                                 val goalUpdate = hashMapOf<String, Any?>(
                                     "myGoalList" to goalList,
                                 )
-                                firestore?.collection("Account")?.document(accountUId)?.update(goalUpdate)
+                                firestore
+                                    .collection("Account")
+                                    .document(accountUId)
+                                    .update(goalUpdate)
                                 MySharedPreferences.setGoalList(this, goalList)
                                 goalList = MySharedPreferences.getGoalList(this)
                                 Log.d("myGoalList", goalList.toString())
@@ -229,16 +259,18 @@ class NoticeActivity : AppCompatActivity() {
                                 viewHolder.notice_button.isEnabled = false
                             }
 
-                        val myGoalList : List<String>? = curUser.myGoalList
-
-                        firestore?.collection("Account")?.document()
+//                        val myGoalList : List<String>? = curUser.myGoalList
+//
+//                        firestore.collection("Account").document()
                     }
                 }
             }
 
             viewHolder.notice_delete_button.setOnClickListener {
-                firestore?.collection("Account")?.document(accountUId!!)?.collection("Notification")?.document(item!!.goalUid.toString())
-                    ?.delete()?.addOnSuccessListener {
+                notices
+                    .document(item!!.goalUid.toString())
+                    .delete()
+                    .addOnSuccessListener {
                         Log.d("Delete", "Success!!!!")
                     }
                     ?.addOnFailureListener {
@@ -252,8 +284,11 @@ class NoticeActivity : AppCompatActivity() {
             viewHolder.notice_button.setVisibility(View.GONE)
             viewHolder.notice_title.text = item.goalName
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
-            firestore?.collection("Account")?.document(item.requestUserId.toString())
-                ?.get()?.addOnSuccessListener { document ->
+            firestore
+                .collection("Account")
+                .document(item.requestUserId.toString())
+                .get()
+                .addOnSuccessListener { document ->
                     var account = document.toObject(Account::class.java)
                     var color = account?.userColor.toString()
 
