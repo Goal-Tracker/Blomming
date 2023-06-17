@@ -161,15 +161,17 @@ class FriendActivity : AppCompatActivity() {
             //친구 프로필
             fun SetFriendAcceptColor(item: Friend) {
                 var circleResource : GradientDrawable = AcceptColor.background as GradientDrawable
-                firestore?.collection("Account")?.document(item.uid.toString())
-                    ?.get()?.addOnSuccessListener { document ->
-                        var account = document.toObject(Account::class.java)
-                        var color = account?.userColor.toString()
+                if (item.uid != null) {
+                    firestore?.document("Account/${item.uid}")
+                        ?.get()?.addOnSuccessListener { document ->
+                            var account = document.toObject(Account::class.java)
+                            var color = account?.userColor.toString()
 
-                        if (color != null) {
-                            circleResource.setColor(Color.parseColor(color))
+                            if (color != null) {
+                                circleResource.setColor(Color.parseColor(color))
+                            }
                         }
-                    }
+                }
             }
 
             //친구 수락 버튼
