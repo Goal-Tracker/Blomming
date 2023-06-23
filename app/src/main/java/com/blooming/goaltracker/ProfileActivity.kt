@@ -3,6 +3,8 @@ package com.blooming.goaltracker
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -165,6 +167,15 @@ class ProfileActivity : AppCompatActivity() {
             c_e5afe9.setBackgroundResource(R.drawable.p_e5afe9)
             click = true
             backgroundColor = "#e5afe9"
+        }
+
+        joinName.setOnKeyListener { view, i, keyEvent ->
+            if(i== KeyEvent.KEYCODE_ENTER){
+                val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(joinName.windowToken, 0)
+                true
+            }
+            false
         }
 
         pfSettingButton.setOnClickListener {
