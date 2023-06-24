@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blooming.goaltracker.databinding.ItemMemberBinding
+import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -57,7 +58,11 @@ class EditGoalActivity : AppCompatActivity() {
             // 검색창에 변화가 있을때마다
             override fun afterTextChanged(editable: Editable) {
                 // search 함수 호출
-                (recyclerview.adapter as AddGoal.RecyclerViewAdapter).search(searchWord.text.toString())
+                (recyclerview.adapter as FriendListAdapter).search(searchWord.text.toString())
+                if(searchWord.text.toString() == "")
+                {
+                    FriendListAdapter() // 친구 목록만 보이게
+                }
             }
         })
 
@@ -72,7 +77,7 @@ class EditGoalActivity : AppCompatActivity() {
         memo = findViewById(R.id.memo)
         close_btn = findViewById(R.id.close_btn)
 
-        recyclerview.adapter = RecyclerViewAdapter()
+        recyclerview.adapter = FriendListAdapter()
         recyclerview.layoutManager = LinearLayoutManager(this)
 
         // goalID 값 받아오기
@@ -93,9 +98,19 @@ class EditGoalActivity : AppCompatActivity() {
             endDay.setText(db_endDay)
         }
 
+        // 시작일 고정
+        startDay.setOnClickListener {
+            Toast.makeText(this, "시작일은 수정할 수 없습니다.", Toast.LENGTH_SHORT).show()
+        }
+
         // 검색
         searchBtn.setOnClickListener {
-            (recyclerview.adapter as RecyclerViewAdapter).search(searchWord.text.toString())
+            // search 함수 호출
+            (recyclerview.adapter as FriendListAdapter).search(searchWord.text.toString())
+            if(searchWord.text.toString() == "")
+            {
+                FriendListAdapter() // 친구 목록만 보이게
+            }
         }
 
         // 이전 화면으로 이동
@@ -168,24 +183,23 @@ class EditGoalActivity : AppCompatActivity() {
         //milliseconds -> day로 변환
         return TimeUnit.MILLISECONDS.toDays(endDay_calendar.timeInMillis - startDay_calendar.timeInMillis)
     }
-    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class FriendListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        init {  // 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
+            firestore?.collection("Account")?.document(accountUId)
+                ?.collection("Friend")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    // ArrayList 비워줌
+                    FriendsList.clear()
 
-        init {
-            firestore?.collection("Account")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                // ArrayList 비워줌
-                FriendsList.clear()
-
-                for (snapshot in querySnapshot!!.documents) {
-                    var item = snapshot.toObject(Friend::class.java)
-                    FriendsList.add(item!!)
+                    for (snapshot in querySnapshot!!.documents) {
+                        val item = snapshot.toObject(Friend::class.java)
+                        FriendsList.add(item!!)
+                    }
+                    notifyDataSetChanged()
                 }
-                notifyDataSetChanged()
-            }
         }
 
         // xml파일을 inflate하여 ViewHolder를 생성
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
             val binding = ItemMemberBinding.inflate(layoutInflater,parent,false)
             return ViewHolder(binding)
         }
