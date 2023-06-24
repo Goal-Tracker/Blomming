@@ -62,7 +62,11 @@ class AddGoal : AppCompatActivity() {
             // 검색창에 변화가 있을때마다
             override fun afterTextChanged(editable: Editable) {
                 // search 함수 호출
-                (recyclerview.adapter as RecyclerViewAdapter).search(searchWord.text.toString())
+                (recyclerview.adapter as FriendListAdapter).search(searchWord.text.toString())
+                if(searchWord.text.toString() == "")
+                {
+                    FriendListAdapter() // 친구 목록만 보이게
+                }
             }
         })
 
@@ -77,12 +81,17 @@ class AddGoal : AppCompatActivity() {
         memo = findViewById(R.id.memo)
         close_btn = findViewById(R.id.close_btn)
 
-        recyclerview.adapter = RecyclerViewAdapter()
+        recyclerview.adapter = FriendListAdapter()
         recyclerview.layoutManager = LinearLayoutManager(this)
 
         // 검색
         searchBtn.setOnClickListener {
-            (recyclerview.adapter as RecyclerViewAdapter).search(searchWord.text.toString())
+            // search 함수 호출
+            (recyclerview.adapter as FriendListAdapter).search(searchWord.text.toString())
+            if(searchWord.text.toString() == "")
+            {
+                FriendListAdapter() // 친구 목록만 보이게
+            }
         }
 
         // 메인 화면으로 이동
@@ -256,7 +265,7 @@ class AddGoal : AppCompatActivity() {
         return TimeUnit.MILLISECONDS.toDays(endDay_calendar.timeInMillis - startDay_calendar.timeInMillis)
     }
 
-    inner class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class FriendListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         init {  // 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
             firestore?.collection("Account")?.document(accountUId)
                 ?.collection("Friend")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
@@ -273,7 +282,6 @@ class AddGoal : AppCompatActivity() {
 
         // xml파일을 inflate하여 ViewHolder를 생성
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            // var view = LayoutInflater.from(parent.context).inflate(R.layout.item_member, parent, false)
             val binding = ItemMemberBinding.inflate(layoutInflater,parent,false)
             return ViewHolder(binding)
         }
