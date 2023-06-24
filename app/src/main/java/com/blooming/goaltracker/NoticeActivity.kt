@@ -195,6 +195,7 @@ class NoticeActivity : AppCompatActivity() {
                     .document(item!!.requestUserId.toString())
                     .delete()
                     .addOnSuccessListener {
+
                         Log.d("Delete", "Success!!!!")
                     }
                     .addOnFailureListener {

@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -29,9 +30,11 @@ class ProfileActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         fireStore = FirebaseFirestore.getInstance()
 
-        backToJoin.setOnClickListener {
-            finish()
-        }
+        backToJoin.isVisible=false
+
+//        backToJoin.setOnClickListener {
+//            finish()
+//        }
 
         c_f69b94.setOnClickListener {
             if (click == true) {
