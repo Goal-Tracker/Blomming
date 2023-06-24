@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -17,10 +18,6 @@ import kotlinx.android.synthetic.main.activity_join.*
 
 class JoinActivity : AppCompatActivity() {
 
-    lateinit var signupID : EditText
-    //lateinit var emailID_error : TextView
-    lateinit var signupPW : EditText
-    lateinit var pwCheck : EditText
     lateinit var pwCheck_error : TextView
     var firebaseAuth: FirebaseAuth?=null
     var fireStore : FirebaseFirestore?=null
@@ -29,17 +26,12 @@ class JoinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_join)
 
-        signupID=findViewById(R.id.signupID)
-        //emailID_error=findViewById(R.id.emailID_error)
-        signupPW=findViewById<EditText?>(R.id.signupPW)
-        pwCheck=findViewById(R.id.signupPWcheck)
         pwCheck_error=findViewById(R.id.pwCheck_error)
 
         firebaseAuth= FirebaseAuth.getInstance()
         fireStore= FirebaseFirestore.getInstance()
 
         backtologin.setOnClickListener {
-            
             finish()
         }
 
@@ -47,8 +39,8 @@ class JoinActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                var password = signupPW.text.toString()
-                var passwordCheck = signupPWcheck.text.toString()
+                var password = signuppw.text.toString()
+                var passwordCheck = pwCheck.text.toString()
                 if (password != passwordCheck) {
                     pwCheck_error.setText("비밀번호가 일치하지 않습니다.") // 경고 메세지
                     pwCheck.setBackgroundResource(R.drawable.red_edittext) // 적색 테두리 적용
@@ -68,11 +60,11 @@ class JoinActivity : AppCompatActivity() {
     }
 
     fun signinAndSignup() {
-        if (signupID.text != null && signupPW.text != null) {
-            var password = signupPW.text.toString()
+        if (signupID.text != null && signuppw.text != null) {
+            var password = signuppw.text.toString()
             var passwordCheck = pwCheck.text.toString()
             if (password == passwordCheck) {
-                firebaseAuth?.createUserWithEmailAndPassword(signupID.text.toString(), signupPW.text.toString())
+                firebaseAuth?.createUserWithEmailAndPassword(signupID.text.toString(), signuppw.text.toString())
                     ?.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             //account db 저장
@@ -98,7 +90,7 @@ class JoinActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show()
             }
-        } else if (signupPW.text==null){
+        } else if (signuppw.text==null){
             Toast.makeText(this, "비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show()
         } else if (signupID.text==null){
             Toast.makeText(this, "이메일을 입력해주세요", Toast.LENGTH_SHORT).show()

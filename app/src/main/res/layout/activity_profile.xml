@@ -200,6 +200,8 @@
                     android:paddingLeft="15dp"
                     android:textColor="#363639"
                     android:textSize="13sp"
+                    android:singleLine="true"
+                    android:lines="1"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

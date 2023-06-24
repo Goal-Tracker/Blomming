@@ -3,9 +3,12 @@ package com.blooming.goaltracker
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_profile.*
@@ -27,9 +30,11 @@ class ProfileActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         fireStore = FirebaseFirestore.getInstance()
 
-        backToJoin.setOnClickListener {
-            finish()
-        }
+        backToJoin.isVisible=false
+
+//        backToJoin.setOnClickListener {
+//            finish()
+//        }
 
         c_f69b94.setOnClickListener {
             if (click == true) {
@@ -165,6 +170,15 @@ class ProfileActivity : AppCompatActivity() {
             c_e5afe9.setBackgroundResource(R.drawable.p_e5afe9)
             click = true
             backgroundColor = "#e5afe9"
+        }
+
+        joinName.setOnKeyListener { view, i, keyEvent ->
+            if(i== KeyEvent.KEYCODE_ENTER){
+                val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(joinName.windowToken, 0)
+                true
+            }
+            false
         }
 
         pfSettingButton.setOnClickListener {

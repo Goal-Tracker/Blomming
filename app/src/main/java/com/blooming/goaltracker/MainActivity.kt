@@ -256,6 +256,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     firebaseAuth.signOut()
                     onBackPressed()
                     startActivity(Intent(this, LoginActivity::class.java))
+                    this.finish()
                 } else {
                     throw Exception ("현재 유저가 없습니다.")
                 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -27,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
     private var curUser = Account()
     private var accountUId:String = ""
+    private var changePWDialog : ChangePWDialog ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +37,39 @@ class LoginActivity : AppCompatActivity() {
         emailEt=findViewById(R.id.loginEmail)
         pwEt=findViewById(R.id.loginPW)
 
+        emailEt.setOnKeyListener { view, i, keyEvent ->
+            if (keyEvent.action == KeyEvent.ACTION_DOWN && i==KeyEvent.KEYCODE_ENTER){
+                pwEt.requestFocus()
+                true
+            }
+            false
+        }
+
+        pwEt.setOnKeyListener { view, i, keyEvent ->
+            if(i==KeyEvent.KEYCODE_ENTER){
+                val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(pwEt.windowToken, 0)
+                true
+            }
+            false
+        }
+
         loginButton.setOnClickListener {
             signIn(loginEmail.text.toString(), loginPW.text.toString())
         }
 
         joinButton.setOnClickListener{
             startActivity(Intent(this, JoinActivity::class.java))
+        }
+
+        PWButton.setOnClickListener {
+            changePWDialog = ChangePWDialog(this)
+            changePWDialog?.showDialog()
+            changePWDialog?.setOnClickListener(object: ChangePWDialog.OnDialogClickListener {
+                override fun onClicked(name: String) {
+                    Toast.makeText(this@LoginActivity, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
 
         googleLogin.isVisible = false
@@ -138,6 +167,16 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+    }
+
+    private fun findPW() {
+        changePWDialog?.showDialog()
+        onBackPressed()
+        changePWDialog?.setOnClickListener(object: ChangePWDialog.OnDialogClickListener {
+            override fun onClicked(name: String) {
+                Toast.makeText(this@LoginActivity, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

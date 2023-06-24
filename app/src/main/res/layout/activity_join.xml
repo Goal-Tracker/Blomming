@@ -53,6 +53,8 @@
                         android:paddingLeft="15dp"
                         android:textColor="#363639"
                         android:textSize="13sp"
+                        android:singleLine="true"
+                        android:lines="1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +88,7 @@
                     app:passwordToggleEnabled="true">
 
                     <EditText
-                        android:id="@+id/signupPW"
+                        android:id="@+id/signuppw"
                         android:layout_width="313dp"
                         android:layout_height="48dp"
                         android:background="@drawable/gray_edittext"
@@ -95,6 +97,8 @@
                         android:paddingLeft="15dp"
                         android:textColor="#363639"
                         android:textSize="13sp"
+                        android:singleLine="true"
+                        android:lines="1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +117,7 @@
                     app:passwordToggleEnabled="true">
 
                     <EditText
-                        android:id="@+id/signupPWcheck"
+                        android:id="@+id/pwCheck"
                         android:layout_width="313dp"
                         android:layout_height="48dp"
                         android:background="@drawable/pwcheck_edittext"
@@ -122,6 +126,8 @@
                         android:paddingLeft="15dp"
                         android:textColor="#363639"
                         android:textSize="13sp"
+                        android:singleLine="true"
+                        android:lines="1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"></EditText>
