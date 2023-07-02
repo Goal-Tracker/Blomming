@@ -1,16 +1,14 @@
 package com.blooming.goaltracker
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.view.*
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -23,6 +21,7 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
     var accountUId = firebaseAuth?.currentUser?.uid.toString()
+    private lateinit var dialog: DeleteGoal  //다이얼로그
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_goal_record, parent,false)
@@ -211,29 +210,43 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
             view.setOnClickListener(listener)
 
 
-            ///////// 골 삭제 ////////////////////////////////////////////////////////
+            ///////////////////////////-----골 삭제----///////////////////////////////
+
+            // 길게 클릭하면 다이얼로그 생성
             view.setOnLongClickListener {
-                val goal = goalDatas[position]
-                // 다이얼로그를 생성하기 위해 Builder 클래스 생성자를 이용해 줍니다.
-                    val builder = AlertDialog.Builder(view.context)
-
-                builder.setTitle("선택한 목표를 삭제하시겠습니까?")
-                        .setMessage("${goalTitle_textView.text}")
-                        .setPositiveButton("삭제",
-                            DialogInterface.OnClickListener { dialog, id ->
-                                // 해당 position 에 해당하는 데이터 삭제
-                                db?.collection("Account")?.document(accountUId)
-                                    ?.update("myGoalList", FieldValue.arrayRemove(goal.goalId))
-                            })
-                        .setNegativeButton("취소",
-                            DialogInterface.OnClickListener { dialog, id ->
-                                dialog?.dismiss()
-                            })
-                    // 다이얼로그를 띄워주기
-                    builder.show()
-
+                DeleteGoal(view.context, "${goalTitle_textView.text}")
                 false // 직후 click event 를 받기 위해 false 반환
             }
         }
+
+        // 해당 position 에 해당하는 데이터 삭제
+        val deletebtnListener = View.OnClickListener {
+            val goal = goalDatas[position]
+            db?.collection("Account")?.document(accountUId)
+                ?.update("myGoalList", FieldValue.arrayRemove(goal.goalId))
+            dialog?.dismiss()
+        }
+
+        val cancelbtnListener = View.OnClickListener {
+            dialog?.dismiss()
+        }
+
+        fun DeleteGoal(context: Context, text: String){
+            dialog = DeleteGoal(
+                context = context,
+                title = text,
+                deletebtnListener = deletebtnListener,
+                cancelbtnListener = cancelbtnListener
+            )
+
+            //다이얼로그 타이틀 및 테두리 없애기
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            dialog.onBackPressed()
+            dialog.show()
+        }
     }
 }
+
+
