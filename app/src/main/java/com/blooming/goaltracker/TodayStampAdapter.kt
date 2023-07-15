@@ -37,8 +37,6 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        private var view: View = view
-
         private val certification_default_view: View = itemView.findViewById(R.id.certification_default_view)
         private val certification_default_textView: TextView = itemView.findViewById(R.id.certification_default_textView)
         var bgCertDefault : GradientDrawable = certification_default_view.background as GradientDrawable
@@ -50,7 +48,7 @@ class TodayStampAdapter (private val context: Context) : RecyclerView.Adapter<To
         fun bind(Data: TodayStampData) {
             // 이미지 로드
             if (Data.image != "") {
-                var fbStorage = FirebaseStorage.getInstance()
+                val fbStorage = FirebaseStorage.getInstance()
                 val storageRef = fbStorage.reference.child("stamp/${Data.image}")
                 bgCertDefault.setColor(ContextCompat.getColor(context, R.color.gray))
 

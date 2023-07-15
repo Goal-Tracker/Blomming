@@ -11,15 +11,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,9 +25,9 @@ import kotlin.collections.HashMap
 class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragment() {
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
-    private lateinit var stamp_recyclerView : RecyclerView
-    private lateinit var noneStamp_textView : TextView
-    private lateinit var today_stamp_button : Button
+    private lateinit var stamp_recyclerView: RecyclerView
+    private lateinit var noneStamp_textView: TextView
+    private lateinit var today_stamp_button: Button
     private lateinit var today_stamp_noneStamp_button: Button
     private lateinit var addPastStamp: LinearLayout
 
@@ -60,9 +56,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         today_stamp_noneStamp_button = view.findViewById(R.id.today_stamp_noneStamp_button)
         addPastStamp = view.findViewById(R.id.addPastStamp)
 
-        var bgButton : GradientDrawable = today_stamp_button.background as GradientDrawable
-        var bgNoneButton: GradientDrawable = today_stamp_noneStamp_button.background as GradientDrawable
-
+        val bgButton: GradientDrawable = today_stamp_button.background as GradientDrawable
 
         // stmap recyvlerview add
         todayStampAdapter = TodayStampAdapter(requireActivity())
@@ -71,143 +65,40 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         // stamp db 접근
         val goal_id = stampInfo.goal_id
         val stamp_num = stampInfo.num
-        var notYet: Int
 
         val goal_db = db.collection("Goal").document(goal_id)
         goal_db.addSnapshotListener { goal_snapshot, e ->
-            val goal_day = goal_snapshot?.get("day").toString().toInt()
             val start_day = goal_snapshot?.get("startDay") as String
 
-            var start_date = start_day + " 00:00:00"
-            var sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
-            var date = sf.parse(start_date)
-            var today = Calendar.getInstance()
-            var certified = false
+            val start_date = start_day + " 00:00:00"
+            val sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
+            val date = sf.parse(start_date)
+            val today = Calendar.getInstance()
 
-            var calcDate = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-            val pastDate = (calcDate+1).toInt()
-
-            // notYet = 0 : 기간 지남
-            // notYet = 1 : 오늘
-            // notYet = 2 : 아직 기간이 아님
+            val calcDate = (today.time.time - date!!.time) / (60 * 60 * 24 * 1000)
+            val pastDate = (calcDate + 1).toInt()
             Log.d(TAG, "pastDate : $pastDate")
             Log.d(TAG, "stamp_num : $stamp_num")
-            if (pastDate == stamp_num) {
-                notYet = 1
-            } else if(pastDate < stamp_num) {
-                notYet = 2
-            } else {
-                notYet = 0
-            }
+
+            // time = 0 : 기간 지남
+            // time = 1 : 오늘
+            // time = 2 : 아직 기간이 아님
+            val time: Int = setTime(pastDate, stamp_num)
 
             val stamp_id = goal_snapshot.get("stampId") as String
             val stamp_db = db.collection("Stamp").document(stamp_id)
             stamp_db.get().addOnSuccessListener { stamp_snapshot ->
                 try {
-                    val dayRecord = stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
-
-                    if (dayRecord.containsKey("day$stamp_num")) {
-                        val commentArray = dayRecord["day$stamp_num"] as List<HashMap<String, String>>
-
+                    val dayRecord =
+                        stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
+                    var certified = false
+                    CoroutineScope(Dispatchers.Main).launch {
                         CoroutineScope(Dispatchers.IO).launch {
-                            runBlocking {
-                                todayStampDatas.apply {
-                                    for (commentInfo in commentArray) {
-                                        db.collection("Account")
-                                            .document(commentInfo["uid"].toString())
-                                            .get().addOnSuccessListener { accountSnapshot ->
-                                                val name = accountSnapshot["userName"] as String
-                                                val theme = accountSnapshot["userColor"] as String
-                                                val comment = commentInfo["comment"] as String
-                                                val img = commentInfo["image"] as String
-                                                val type = commentInfo["type"] as Boolean
-
-                                                add(
-                                                    TodayStampData(
-                                                        stamp_id = stamp_id,
-                                                        num = stamp_num,
-                                                        nickname = name,
-                                                        theme = theme,
-                                                        comment = comment,
-                                                        image = img,
-                                                        type = type
-                                                    )
-                                                )
-
-                                                if (name == MySharedPreferences.getUserNickname(
-                                                        requireContext()
-                                                    )
-                                                ) {
-                                                    certified = true
-                                                }
-                                            }.await()
-                                    }
-
-                                    Log.d(
-                                        "User Comment",
-                                        "User todayStampDatas : " + todayStampDatas.toString()
-                                    )
-
-                                    activity?.runOnUiThread {
-                                        todayStampAdapter.todayStampDatas = todayStampDatas
-                                        todayStampAdapter.notifyDataSetChanged()
-                                    }
-                                }
-                            }
-                        }
+                            certified = setStampImage(dayRecord, stamp_num, stamp_id)
+                        }.join()
+                        setButton(certified, time, bgButton)
                     }
-
-                    if (!certified && pastDate <= goal_day) {
-                        addPastStamp.visibility = View.VISIBLE
-                    } else {
-                        addPastStamp.visibility = View.GONE
-                    }
-
-                    if (notYet == 0){ // 이미 기간이 지난 경우
-                        Log.d("stamp status", "notYet: $notYet")
-
-                        // 스탬프가 하나라도 있는 경우
-                        noneStamp_textView.visibility = View.GONE
-                        today_stamp_noneStamp_button.visibility = View.GONE
-                        stamp_recyclerView.visibility = View.VISIBLE
-                        today_stamp_button.visibility = View.VISIBLE
-                        today_stamp_noneStamp_button.isEnabled = false
-                        today_stamp_button.isEnabled = false
-
-                        today_stamp_button.text = "기간이 지났습니다"
-                        bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-
-                    } else if(notYet == 1) {  // 오늘인 경우
-                        Log.d("stamp status", "notYet: $notYet")
-
-                        addPastStamp.visibility = View.GONE
-
-                        if (certified) {
-                            noneStamp_textView.visibility = View.GONE
-                            today_stamp_noneStamp_button.visibility = View.GONE
-                            stamp_recyclerView.visibility = View.VISIBLE
-                            today_stamp_button.visibility = View.VISIBLE
-                            today_stamp_noneStamp_button.isEnabled = false
-                            today_stamp_button.isEnabled = false
-
-                            today_stamp_button.text = "도장찍기 완료"
-                            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
-
-                        } else {
-                            noneStamp_textView.visibility = View.GONE
-                            today_stamp_noneStamp_button.visibility = View.GONE
-                            stamp_recyclerView.visibility = View.VISIBLE
-                            today_stamp_button.visibility = View.VISIBLE
-                            today_stamp_noneStamp_button.isEnabled = false
-                            today_stamp_button.isEnabled = true
-
-                            today_stamp_button.text = "오늘의 도장 찍기"
-                            bgButton.setColor(ContextCompat.getColor(requireContext(),
-                                MySharedPreferences.getUserColorInt(requireContext())
-                            ))
-                        }
-                    }
-                } catch (e: Exception){
+                } catch (e: Exception) {
                     Log.d(TAG, "[Error] $e")
                 }
             }
@@ -238,5 +129,131 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
         }
 
         return view
+    }
+
+    private fun setTime(pastDate: Int, stamp_num: Int): Int {
+        if (pastDate == stamp_num) {
+            return 1
+        }
+        if (pastDate < stamp_num) {
+            return 2
+        }
+        return 0
+    }
+
+    suspend fun setStampImage(
+        dayRecord: HashMap<String, List<HashMap<String, String>>>,
+        stamp_num: Int,
+        stamp_id: String
+    ): Boolean {
+        var certified = false
+        if (dayRecord.containsKey("day$stamp_num")) {
+            val commentArray = dayRecord["day$stamp_num"] as List<HashMap<String, String>>
+
+            todayStampDatas.apply {
+                for (commentInfo in commentArray) {
+                    db.collection("Account")
+                        .document(commentInfo["uid"].toString())
+                        .get().addOnSuccessListener { accountSnapshot ->
+                            val name = accountSnapshot["userName"] as String
+                            val theme = accountSnapshot["userColor"] as String
+                            val comment = commentInfo["comment"] as String
+                            val img = commentInfo["image"] as String
+                            val type = commentInfo["type"] as Boolean
+
+                            add(
+                                TodayStampData(
+                                    stamp_id = stamp_id,
+                                    num = stamp_num,
+                                    nickname = name,
+                                    theme = theme,
+                                    comment = comment,
+                                    image = img,
+                                    type = type
+                                )
+                            )
+
+                            if (name == MySharedPreferences.getUserNickname(requireContext())) {
+                                certified = true
+                            }
+                        }.await()
+                }
+
+                activity?.runOnUiThread {
+                    todayStampAdapter.todayStampDatas = todayStampDatas
+                    todayStampAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
+        return certified
+    }
+
+    private fun setButton(
+        certified: Boolean, notYet: Int,
+        bgButton: GradientDrawable
+    ) {
+
+        addPastStamp.visibility = View.GONE
+
+        if (notYet == 0) { // 이미 기간이 지난 경우
+            Log.d("stamp status", "notYet: $notYet")
+
+            // 스탬프가 하나라도 있는 경우
+            noneStamp_textView.visibility = View.GONE
+            today_stamp_noneStamp_button.visibility = View.GONE
+            stamp_recyclerView.visibility = View.VISIBLE
+            today_stamp_button.visibility = View.VISIBLE
+            today_stamp_noneStamp_button.isEnabled = false
+            today_stamp_button.isEnabled = false
+
+            today_stamp_button.text = "기간이 지났습니다"
+            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+
+            if (!certified) {
+                addPastStamp.visibility = View.VISIBLE
+            }
+
+        } else if (notYet == 1) {  // 오늘인 경우
+            Log.d("stamp status", "notYet: $notYet")
+
+            if (certified) {
+                noneStamp_textView.visibility = View.GONE
+                today_stamp_noneStamp_button.visibility = View.GONE
+                stamp_recyclerView.visibility = View.VISIBLE
+                today_stamp_button.visibility = View.VISIBLE
+                today_stamp_noneStamp_button.isEnabled = false
+                today_stamp_button.isEnabled = false
+
+                today_stamp_button.text = "도장찍기 완료"
+                bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+
+            } else {
+                noneStamp_textView.visibility = View.GONE
+                today_stamp_noneStamp_button.visibility = View.GONE
+                stamp_recyclerView.visibility = View.VISIBLE
+                today_stamp_button.visibility = View.VISIBLE
+                today_stamp_noneStamp_button.isEnabled = false
+                today_stamp_button.isEnabled = true
+
+                today_stamp_button.text = "오늘의 도장 찍기"
+                bgButton.setColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        MySharedPreferences.getUserColorInt(requireContext())
+                    )
+                )
+            }
+        } else {
+            noneStamp_textView.visibility = View.GONE
+            today_stamp_noneStamp_button.visibility = View.GONE
+            stamp_recyclerView.visibility = View.GONE
+            today_stamp_button.visibility = View.VISIBLE
+            today_stamp_noneStamp_button.isEnabled = false
+            today_stamp_button.isEnabled = false
+
+            today_stamp_button.text = "아직 기간이 아닙니다"
+            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+        }
     }
 }
