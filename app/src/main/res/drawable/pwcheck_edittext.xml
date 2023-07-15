@@ -14,7 +14,7 @@
                 android:bottomLeftRadius="3dp"
                 android:topLeftRadius="3dp"
                 android:topRightRadius="3dp"/>
-            <solid android:color="#ececec"/>
+            <solid android:color="#f9f9f9"/>
         </shape>
     </item>
 </selector>
