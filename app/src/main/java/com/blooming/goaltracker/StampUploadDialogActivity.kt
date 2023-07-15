@@ -221,18 +221,15 @@ class StampUploadDialogActivity : AppCompatActivity() {
                     try{
                         selectedUri?.let {
                             if (Build.VERSION.SDK_INT < 28) {
-                                val bitmap = MediaStore.Images.Media
-                                    .getBitmap(contentResolver, selectedUri)
                                 launchImageCrop(selectedUri)
                             }
                             else{
                                 val decode = ImageDecoder.createSource(this.contentResolver, selectedUri)
-                                val bitmap = ImageDecoder.decodeBitmap(decode)
                                 launchImageCrop(selectedUri)
                             }
                         }
 
-                    }catch (e: java.lang.Exception){
+                    }catch (e: Exception){
                         e.printStackTrace()
                     }
                 }
@@ -265,8 +262,8 @@ class StampUploadDialogActivity : AppCompatActivity() {
     // 카메라 권한 체크
     private fun checkPermission(): Boolean {
         return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) ==
-                PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
     }
 
     // 권한요청 결과
