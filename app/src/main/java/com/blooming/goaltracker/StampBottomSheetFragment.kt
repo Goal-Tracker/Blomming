@@ -87,7 +87,12 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
 
             val stamp_id = goal_snapshot.get("stampId") as String
             val stamp_db = db.collection("Stamp").document(stamp_id)
-            stamp_db.get().addOnSuccessListener { stamp_snapshot ->
+            stamp_db.addSnapshotListener { stamp_snapshot, e ->
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e)
+                    return@addSnapshotListener
+                }
+
                 try {
                     val dayRecord =
                         stamp_snapshot?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
