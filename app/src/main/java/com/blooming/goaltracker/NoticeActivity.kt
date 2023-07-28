@@ -117,6 +117,8 @@ class NoticeActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { document ->
                     var account = document.toObject(Account::class.java)
+                    var name = account?.userName.toString()
+                    var profileName = account?.userName?.substring(0, 1)
                     var color = account?.userColor.toString()
 
                     if (color != null) {
@@ -125,15 +127,23 @@ class NoticeActivity : AppCompatActivity() {
                 }
 
         } else if (item.type == 1) {  // 친구 요청
-            viewHolder.notice_text.text = item.userName+"님이 친구 요청을 보냈습니다."
-            viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
             viewHolder.notice_title.setVisibility(View.GONE)
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             getRequestNotice
                 .get()
                 .addOnSuccessListener { document ->
                     var account = document.toObject(Account::class.java)
+                    var name = account?.userName.toString()
+                    var profileName = account?.userName?.substring(0, 1)
                     var color = account?.userColor.toString()
+
+                    if (name!=null) {
+                        viewHolder.notice_text.text = name+"님이 친구 요청을 보냈습니다."
+                    }
+
+                    if (profileName!=null){
+                        viewHolder.notice_profile_name.text = profileName
+                    }
 
                     if (color != null) {
                         profileColor.setColor(Color.parseColor(color))
@@ -167,11 +177,13 @@ class NoticeActivity : AppCompatActivity() {
                                     .document(accountUId!!)
                                     .update("status", "friend")
                                     .addOnSuccessListener {
+                                        NoticesAdapter().notifyDataSetChanged()
                                         viewHolder.notice_button.text = "수락 완료"
                                         viewHolder.notice_button.isEnabled = false
                                         var friendList = MySharedPreferences.getFriendList(this)
                                         friendList.add(item.requestUserId.toString())
                                         MySharedPreferences.setFriendList(this, friendList)
+
                                     }
                                     .addOnFailureListener {
                                         throw IllegalArgumentException()
@@ -205,20 +217,28 @@ class NoticeActivity : AppCompatActivity() {
 
 
         } else if (item.type == 2) {  // 골 초대
-            viewHolder.notice_text.text = item.userName+"님이 새로운 골에 초대했습니다."
-            viewHolder.notice_profile_name.text = item.userName?.substring(0 , 1)
-            viewHolder.notice_title.text = item.goalName
             var profileColor : GradientDrawable = viewHolder.notice_profile.background as GradientDrawable
             getRequestNotice
                 .get()
                 .addOnSuccessListener { document ->
                     var account = document.toObject(Account::class.java)
+                    var name = account?.userName.toString()
+                    var profileName = account?.userName?.substring(0, 1)
                     var color = account?.userColor.toString()
+
+                    if (name!=null) {
+                        viewHolder.notice_text.text = name+"님이 새로운 골에 초대하셨습니다."
+                    }
+
+                    if (profileName!=null){
+                        viewHolder.notice_profile_name.text = profileName
+                    }
 
                     if (color != null) {
                         profileColor.setColor(Color.parseColor(color))
                     }
                 }
+            viewHolder.notice_title.text = item.goalName.toString()
 
             var accountUId: String?=""
             accountUId = firebaseAuth?.currentUser?.uid.toString()
@@ -258,6 +278,7 @@ class NoticeActivity : AppCompatActivity() {
                                 Log.d("myGoalList", goalList.toString())
                                 viewHolder.notice_button.text = "수락 완료"
                                 viewHolder.notice_button.isEnabled = false
+                                NoticesAdapter().notifyDataSetChanged()
                             }
 
 //                        val myGoalList : List<String>? = curUser.myGoalList
