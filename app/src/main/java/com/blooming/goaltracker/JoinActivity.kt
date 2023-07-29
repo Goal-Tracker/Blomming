@@ -103,8 +103,6 @@ class JoinActivity : AppCompatActivity() {
         }
     }
 
-    over
-
     fun signinAndSignup() {
         if (signupID.text != null && signuppw.text != null) {
             var password = signuppw.text.toString()
