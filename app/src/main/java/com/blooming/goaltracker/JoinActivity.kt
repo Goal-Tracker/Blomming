@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.actionCodeSettings
@@ -65,8 +66,7 @@ class JoinActivity : AppCompatActivity() {
         })
 
         sendEmailButton.setOnClickListener {
-            Toast.makeText(this, "인증 메일을 보냈습니다.", Toast.LENGTH_SHORT).show()
-            verifyEmail(email)
+            sendEmail(email)
         }
 
         pwCheck.addTextChangedListener(object : TextWatcher {
@@ -94,21 +94,22 @@ class JoinActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val user = Firebase.auth.currentUser
-        if (user!=null){
+        if (user != null) {
             user.reload().addOnSuccessListener {
                 Log.d("reload", "success")
             }
         } else {
             Log.d("reload", "failed")
         }
-
     }
+
+    over
 
     fun signinAndSignup() {
         if (signupID.text != null && signuppw.text != null) {
             var password = signuppw.text.toString()
             var passwordCheck = pwCheck.text.toString()
-            if ((password == passwordCheck) && isEmailVerified==true) {
+            if (password == passwordCheck) {
                 val user = Firebase.auth.currentUser
                 user!!.updatePassword(signuppw.text.toString())
                     ?.addOnCompleteListener { task ->
@@ -144,34 +145,20 @@ class JoinActivity : AppCompatActivity() {
         }
     }
 
-    fun verifyEmail(email: String?){
+    fun sendEmail(email: String?){
         if (email!=null){
             val randomString = getRandomString(10)
             firebaseAuth?.useAppLanguage()
             firebaseAuth?.createUserWithEmailAndPassword(email, randomString)
-                ?.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val user = Firebase.auth.currentUser
-                        user?.sendEmailVerification()?.addOnCompleteListener{ sendTask ->
-                            if (sendTask.isSuccessful){
-                                isEmailVerified=true
-                                if (user.isEmailVerified){
-                                    Log.d("유효성 검증", "성공")
-                                    isEmailVerified=true
-                                }
-                            } else {
-                                Toast.makeText(this, "유효한 이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
-                                //계정 삭제 코드 구현해야함
-                            }
-                        }
-                    } else if(task.exception?.message.isNullOrEmpty()) {
-                        // Show the error message
-                        Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
-                        Toast.makeText(this, "계정 생성 실패", Toast.LENGTH_SHORT).show()
-                    } else {
-                        // Alert if you have account
-                        Toast.makeText(this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show()
+                ?.addOnSuccessListener { task ->
+                    val user = Firebase.auth.currentUser
+                    user?.sendEmailVerification()?.addOnSuccessListener{ sendTask ->
+                        Toast.makeText(this, "인증 메일을 보냈습니다.", Toast.LENGTH_SHORT).show()
+                    }?.addOnFailureListener {
+                        Toast.makeText(this, "유효한 이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
                     }
+                }?.addOnFailureListener {
+                    Toast.makeText(this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show()
                 }
         }
     }
