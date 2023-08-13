@@ -86,7 +86,18 @@ class LoginActivity : AppCompatActivity() {
     // 로그아웃하지 않을 시 자동 로그인 , 회원가입시 바로 로그인 됨
     public override fun onStart() {
         super.onStart()
-        toMainActivity(auth?.currentUser)
+        val user = auth?.currentUser
+        if (user != null) {
+            if (!user.isEmailVerified){
+                Toast.makeText(
+                    baseContext, "이메일 인증을 해주세요.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                startActivity(Intent(this, JoinActivity::class.java))
+            } else{
+                toMainActivity(user)
+            }
+        }
     }
 
     // 로그인
@@ -162,8 +173,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun toMainActivity(user: FirebaseUser?){
-        if(user !=null){
+    fun toMainActivity(user: FirebaseUser?) {
+        if (user != null) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
