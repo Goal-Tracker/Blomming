@@ -75,9 +75,18 @@ class JoinActivity : AppCompatActivity() {
             Log.d("user: ", user.toString())
             if (user==null){
                 signinAndSignup()
-            } else if(mailSent) {
-                if (user != null) {
-                    createUserAccount()
+            } else {
+                user.reload().addOnSuccessListener {
+                    if (mailSent) {
+                        if (!user?.isEmailVerified!!){
+                            joinCheckButton.setBackgroundColor(R.drawable.login_button)
+                            joinCheckButton.setText("이메일 인증 링크를 눌러주세요.")
+                        } else {
+                            joinCheckButton.setText("로그인 완료하기")
+                            joinCheckButton.isEnabled = true
+                            createUserAccount()
+                        }
+                    }
                 }
             }
         }
