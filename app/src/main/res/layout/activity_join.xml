@@ -44,60 +44,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="325dp"
+                    <EditText
+                        android:id="@+id/signupID"
+                        android:layout_width="313dp"
                         android:layout_height="48dp"
+                        android:background="@drawable/pwcheck_edittext"
+                        android:fontFamily="@font/ko_pub_world_dotum_medium"
+                        android:hint="이메일"
+                        android:lines="1"
+                        android:paddingLeft="15dp"
+                        android:singleLine="true"
+                        android:textColor="#363639"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <EditText
-                            android:id="@+id/signupID"
-                            android:layout_width="225dp"
-                            android:layout_height="48dp"
-                            android:background="@drawable/pwcheck_edittext"
-                            android:fontFamily="@font/ko_pub_world_dotum_medium"
-                            android:hint="이메일"
-                            android:lines="1"
-                            android:paddingLeft="15dp"
-                            android:singleLine="true"
-                            android:textColor="#363639"
-                            android:textSize="13sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/sendEmailButton"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"></EditText>
-
-                        <Button
-                            android:id="@+id/sendEmailButton"
-                            android:layout_width="80dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/button_round"
-                            android:text="인증하기"
-                            android:textColor="@color/black"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/signupID"
-                            app:layout_constraintTop_toTopOf="parent"></Button>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/email_verify"
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:textColor="#2EFE2E"
-                        android:textSize="11sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"></EditText>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -188,7 +150,7 @@
                     android:layout_width="313dp"
                     android:layout_height="48dp"
                     android:background="@drawable/add_button"
-                    android:text="회원 가입 완료"
+                    android:text="이메일 인증하기"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

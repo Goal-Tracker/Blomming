@@ -28,7 +28,7 @@ class JoinActivity : AppCompatActivity() {
     var firebaseAuth: FirebaseAuth?=null
     var fireStore : FirebaseFirestore?=null
     var email : String ?= null
-    var isEmailVerified : Boolean = false
+    var mailSent: Boolean = false
 
     val actionCodeSettings = actionCodeSettings {
         url = "https://www.example.com/finishSignUp?cartId=1234"
@@ -54,21 +54,6 @@ class JoinActivity : AppCompatActivity() {
             finish()
         }
 
-        signupID.addTextChangedListener(object  : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable) {
-                email = signupID.text.toString()
-                if (isEmailVerified){
-                    email_verify.setText("인증되었습니다.")
-                }
-            } // afterTextChanged()..
-        })
-
-        sendEmailButton.setOnClickListener {
-            sendEmail(email)
-        }
-
         pwCheck.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
@@ -86,50 +71,59 @@ class JoinActivity : AppCompatActivity() {
         })
 
         joinCheckButton.setOnClickListener {
-            signinAndSignup()
+            val user = Firebase.auth.currentUser
+            Log.d("user: ", user.toString())
+            if (user==null){
+                signinAndSignup()
+            } else if(mailSent) {
+                if (user != null) {
+                    createUserAccount()
+                }
+            }
         }
 
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         val user = Firebase.auth.currentUser
         if (user != null) {
             user.reload().addOnSuccessListener {
                 Log.d("reload", "success")
+                if (mailSent) {
+                    if (!user?.isEmailVerified!!){
+                        joinCheckButton.setBackgroundColor(R.drawable.login_button)
+                        joinCheckButton.setText("이메일 인증 링크를 눌러주세요.")
+                        joinCheckButton.isEnabled = false
+                    } else {
+                        joinCheckButton.setText("로그인 완료하기")
+                        joinCheckButton.isEnabled = true
+                    }
+                }
             }
         } else {
             Log.d("reload", "failed")
         }
     }
 
-    fun signinAndSignup() {
+    private fun signinAndSignup() {
         if (signupID.text != null && signuppw.text != null) {
+            var email = signupID.text.toString()
             var password = signuppw.text.toString()
             var passwordCheck = pwCheck.text.toString()
             if (password == passwordCheck) {
-                val user = Firebase.auth.currentUser
-                user!!.updatePassword(signuppw.text.toString())
-                    ?.addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            var userAccount = Account()
-                            var accountName : String ?= ""
-
-                            accountName=user.uid.toString()
-                            userAccount.email= user.email.toString()
-
-                            fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
-                            Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this, ProfileActivity::class.java))
-                            finish()
-                        } else if(task.exception?.message.isNullOrEmpty()) {
-                            // Show the error message
-                            Toast.makeText(this, task.exception?.message, Toast.LENGTH_LONG).show()
-                            Toast.makeText(this, "계정 생성 실패", Toast.LENGTH_SHORT).show()
-                        } else {
-                            // Alert if you have account
-                            Toast.makeText(this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show()
+                firebaseAuth?.createUserWithEmailAndPassword(email, password)
+                    ?.addOnSuccessListener { task ->
+                        backtologin.isEnabled = false
+                        val user = Firebase.auth.currentUser
+                        user?.sendEmailVerification()?.addOnSuccessListener{ sendTask ->
+                            Toast.makeText(this, "인증 메일을 보냈습니다.", Toast.LENGTH_SHORT).show()
+                            mailSent=true
+                        }?.addOnFailureListener {
+                            Toast.makeText(this, "유효한 이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
                         }
+                    }?.addOnFailureListener {
+                        Toast.makeText(this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show()
                     }
             } else {
                 Toast.makeText(this, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show()
@@ -143,35 +137,30 @@ class JoinActivity : AppCompatActivity() {
         }
     }
 
-    fun sendEmail(email: String?){
-        if (email!=null){
-            val randomString = getRandomString(10)
-            firebaseAuth?.useAppLanguage()
-            firebaseAuth?.createUserWithEmailAndPassword(email, randomString)
-                ?.addOnSuccessListener { task ->
-                    val user = Firebase.auth.currentUser
-                    user?.sendEmailVerification()?.addOnSuccessListener{ sendTask ->
-                        Toast.makeText(this, "인증 메일을 보냈습니다.", Toast.LENGTH_SHORT).show()
-                    }?.addOnFailureListener {
-                        Toast.makeText(this, "유효한 이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
-                    }
-                }?.addOnFailureListener {
-                    Toast.makeText(this, "이미 존재하는 계정입니다.", Toast.LENGTH_SHORT).show()
-                }
-        }
-    }
-
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         return true
     }
 
-    fun getRandomString(length: Int) : String {
-        val charset = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
-        return (1..length)
-            .map { charset.random() }
-            .joinToString("")
+    fun createUserAccount(){
+        var user = firebaseAuth?.currentUser
+        if (user != null) {
+            if (user.isEmailVerified) {
+                var userAccount = Account()
+                var accountName : String ?= ""
+
+                accountName=user.uid.toString()
+                userAccount.email= user.email.toString()
+
+                fireStore?.collection("Account")?.document(accountName)?.set(userAccount)
+                Toast.makeText(this, "계정 생성 완료", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, ProfileActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(this, "메일 인증을 완료해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 }
