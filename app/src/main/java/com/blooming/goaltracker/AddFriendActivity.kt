@@ -284,24 +284,24 @@ class AddFriendActivity : AppCompatActivity() {
                                                         ?.addOnFailureListener {
                                                         }
 
-                                                    //내 노티피케이션
-                                                    firestore?.collection("Account")
-                                                        ?.document("$currentUser")
-                                                        ?.collection("Notification")
-                                                        ?.document("${item.uid}")
-                                                        ?.set(
-                                                            hashMapOf(
-                                                                "requestUserId" to item.uid,
-                                                                "userName" to item.userName,
-                                                                "userColor" to item.userColor,
-                                                                "type" to 1,
-                                                                "read" to false,
-                                                                "timestamp" to FieldValue.serverTimestamp()
-
-                                                            )
-                                                        )
-                                                        ?.addOnSuccessListener {}
-                                                        ?.addOnFailureListener {}
+//                                                    //내 노티피케이션
+//                                                    firestore?.collection("Account")
+//                                                        ?.document("$currentUser")
+//                                                        ?.collection("Notification")
+//                                                        ?.document("${item.uid}")
+//                                                        ?.set(
+//                                                            hashMapOf(
+//                                                                "requestUserId" to currentUser,
+//                                                                "userName" to indexname,
+//                                                                "userColor" to indexcolor,
+//                                                                "type" to 1,
+//                                                                "read" to false,
+//                                                                "timestamp" to FieldValue.serverTimestamp()
+//
+//                                                            )
+//                                                        )
+//                                                        ?.addOnSuccessListener {}
+//                                                        ?.addOnFailureListener {}
 
                                                     // 상대방 노티피케이션
                                                     firestore?.collection("Account")
@@ -390,9 +390,9 @@ class AddFriendActivity : AppCompatActivity() {
                                                                     ?.document("${currentUser}")
                                                                     ?.set(
                                                                         hashMapOf(
-                                                                            "uid" to currentUser,
-                                                                            "status" to "accept",
-                                                                            "userName" to indexname,
+                                                                            "requestUserId" to item.uid,
+                                                                            "userName" to item.userName,
+                                                                            "userColor" to item.userColor,
                                                                             "email" to indexemail,
                                                                             "userColor" to indexcolor
 
@@ -404,24 +404,24 @@ class AddFriendActivity : AppCompatActivity() {
                                                                     }
 
 
-                                                                //내 노티피케이션
-                                                                firestore?.collection("Account")
-                                                                    ?.document("$currentUser")
-                                                                    ?.collection("Notification")
-                                                                    ?.document("${item.uid}")
-                                                                    ?.set(
-                                                                        hashMapOf(
-                                                                            "requestUserId" to item.uid,
-                                                                            "userName" to item.userName,
-                                                                            "userColor" to item.userColor,
-                                                                            "type" to 1,
-                                                                            "read" to false,
-                                                                            "timestamp" to FieldValue.serverTimestamp()
-
-                                                                        )
-                                                                    )
-                                                                    ?.addOnSuccessListener {}
-                                                                    ?.addOnFailureListener {}
+//                                                                //내 노티피케이션
+//                                                                firestore?.collection("Account")
+//                                                                    ?.document("$currentUser")
+//                                                                    ?.collection("Notification")
+//                                                                    ?.document("${item.uid}")
+//                                                                    ?.set(
+//                                                                        hashMapOf(
+//                                                                            "requestUserId" to currentUser,
+//                                                                            "userName" to indexname,
+//                                                                            "userColor" to indexcolor,
+//                                                                            "type" to 1,
+//                                                                            "read" to false,
+//                                                                            "timestamp" to FieldValue.serverTimestamp()
+//
+//                                                                        )
+//                                                                    )
+//                                                                    ?.addOnSuccessListener {}
+//                                                                    ?.addOnFailureListener {}
 
                                                                 // 상대방 노티피케이션
                                                                 firestore?.collection("Account")

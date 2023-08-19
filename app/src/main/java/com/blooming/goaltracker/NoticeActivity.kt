@@ -146,7 +146,12 @@ class NoticeActivity : AppCompatActivity() {
                     }
 
                     if (color != null) {
-                        profileColor.setColor(Color.parseColor(color))
+                        try {
+                            profileColor.setColor(Color.parseColor(color))
+                        } catch (e: IllegalArgumentException) {
+                            e.printStackTrace()
+                            // 색상 값이 올바르지 않을 때의 예외 처리
+                        }
                     }
                 }
 
