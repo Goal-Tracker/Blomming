@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.change_pw_dialog.*
 import kotlinx.android.synthetic.main.notice_layer.view.*
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 
 class ChangePWDialog(context: Context) {
     private val dialog = Dialog(context)
@@ -45,13 +47,14 @@ class ChangePWDialog(context: Context) {
         dialog.setCancelable(true)
         dialog.show()
 
+
+
         var profileName = dialog.findViewById<TextView>(R.id.changePW_profileName)
         val confirmPW = dialog.findViewById<EditText>(R.id.confirm_PW)
         val dialogLayout = dialog.findViewById<ConstraintLayout>(R.id.change_pw_dialog)
 //        var profileColor : GradientDrawable = dialog.changePW_profileView.background as GradientDrawable
 
-        var accountUId: String? = ""
-        accountUId = firebaseAuth?.currentUser?.uid.toString()
+        var accountUId = firebaseAuth?.currentUser?.uid.toString()
         if (accountUId.isNullOrEmpty()) {
             profileName.isVisible=false
 //            profileColor.setColor(Color.parseColor("#7175a5"))
@@ -71,6 +74,7 @@ class ChangePWDialog(context: Context) {
 
         dialog.changePW_Btn.setOnClickListener {
             if (confirmPW.text!=null){
+                var account = firebaseAuth?.currentUser?.uid
                 var curUserId:String
                 var curUserEmail:String
                 Log.d("confirmPW text", confirmPW.text.toString())
@@ -82,20 +86,39 @@ class ChangePWDialog(context: Context) {
                             var curUser = document.toObject(Account::class.java)
                             curUserId = curUser.uid
                             curUserEmail = curUser.email
-                            if (accountUId == curUserId || curUserId!=null){
-                                firebaseAuth!!.sendPasswordResetEmail(curUserEmail).addOnCompleteListener { task ->
-                                    if(task.isSuccessful) {
-                                        var snackbar = Snackbar.make(dialogLayout, "비밀번호 재설정 이메일을 성공적으로 보냈습니다.", Snackbar.LENGTH_LONG)
-                                        snackbar.show()
-                                        dialog.dismiss()
-                                    } else {
-                                        var snackbar = Snackbar.make(dialogLayout, "이메일 보내기에 실패하였습니다.", Snackbar.LENGTH_LONG)
-                                        snackbar.show()
+                            if (account!=null) {
+                                Log.d("account is not null", account.toString())
+                                if (account == curUserId && curUserId!=null){
+                                    firebaseAuth!!.sendPasswordResetEmail(curUserEmail).addOnCompleteListener { task ->
+                                        if(task.isSuccessful) {
+                                            var snackbar = Snackbar.make(dialogLayout, "비밀번호 재설정 이메일을 성공적으로 보냈습니다.", Snackbar.LENGTH_LONG)
+                                            snackbar.show()
+//                                            dialog.dismiss()
+                                        } else {
+                                            var snackbar = Snackbar.make(dialogLayout, "이메일 보내기에 실패하였습니다.", Snackbar.LENGTH_LONG)
+                                            snackbar.show()
+                                        }
                                     }
+                                } else {
+                                    var snackbar = Snackbar.make(dialogLayout, "현재 가입된 이메일 주소가 아닙니다.", Snackbar.LENGTH_LONG)
+                                    snackbar.show()
                                 }
                             } else {
-                                var snackbar = Snackbar.make(dialogLayout, "가입된 이메일 주소가 아닙니다.", Snackbar.LENGTH_LONG)
-                                snackbar.show()
+                                if (curUserId!=null) {
+                                    firebaseAuth!!.sendPasswordResetEmail(curUserEmail).addOnCompleteListener { task ->
+                                        if(task.isSuccessful) {
+                                            var snackbar = Snackbar.make(dialogLayout, "비밀번호 재설정 이메일을 성공적으로 보냈습니다.", Snackbar.LENGTH_LONG)
+                                            snackbar.show()
+//                                            dialog.dismiss()
+                                        } else {
+                                            var snackbar = Snackbar.make(dialogLayout, "이메일 보내기에 실패하였습니다.", Snackbar.LENGTH_LONG)
+                                            snackbar.show()
+                                        }
+                                    }
+                                } else {
+                                    var snackbar = Snackbar.make(dialogLayout, "이메일이 유효하지 않습니다.", Snackbar.LENGTH_LONG)
+                                    snackbar.show()
+                                }
                             }
                         }
                     }?.addOnFailureListener {
