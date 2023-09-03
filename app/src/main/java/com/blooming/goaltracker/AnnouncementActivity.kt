@@ -26,8 +26,7 @@ class AnnouncementActivity : AppCompatActivity() {
         backtomain = findViewById(R.id.backtomain)
 
         backtomain.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
         announcementAdapter = AnnouncementAdapter(this)

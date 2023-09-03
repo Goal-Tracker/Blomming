@@ -261,7 +261,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
                 android:text="프로필 변경 완료"
-                android:textColor="#ffffff"
+                android:tint="?attr/colorButtonNormal"
                 android:fontFamily="@font/ko_pub_world_dotum_bold"
                 android:background="@drawable/add_button"></Button>
 

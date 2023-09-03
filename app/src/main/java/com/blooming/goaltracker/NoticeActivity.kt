@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.android.synthetic.main.main_toolbar.*
 import kotlinx.android.synthetic.main.notice_layer.view.*
 import kotlinx.android.synthetic.main.notice_view.*
