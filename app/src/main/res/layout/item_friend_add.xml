@@ -3,18 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:layout_width="320dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp">
 
 
     <ImageView
         android:id="@+id/AddColor"
         android:layout_width="31dp"
         android:layout_height="31dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/profile_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,12 +26,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
         android:fontFamily="@font/fontstyle"
         android:lineSpacingExtra="23sp"
         android:text="이름"
         android:textColor="#363639"
         android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/AddColor"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,60 +39,59 @@
         android:id="@+id/AddProfileName"
         android:layout_width="16dp"
         android:layout_height="28dp"
-        android:layout_marginStart="2dp"
         android:text="신"
         android:textColor="@color/white"
         android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="@+id/AddName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.052"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/AddName"
-        app:layout_constraintVertical_bias="0.625" />
+        app:layout_constraintBottom_toBottomOf="@+id/AddColor"
+        app:layout_constraintEnd_toEndOf="@+id/AddColor"
+        app:layout_constraintStart_toStartOf="@+id/AddColor"
+        app:layout_constraintTop_toTopOf="@+id/AddColor" />
 
 
     <TextView
         android:id="@+id/AddEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
         android:fontFamily="@font/fontstyle"
         android:lineSpacingExtra="23sp"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
         android:text="이메일"
         android:textColor=" #676767"
         android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/AddBtn"
         app:layout_constraintStart_toEndOf="@+id/AddName"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/Adduid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
         android:fontFamily="@font/fontstyle"
         android:lineSpacingExtra="23sp"
         android:text="uid"
         android:textColor=" #676767"
         android:textSize="11sp"
         android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/AddEmail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/AddBtn"
         android:layout_width="74dp"
         android:layout_height="23dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="20dp"
         android:background="@drawable/color_circle_btn_shape"
         android:backgroundTint="?attr/colorPrimary"
         android:fontFamily="@font/fontstyle"
         android:text="친구 요청"
         android:textAlignment="center"
         android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

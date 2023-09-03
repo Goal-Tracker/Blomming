@@ -3,48 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:paddingLeft="16dp"
+    android:paddingTop="8dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="8dp">
 
 
     <ImageView
         android:id="@+id/AcceptColor"
         android:layout_width="31dp"
         android:layout_height="31dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="4dp"
         android:background="@drawable/profile_view"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"></ImageView>
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
     <TextView
         android:id="@+id/AcceptName"
         android:layout_width="16dp"
         android:layout_height="28dp"
-        android:layout_marginStart="11dp"
         android:text="신"
         android:textColor="@color/white"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="@+id/AcceptColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.311"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/AcceptColor"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toEndOf="@+id/AcceptColor"
+        app:layout_constraintStart_toStartOf="@+id/AcceptColor"
+        app:layout_constraintTop_toTopOf="@+id/AcceptColor" />
 
 
     <Button
         android:id="@+id/AcceptBtn"
         android:layout_width="61dp"
         android:layout_height="18dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
         android:background="@drawable/color_circle_btn_shape"
         android:backgroundTint="?attr/colorPrimary"
         android:fontFamily="@font/fontstyle"
@@ -52,9 +46,9 @@
         android:text="친구 수락"
         android:textAlignment="center"
         android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AcceptName" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

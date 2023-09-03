@@ -70,7 +70,7 @@ class FriendActivity : AppCompatActivity() {
 
         //x버튼 누르면 main 화면으로 이동
         backBtn.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
 

@@ -78,7 +78,7 @@ class AddFriendActivity : AppCompatActivity() {
 
         //x버튼 누르면 main 화면으로 이동
         backBtn.setOnClickListener {
-            startActivity(Intent(this, FriendActivity::class.java))
+            finish()
         }
 
         // 검색 옵션에 따라 검색
