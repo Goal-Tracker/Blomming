@@ -3,8 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="335dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     tools:context=".StampUploadDialogActivity">
 
     <ImageButton
@@ -16,19 +18,21 @@
         android:background="@android:color/transparent"
         android:src="@drawable/ic_baseline_close_poke_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="닫기 버튼" />
 
     <ImageView
         android:id="@+id/certImage_imageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="39dp"
         android:src="@drawable/certification_default_image"
         android:background="@drawable/today_stamp_borderline"
         android:clipToOutline="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="인증샷 버튼" />
 
     <EditText
         android:id="@+id/comment_editText"
@@ -38,6 +42,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="20dp"
         android:hint="한 줄 코멘트를 입력해 보세요!"
+        android:singleLine="true"
         android:textSize="12sp"
         android:textColor="@color/greyish_brown"
         android:paddingStart="15dp"
