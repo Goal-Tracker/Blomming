@@ -39,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ko_pub_world_dotum_bold"
                 android:text="효"
-                android:textColor="#ffffff"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/nav_profile_icon"
                 app:layout_constraintEnd_toEndOf="@+id/nav_profile_icon"
