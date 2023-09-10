@@ -5,24 +5,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.blooming.goaltracker.databinding.ItemMemberBinding
-import com.facebook.appevents.codeless.internal.ViewHierarchy.setOnClickListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_add_goal.*
+import kotlinx.android.synthetic.main.activity_edit_goal.recyclerview
+import kotlinx.android.synthetic.main.activity_edit_goal.searchWord
 import kotlinx.android.synthetic.main.item_member.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class EditGoalActivity : AppCompatActivity() {
@@ -44,6 +41,7 @@ class EditGoalActivity : AppCompatActivity() {
 
     // ArrayList 생성
     var FriendsList : ArrayList<Friend> = arrayListOf()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +113,7 @@ class EditGoalActivity : AppCompatActivity() {
 
         // 이전 화면으로 이동
         close_btn.setOnClickListener {
-            onBackPressed()
+            finish()
         }
 
         // 날짜 수정
@@ -123,7 +121,6 @@ class EditGoalActivity : AppCompatActivity() {
 
         // 데이터 저장
         save_btn.setOnClickListener {
-
             // goal 데이터 받아오기
             val userUID = firestore!!.collection("Goal").document(goal_id)
             userUID.addSnapshotListener { snapshot, e ->
@@ -148,8 +145,8 @@ class EditGoalActivity : AppCompatActivity() {
         }
     }
 
-    fun showDatePicker() {
 
+    fun showDatePicker() {
         // 종료일 직접 설정
         val dateSetListener2 = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             endDay_calendar.set(Calendar.YEAR, year)
@@ -164,9 +161,6 @@ class EditGoalActivity : AppCompatActivity() {
 
         // 종료일 클릭 시 달력 팝업
         endDay.setOnClickListener {
-
-            Log.d("Clicked", "Interview Date Clicked")
-
             val dialog = DatePickerDialog(this, dateSetListener2,
                 endDay_calendar.get(Calendar.YEAR),
                 endDay_calendar.get(Calendar.MONTH),
@@ -179,10 +173,16 @@ class EditGoalActivity : AppCompatActivity() {
     }
 
     // 두 날짜 차이 계산
-    fun fewDay(): Long {
-        //milliseconds -> day로 변환
-        return TimeUnit.MILLISECONDS.toDays(endDay_calendar.timeInMillis - startDay_calendar.timeInMillis)
+    fun fewDay(): Int {
+        var sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
+        var startDay = sf.parse(startDay.text.toString() + " 00:00:00")
+        var endDay = sf.parse(endDay.text.toString()+ " 00:00:00")
+
+        var date = (endDay.time - startDay.time) / (60 * 60 * 24 * 1000)
+
+        return (date).toInt()
     }
+
     inner class FriendListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         init {  // 문서를 불러온 뒤 Person으로 변환해 ArrayList에 담음
             firestore?.collection("Account")?.document(accountUId)
