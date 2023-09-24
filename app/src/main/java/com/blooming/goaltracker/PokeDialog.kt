@@ -1,6 +1,5 @@
 package com.blooming.goaltracker
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -15,10 +14,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -35,7 +36,6 @@ class PokeDialog(context: Context) : Dialog(context) {
 
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
 
-    @SuppressLint("ResourceType")
     fun start(profile: GoalTeamData, goalId: String, goalTitle: String) {
         setContentView(R.layout.poke_dialog)
 
@@ -74,9 +74,21 @@ class PokeDialog(context: Context) : Dialog(context) {
                 try {
                     CoroutineScope(Dispatchers.Main).launch {
                         CoroutineScope(Dispatchers.IO).launch {
-                            val startDay = getStartDay(goalId)
-                            val isAlreadyStamp = checkIsAlreadyStamp(stamp_snapshot, startDay)
-                            setPokeDialog(profile, isAlreadyStamp, bgButton, goalTitle)
+                            for (document in stamp_snapshot!!.documents) {
+                                val data = document.data
+                                val startDay = getStartDay(goalId)
+                                val dayRecord = data?.get("dayRecord")
+
+                                if (dayRecord is HashMap<*, *> && dayRecord.isNotEmpty()) {
+                                    val castedDayRecord = dayRecord as HashMap<String, List<HashMap<String, String>>>
+
+                                    val isAlreadyStamp = checkIsAlreadyStamp(profile, castedDayRecord, startDay)
+                                    setPokeDialog(profile, isAlreadyStamp, bgButton, goalTitle)
+                                } else {
+                                    setPokeDialog(profile, false, bgButton, goalTitle)
+                                    Log.d(TAG, "아직 기록이 없습니다.")
+                                }
+                            }
                         }.join()
                     }
                 } catch (e: Exception) {
@@ -87,28 +99,36 @@ class PokeDialog(context: Context) : Dialog(context) {
         dlg.show()
     }
 
+    suspend fun getStartDay(goalId: String): String {
+        return withContext(Dispatchers.IO) {
+            val document = db.collection("Goal").document(goalId).get().await()
+            val startDay = document?.get("startDay").toString()
+            startDay
+        }
+    }
+
     private fun checkIsAlreadyStamp(
-        stampSnapshot: QuerySnapshot?,
+        profile: GoalTeamData,
+        dayRecord: HashMap<String, List<HashMap<String, String>>>,
         start_day: String,
     ): Boolean {
-        val start_date = start_day + " 00:00:00"
-        val sf = SimpleDateFormat("yyyy-MM-dd 00:00:00")
+        val start_date = start_day
+        val sf = SimpleDateFormat("yyyy-MM-dd")
         val date = sf.parse(start_date)
         val today = Calendar.getInstance()
 
         val calcDate = (today.time.time - date!!.time) / (60 * 60 * 24 * 1000)
         val pastDate = (calcDate + 1).toInt()
 
-        val dayRecord =
-            stampSnapshot?.documents?.firstOrNull()?.get("dayRecord") as HashMap<String, List<HashMap<String, String>>>
-
         val dayRecordForPastDate = dayRecord["day$pastDate"]
+
+        Log.d(TAG, "dayRecordForPastDate: $dayRecordForPastDate")
 
         if (dayRecordForPastDate != null) {
             var anyMatchResult = false
 
             for (map in dayRecordForPastDate) {
-                if (map.containsKey("uid") && map["uid"] == MySharedPreferences.getUserId(context)) {
+                if (map.containsKey("uid") && map["uid"] == profile.uid) {
                     anyMatchResult = true
                     break
                 }
@@ -126,66 +146,54 @@ class PokeDialog(context: Context) : Dialog(context) {
         bgButton: GradientDrawable,
         goalTitle: String
     ) {
-        if (profile.uid == MySharedPreferences.getUserId(context)) {
-            commentUpload_button.text = "자신입니다"
-            commentUpload_button.isEnabled = false
-            bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
-        } else if (isAlreadyStamp) {
-            commentUpload_button.text = "이미 도장을 찍었습니다."
-            commentUpload_button.isEnabled = false
-            bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
-        } else {
-            commentUpload_button.text = "콕 찌르기"
-            commentUpload_button.isEnabled = true
-            bgButton.setColor(
-                ContextCompat.getColor(
-                    context,
-                    MySharedPreferences.getUserColorInt(context)
-                )
-            )
+        Log.d(TAG, "isAlreadyStamp: $isAlreadyStamp")
 
-            commentUpload_button.setOnClickListener {
-                Toast.makeText(it.context, profile.name + " 님을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
-
-                val notifyData = hashMapOf(
-                    "goalName" to goalTitle,
-                    "message" to profile.name + " 님을 콕 찔렀습니다.",
-                    "read" to false,
-                    "type" to 3,
-                    "requestUserId" to MySharedPreferences.getUserId(context),
-                    "userColor" to MySharedPreferences.getUserColor(context),
-                    "userName" to MySharedPreferences.getUserNickname(context),
-                    "timestamp" to FieldValue.serverTimestamp()
-                )
-
-                Log.d(TAG, "poke message : $notifyData")
-                Log.d(TAG, "poke message to : ${profile.uid}")
-
-                db.collection("Account/${profile.uid}/Notification")
-                    .add(notifyData)
-                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-
-                commentUpload_button.text = "콕 찔렀습니다"
+        GlobalScope.launch(Dispatchers.Main) {
+            if (profile.uid == MySharedPreferences.getUserId(context)) {
+                commentUpload_button.text = "자신입니다"
                 commentUpload_button.isEnabled = false
                 bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
+            } else if (isAlreadyStamp) {
+                commentUpload_button.text = "이미 도장을 찍었습니다."
+                commentUpload_button.isEnabled = false
+                bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
+            } else {
+                commentUpload_button.text = "콕 찌르기"
+                commentUpload_button.isEnabled = true
+                bgButton.setColor(
+                    ContextCompat.getColor(
+                        context,
+                        MySharedPreferences.getUserColorInt(context)
+                    )
+                )
+
+                commentUpload_button.setOnClickListener {
+                    Toast.makeText(it.context, profile.name + " 님을 콕 찔렀습니다.", Toast.LENGTH_SHORT).show()
+
+                    val notifyData = hashMapOf(
+                        "goalName" to goalTitle,
+                        "message" to profile.name + " 님을 콕 찔렀습니다.",
+                        "read" to false,
+                        "type" to 3,
+                        "requestUserId" to MySharedPreferences.getUserId(context),
+                        "userColor" to MySharedPreferences.getUserColor(context),
+                        "userName" to MySharedPreferences.getUserNickname(context),
+                        "timestamp" to FieldValue.serverTimestamp()
+                    )
+
+                    Log.d(TAG, "poke message : $notifyData")
+                    Log.d(TAG, "poke message to : ${profile.uid}")
+
+                    db.collection("Account/${profile.uid}/Notification")
+                        .add(notifyData)
+                        .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
+                    commentUpload_button.text = "콕 찔렀습니다"
+                    commentUpload_button.isEnabled = false
+                    bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
+                }
             }
         }
-    }
-
-    fun getStartDay(goalId: String): String {
-        var startDay = ""
-
-        db.collection("Goal").document(goalId)
-            .addSnapshotListener { goalSnapshot, e ->
-                if (e != null) {
-                    Log.w(TAG, "listen:error", e)
-                    return@addSnapshotListener
-                }
-
-                startDay = goalSnapshot?.get("startDay").toString()
-            }
-
-        return startDay
     }
 }
