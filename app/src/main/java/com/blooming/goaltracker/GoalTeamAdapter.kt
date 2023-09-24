@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class GoalTeamAdapter (private val context: Context, private val goalTitle: String) : RecyclerView.Adapter<GoalTeamAdapter.ViewHolder>() {
+class GoalTeamAdapter(private val context: Context, private val goalId: String, private val goalTitle: String) : RecyclerView.Adapter<GoalTeamAdapter.ViewHolder>() {
 
     var teamDatas = ArrayList<GoalTeamData>()
 
@@ -24,7 +24,7 @@ class GoalTeamAdapter (private val context: Context, private val goalTitle: Stri
         var dialog: PokeDialog = PokeDialog(context)
 
         val listener = View.OnClickListener {
-            dialog.start(team, goalTitle)
+            dialog.start(team, goalId, goalTitle)
         }
 
         holder.apply {

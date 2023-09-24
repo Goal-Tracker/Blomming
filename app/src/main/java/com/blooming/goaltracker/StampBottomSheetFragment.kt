@@ -15,12 +15,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import java.util.Calendar
 
 class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragment() {
     val db = FirebaseFirestore.getInstance()    // Firestore 인스턴스 선언
@@ -104,7 +104,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                         setButton(certified, time, bgButton)
                     }
                 } catch (e: Exception) {
-                    Log.d(TAG, "[Error] $e")
+                    Log.w(TAG, "[Error] $e")
                 }
             }
         }
@@ -195,9 +195,15 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
     }
 
     private fun setButton(
-        certified: Boolean, notYet: Int,
+        certified: Boolean,
+        notYet: Int,
         bgButton: GradientDrawable
     ) {
+        val context = requireContext()
+        if (context == null) {
+            Log.d(TAG, "context가 연결이 안 됨")
+            return
+        }
 
         addPastStamp.visibility = View.GONE
 
@@ -213,7 +219,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             today_stamp_button.isEnabled = false
 
             today_stamp_button.text = "기간이 지났습니다"
-            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+            bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
 
             if (!certified) {
                 addPastStamp.visibility = View.VISIBLE
@@ -231,7 +237,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                 today_stamp_button.isEnabled = false
 
                 today_stamp_button.text = "도장찍기 완료"
-                bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+                bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
 
             } else {
                 noneStamp_textView.visibility = View.GONE
@@ -244,8 +250,8 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
                 today_stamp_button.text = "오늘의 도장 찍기"
                 bgButton.setColor(
                     ContextCompat.getColor(
-                        requireContext(),
-                        MySharedPreferences.getUserColorInt(requireContext())
+                        context,
+                        MySharedPreferences.getUserColorInt(context)
                     )
                 )
             }
@@ -258,7 +264,7 @@ class StampBottomSheetFragment(stamp: StampBoardData) : BottomSheetDialogFragmen
             today_stamp_button.isEnabled = false
 
             today_stamp_button.text = "아직 기간이 아닙니다"
-            bgButton.setColor(ContextCompat.getColor(requireContext(), R.color.greyish_brown))
+            bgButton.setColor(ContextCompat.getColor(context, R.color.greyish_brown))
         }
     }
 }

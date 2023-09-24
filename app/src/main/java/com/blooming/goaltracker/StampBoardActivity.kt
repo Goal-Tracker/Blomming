@@ -2,13 +2,13 @@ package com.blooming.goaltracker
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Calendar
 
 class StampBoardActivity() : AppCompatActivity() {
 
@@ -95,7 +94,7 @@ class StampBoardActivity() : AppCompatActivity() {
             val title = snapshot.get("title") as String
             val subtitle = snapshot.get("memo") as String
 
-            goalTeamAdapter = GoalTeamAdapter(this, title)
+            goalTeamAdapter = GoalTeamAdapter(this, goal_id, title)
             rv_team.adapter = goalTeamAdapter
 
             goalTitle_textView.text = title
