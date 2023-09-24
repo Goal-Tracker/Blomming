@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:paddingLeft="16dp"
@@ -16,10 +16,13 @@
         android:id="@+id/AcceptColor"
         android:layout_width="31dp"
         android:layout_height="31dp"
-        android:background="@drawable/profile_view"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/profile_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/AcceptBtn"
         app:layout_constraintTop_toTopOf="parent"></ImageView>
 
     <TextView
@@ -39,6 +42,7 @@
         android:id="@+id/AcceptBtn"
         android:layout_width="61dp"
         android:layout_height="18dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/color_circle_btn_shape"
         android:backgroundTint="?attr/colorPrimary"
         android:fontFamily="@font/fontstyle"
@@ -47,8 +51,8 @@
         android:textAlignment="center"
         android:textSize="8sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AcceptColor" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
