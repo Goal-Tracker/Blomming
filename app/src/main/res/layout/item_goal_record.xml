@@ -71,13 +71,15 @@
             <ProgressBar
                 android:id="@+id/goal_progressBar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="250dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="11dp"
                 android:max="100"
                 android:progress="30"
                 android:progressDrawable="@drawable/stamp_progressbar"
+                card_view:layout_constraintEnd_toStartOf="@+id/goalToadyDate_textView"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/last_day_textView" />
 
@@ -87,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="11dp"
+                android:layout_marginRight="20dp"
                 android:text="종료"
                 android:textColor="@color/main_text"
                 android:textSize="11dp"

@@ -5,9 +5,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -194,6 +198,11 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
                 goalToadyDate_textView.visibility = View.GONE
                 slash_textView.visibility = View.GONE
                 goalDate_textView.visibility = View.GONE
+
+                val params = goal_progressBar.layoutParams as ConstraintLayout.LayoutParams
+                params.endToStart = R.id.endGoal_textView
+                goal_progressBar.layoutParams = params
+                goal_progressBar.requestLayout()
             } else {
                 endGoal_textView.visibility = View.GONE
 
@@ -203,6 +212,11 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
 
                 goalToadyDate_textView.text = Data.todayNum.toString() + '일'
                 goalDate_textView.text = Data.stampNum.toString() + '일'
+
+                val params = goal_progressBar.layoutParams as ConstraintLayout.LayoutParams
+                params.endToStart = R.id.goalToadyDate_textView
+                goal_progressBar.layoutParams = params
+                goal_progressBar.requestLayout()
             }
             goal_progressBar.max = Data.stampNum
             goal_progressBar.progress = Data.todayNum
