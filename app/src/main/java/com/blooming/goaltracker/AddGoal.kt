@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +26,6 @@ import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 class AddGoal : AppCompatActivity() {
 
@@ -94,10 +95,9 @@ class AddGoal : AppCompatActivity() {
             }
         }
 
-        // 메인 화면으로 이동
+        // 이전 화면으로 이동
         close_btn.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            this.startActivity(intent)
+            finish()
         }
 
         // 날짜 버튼
@@ -195,6 +195,7 @@ class AddGoal : AppCompatActivity() {
 
             // 메인 화면으로 이동
             val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("stampID", stampID)
             startActivity(intent)
         }
     }

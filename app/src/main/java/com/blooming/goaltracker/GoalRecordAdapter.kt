@@ -222,8 +222,19 @@ class GoalRecordAdapter(private val context: Context) : RecyclerView.Adapter<Goa
         // 해당 position 에 해당하는 데이터 삭제
         val deletebtnListener = View.OnClickListener {
             val goal = goalDatas[position]
-            db?.collection("Account")?.document(accountUId)
-                ?.update("myGoalList", FieldValue.arrayRemove(goal.goalId))
+            val userUID = db!!.collection("Goal").document(goal.goalId)
+            userUID.addSnapshotListener { snapshot, e ->
+                val stampId = snapshot?.get("stampId").toString()
+                // Account의 Goal 정보 삭제
+                db?.collection("Account")?.document(accountUId)
+                    ?.update("myGoalList", FieldValue.arrayRemove(goal.goalId))
+
+                // Goal 삭제
+                //db?.collection("Goal")?.document(goal.goalId).delete()
+
+                // Stamp 삭제
+                //db?.collection("Stamp")?.document(stampId).delete()
+            }
             dialog?.dismiss()
         }
 

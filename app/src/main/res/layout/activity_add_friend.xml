@@ -9,166 +9,148 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
-    <ScrollView
-        android:id="@+id/scrollView3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="24dp">
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:ignore="MissingConstraints">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="107dp"
-                    android:background="@drawable/ic_s"
-                    tools:ignore="MissingConstraints" />
+                android:layout_height="107dp"
+                android:background="@drawable/ic_s"
+                tools:ignore="MissingConstraints" />
 
 
-                <TextView
-                    android:id="@+id/myImageViewText"
-                    android:layout_width="57dp"
-                    android:layout_height="23dp"
-                    android:layout_alignLeft="@id/imageView"
-                    android:layout_alignTop="@id/imageView"
-                    android:layout_alignRight="@id/imageView"
-                    android:layout_alignBottom="@id/imageView"
-                    android:fontFamily="@font/fontstyle"
-                    android:text="친구 목록"
-                    android:textSize="15sp"
-                    android:translationX="20dp"
-                    android:translationY="56dp"
-                    app:lineHeight="26sp" />
+            <TextView
+                android:id="@+id/myImageViewText"
+                android:layout_width="57dp"
+                android:layout_height="23dp"
+                android:layout_alignLeft="@id/imageView"
+                android:layout_alignTop="@id/imageView"
+                android:layout_alignRight="@id/imageView"
+                android:layout_alignBottom="@id/imageView"
+                android:fontFamily="@font/fontstyle"
+                android:text="친구 목록"
+                android:textSize="15sp"
+                android:translationX="20dp"
+                android:translationY="56dp"
+                app:lineHeight="26sp" />
 
-                <ImageButton
-                    android:id="@+id/backBtn"
-                    android:layout_width="13.5dp"
-                    android:layout_height="13.5dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="61.1dp"
-                    android:layout_marginEnd="22.8dp"
-                    android:background="@android:color/transparent"
-                    android:tint="?attr/colorButtonNormal"
-                    android:padding="0sp"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/icon"
-                    tools:ignore="UseAppTint" />
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="13.5dp"
+                android:layout_height="13.5dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="61.1dp"
+                android:layout_marginEnd="22.8dp"
+                android:background="@android:color/transparent"
+                android:padding="0sp"
+                android:scaleType="centerCrop"
+                android:tint="?attr/colorButtonNormal"
+                app:srcCompat="@drawable/icon"
+                tools:ignore="UseAppTint" />
 
-            </RelativeLayout>
+        </RelativeLayout>
 
-            <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+            <EditText
+                android:id="@+id/searchWord"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:background="@drawable/shadow_1"
+                android:fontFamily="@font/fontstyle"
+                android:hint="새로운 친구를 검색해주세요."
+                android:inputType="textEmailAddress"
+                android:lineSpacingExtra="6sp"
+                android:paddingStart="30dp"
+                android:textColor="#676767"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageButton
+                android:id="@+id/searchBtn"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:padding="0sp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/search" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            app:circularflow_defaultRadius="16dp"
+            android:background="@drawable/rounded_box"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+            <TextView
+                android:id="@+id/title1"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/fontstyle"
+                android:text="검색 결과"
+                android:textColor="#363639"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lineHeight="38sp" />
+
+            <TextView
+                android:id="@+id/search_count"
+                android:layout_width="50dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/fontstyle"
+                android:textColor="#606060"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/title1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lineHeight="38sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/FriendAddRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:orientation="vertical">
+                android:layout_marginTop="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/item_friend_add" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <RelativeLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
-                    <EditText
-                        android:id="@+id/searchWord"
-                        android:layout_width="335dp"
-                        android:layout_height="38dp"
-                        android:layout_marginLeft="18dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/shadow_1"
-                        android:fontFamily="@font/fontstyle"
-                        android:hint="새로운 친구를 검색해주세요."
-                        android:inputType="textEmailAddress"
-                        android:lineSpacingExtra="6sp"
-                        android:paddingStart="30dp"
-                        android:textColor="#676767"
-                        android:textSize="11sp" />
-
-                    <ImageButton
-                        android:id="@+id/searchBtn"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:layout_alignParentTop="false"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="41.7dp"
-                        android:layout_marginEnd="40dp"
-                        android:background="@android:color/transparent"
-                        android:padding="0sp"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/search" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/contentBox"
-                    android:layout_width="335dp"
-                    android:layout_height="372dp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/box"
-                    android:orientation="horizontal">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/FriendAddRecyclerView"
-                        android:layout_width="335dp"
-                        android:layout_height="310dp"
-                        android:layout_below="@+id/title1"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        tools:listitem="@layout/item_friend_add" />
-
-
-                    <TextView
-                        android:id="@+id/title1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="19dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="25dp"
-
-                        android:layout_marginTop="25dp"
-                        android:fontFamily="@font/fontstyle"
-                        android:text="검색 결과"
-                        android:textColor="#363639"
-                        android:textSize="12sp"
-                        app:lineHeight="38sp" />
-
-                    <TextView
-                        android:id="@+id/search_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="19dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="81dp"
-                        android:layout_marginTop="25dp"
-                        android:fontFamily="@font/fontstyle"
-                        android:textColor="#606060"
-                        android:textSize="12sp"
-                        app:lineHeight="38sp" />
-
-                </RelativeLayout>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>
