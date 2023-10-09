@@ -198,7 +198,6 @@
             android:paddingBottom="33dp"
             app:spanCount="5"
             android:overScrollMode="never"
-            android:nestedScrollingEnabled="false"
             tools:listitem="@layout/stamp_num_item"
             android:background="@drawable/stamp_board_rectangle" />
     </androidx.constraintlayout.widget.ConstraintLayout>
