@@ -18,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="변"
-        android:textColor="@color/white"
         android:textSize="9dp"
         app:layout_constraintBottom_toBottomOf="@+id/view_profile"
         app:layout_constraintEnd_toEndOf="@+id/view_profile"
